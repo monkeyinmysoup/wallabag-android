@@ -1,21 +1,23 @@
 package fr.gaulupeau.apps.Poche;
 
 import java.util.ArrayList;
+
+import com.actionbarsherlock.app.SherlockActivity;
+
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.*;
 import fr.gaulupeau.apps.InThePoche.R;
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class ListArticles extends Activity {
+public class ListArticles extends SherlockActivity {
 
     private ArrayList<Article> readArticlesInfo;
 	private ListView readList;
@@ -40,7 +42,7 @@ public class ListArticles extends Activity {
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-           MenuInflater inflater = getMenuInflater();
+           MenuInflater inflater = getSupportMenuInflater();
            inflater.inflate(R.menu.option_list, menu);
            return true;
     }

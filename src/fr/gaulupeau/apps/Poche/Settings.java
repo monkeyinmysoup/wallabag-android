@@ -1,8 +1,6 @@
 package fr.gaulupeau.apps.Poche;
 
 import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
-import fr.gaulupeau.apps.InThePoche.R;
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +8,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class Settings extends Activity {
+import com.actionbarsherlock.app.SherlockActivity;
+
+import fr.gaulupeau.apps.InThePoche.R;
+
+public class Settings extends SherlockActivity {
 	Button btnDone;
 	EditText editPocheUrl;
 	EditText editAPIUsername;
