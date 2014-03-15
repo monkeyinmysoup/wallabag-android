@@ -904,8 +904,9 @@ containing a value of this type.
         public static final int abs__textfield_searchview_right_holo_dark=0x7f02006d;
         public static final int abs__textfield_searchview_right_holo_light=0x7f02006e;
         public static final int abs__toast_frame=0x7f02006f;
-        public static final int icon=0x7f020070;
-        public static final int poche=0x7f020071;
+        public static final int actionbar=0x7f020070;
+        public static final int icon=0x7f020071;
+        public static final int poche=0x7f020072;
     }
     public static final class id {
         public static final int APIToken=0x7f040046;
@@ -2244,7 +2245,7 @@ containing a value of this type.
          */
         public static final int[] SherlockSpinner = {
             0x010100af, 0x01010175, 0x01010176, 0x0101017b,
-            0x01010262, 0x010102ac, 0x010102ad, 0x010103fd
+            0x01010262, 0x010102ac, 0x010102ad, 0x0101043a
         };
         /**
           <p>
