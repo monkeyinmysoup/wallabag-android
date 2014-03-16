@@ -25,5 +25,7 @@
     <string name="txtAPIToken"><b>Your token (token in Feed URL):</b></string>
     <string name="version">1.6-alpha1</string>
     <string name="unread_label">unread</string>
+    <string name="refresh">Refresh</string>
+    <string name="unread_articles">You have %d unread articles</string>
 </resources>
 

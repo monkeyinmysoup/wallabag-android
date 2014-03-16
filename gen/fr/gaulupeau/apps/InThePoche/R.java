@@ -970,8 +970,10 @@ containing a value of this type.
         public static final int pageUrl_label=0x7f040041;
         public static final int pocheUrl=0x7f040042;
         public static final int progressBar1=0x7f040040;
+        public static final int refresh=0x7f04004d;
         public static final int scroll=0x7f040032;
         public static final int scrollView1=0x7f04003c;
+        public static final int settings=0x7f04004e;
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
@@ -1077,6 +1079,7 @@ containing a value of this type.
         public static final int menuSettings=0x7f09001a;
         public static final int menuShowAll=0x7f09001b;
         public static final int menuWipeDb=0x7f09001c;
+        public static final int refresh=0x7f090026;
         public static final int txtAPIToken=0x7f090023;
         public static final int txtAPIUsername=0x7f090022;
         public static final int txtConfigNotSet=0x7f090020;
@@ -1084,6 +1087,7 @@ containing a value of this type.
         public static final int txtNetOffline=0x7f09001f;
         public static final int txtSyncDone=0x7f09001d;
         public static final int txtSyncFailed=0x7f09001e;
+        public static final int unread_articles=0x7f090027;
         public static final int unread_label=0x7f090025;
         public static final int url_help=0x7f090016;
         public static final int url_label=0x7f090015;

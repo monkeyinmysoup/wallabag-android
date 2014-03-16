@@ -87,6 +87,7 @@ public class Wallabag extends SherlockActivity {
 	static String apiToken;
 	static String pocheUrl;
 	String action;
+	private int REQUEST_EXIT = 0x15F36;
 	  
     /** Called when the activity is first created. 
      * Will act differently depending on whether sharing or
@@ -143,30 +144,32 @@ public class Wallabag extends SherlockActivity {
         else {
         	setContentView(R.layout.main);
 
-            btnSync = (Button)findViewById(R.id.btnSync);
-            btnSync.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					 // Vérification de la connectivité Internet
-					 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-					 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-					 if (pocheUrl == "https://") {
-						 showToast(getString(R.string.txtConfigNotSet));
-					 } else if (activeNetwork != null && activeNetwork.isConnected()) {
-						 // Exécution de la synchro en arrière-plan
-						 new Thread(new Runnable() {
-							 public void run() {
-								 //pushRead();
-								 parseRSS();
-							 }
-						 }).start();
-					 } else {
-						 // Afficher alerte connectivité
-						 showToast(getString(R.string.txtNetOffline));
-					 }
-					
-				}
-			});
+        	startActivityForResult(new Intent(getBaseContext(), ListArticles.class), REQUEST_EXIT);
+//        	startActivity(new Intent(getBaseContext(), ListArticles.class));
+//            btnSync = (Button)findViewById(R.id.btnSync);
+//            btnSync.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					 // Vérification de la connectivité Internet
+//					 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//					 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+//					 if (pocheUrl == "https://") {
+//						 showToast(getString(R.string.txtConfigNotSet));
+//					 } else if (activeNetwork != null && activeNetwork.isConnected()) {
+//						 // Exécution de la synchro en arrière-plan
+//						 new Thread(new Runnable() {
+//							 public void run() {
+//								 //pushRead();
+//								 parseRSS();
+//							 }
+//						 }).start();
+//					 } else {
+//						 // Afficher alerte connectivité
+//						 showToast(getString(R.string.txtNetOffline));
+//					 }
+//					
+//				}
+//			});
             
             btnGetPost = (Button)findViewById(R.id.btnGetPost);
             //updateUnread();
@@ -222,6 +225,14 @@ public class Wallabag extends SherlockActivity {
 		}
     }
     
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_EXIT && resultCode == RESULT_OK){
+            finish();
+        }
+    }
     private void updateUnread(){
     	runOnUiThread(new Runnable() {
     		public void run()
@@ -295,7 +306,7 @@ public class Wallabag extends SherlockActivity {
 //    }
 
     
-    public String cleanString(String s){
+    public static String cleanString(String s){
     	
     	s = s.replace("&Atilde;&copy;", "&eacute;");
     	s = s.replace("&Atilde;&uml;", "&egrave;");

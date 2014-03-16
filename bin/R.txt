@@ -305,8 +305,10 @@ int id normal 0x7f040001
 int id pageUrl_label 0x7f040041
 int id pocheUrl 0x7f040042
 int id progressBar1 0x7f040040
+int id refresh 0x7f04004d
 int id scroll 0x7f040032
 int id scrollView1 0x7f04003c
+int id settings 0x7f04004e
 int id showCustom 0x7f040008
 int id showHome 0x7f040005
 int id showTitle 0x7f040007
@@ -378,6 +380,7 @@ int string label_name 0x7f09000f
 int string menuSettings 0x7f09001a
 int string menuShowAll 0x7f09001b
 int string menuWipeDb 0x7f09001c
+int string refresh 0x7f090026
 int string txtAPIToken 0x7f090023
 int string txtAPIUsername 0x7f090022
 int string txtConfigNotSet 0x7f090020
@@ -385,6 +388,7 @@ int string txtGlobalToken 0x7f090021
 int string txtNetOffline 0x7f09001f
 int string txtSyncDone 0x7f09001d
 int string txtSyncFailed 0x7f09001e
+int string unread_articles 0x7f090027
 int string unread_label 0x7f090025
 int string url_help 0x7f090016
 int string url_label 0x7f090015
