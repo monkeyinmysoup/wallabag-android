@@ -1084,6 +1084,7 @@ containing a value of this type.
         public static final int txtNetOffline=0x7f09001f;
         public static final int txtSyncDone=0x7f09001d;
         public static final int txtSyncFailed=0x7f09001e;
+        public static final int unread_label=0x7f090025;
         public static final int url_help=0x7f090016;
         public static final int url_label=0x7f090015;
         public static final int version=0x7f090024;

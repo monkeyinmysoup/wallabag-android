@@ -385,6 +385,7 @@ int string txtGlobalToken 0x7f090021
 int string txtNetOffline 0x7f09001f
 int string txtSyncDone 0x7f09001d
 int string txtSyncFailed 0x7f09001e
+int string unread_label 0x7f090025
 int string url_help 0x7f090016
 int string url_label 0x7f090015
 int string version 0x7f090024

@@ -93,8 +93,6 @@ public class Wallabag extends SherlockActivity {
      * displaying information page. */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         action = intent.getAction();
@@ -231,7 +229,7 @@ public class Wallabag extends SherlockActivity {
     			ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
     			database = helper.getReadableDatabase();
     			int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
-    			btnGetPost.setText(getString(R.string.btnGetPost) + " - " + news + " unread");
+    			btnGetPost.setText(getString(R.string.btnGetPost) + " - " + news + " " + getString(R.string.unread_label));
     		}
     	});
     }

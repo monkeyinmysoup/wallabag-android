@@ -24,5 +24,6 @@
     <string name="txtAPIUsername"><b>Seu ID de usuário (user_id em Feed URL):</b></string>
     <string name="txtAPIToken"><b>Seu token (token em Feed URL):</b></string>
     <string name="version">1.6-alpha1</string>
+    <string name="unread_label">não lido(s)</string>
 </resources>
 
