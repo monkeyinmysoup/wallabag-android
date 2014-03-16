@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 
 import fr.gaulupeau.apps.InThePoche.R;
 
@@ -58,6 +59,7 @@ public class Settings extends SherlockActivity {
 //        });
 	}
 	
+	@Override
 	protected void onPause() {
 		super.onPause();		
     	editor.putString("pocheUrl", editPocheUrl.getText().toString());
@@ -66,4 +68,15 @@ public class Settings extends SherlockActivity {
 		editor.commit();
 		
     }
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	      case android.R.id.home:
+	        finish();
+	    
+	      default:
+	        return super.onOptionsItemSelected(item);
+	    }
+	}
 }

@@ -24,4 +24,6 @@
     <string name="txtAPIUsername"><b>Your user ID (user_id in Feed URL):</b></string>
     <string name="txtAPIToken"><b>Your token (token in Feed URL):</b></string>
     <string name="version">1.6-alpha1</string>
+    <string name="settings_text">Settings</string>
 </resources>
+
