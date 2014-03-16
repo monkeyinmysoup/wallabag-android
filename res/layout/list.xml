@@ -9,7 +9,7 @@
         android:id="@+id/liste_articles"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="#000000"
+        android:divider="#BCBCBC"
         android:dividerHeight="1dp" >
 
     </ListView>

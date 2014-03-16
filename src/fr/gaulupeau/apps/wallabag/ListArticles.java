@@ -138,14 +138,14 @@ public class ListArticles extends SherlockActivity {
         apiToken = settings.getString("APIToken", "");
     }
 	
-	 public void showToast(final String toast){
-	    	runOnUiThread(new Runnable() {
-	    		public void run()
-	    		{
-	    			Toast.makeText(ListArticles.this, toast, Toast.LENGTH_SHORT).show();
-	    		}
-	    	});
-	    }
+	public void showToast(final String toast) {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				Toast.makeText(ListArticles.this, toast, Toast.LENGTH_SHORT)
+						.show();
+			}
+		});
+	}
 	 public void refresh(){
 		// Vérification de la connectivité Internet
 		 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

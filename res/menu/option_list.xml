@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/menuShowAll" android:title="@string/menuShowAll"></item>
-    <item android:id="@+id/menuWipeDb" android:title="@string/menuWipeDb"></item>
-    <item android:id="@+id/refresh" android:title="@string/refresh"></item>
-    <item android:id="@+id/settings" android:title="@string/menuSettings"></item>
+    <item 	android:id="@+id/menuShowAll"
+        	android:title="@string/menuShowAll"/>
+    <item 	android:id="@+id/menuWipeDb"
+        	android:title="@string/menuWipeDb"/>
+    <item 	android:id="@+id/refresh"
+        	android:title="@string/refresh"/>
+    <item 	android:id="@+id/settings"
+        	android:title="@string/menuSettings"/>
 
 </menu>

@@ -905,12 +905,13 @@ containing a value of this type.
         public static final int abs__textfield_searchview_right_holo_light=0x7f02006e;
         public static final int abs__toast_frame=0x7f02006f;
         public static final int actionbar=0x7f020070;
-        public static final int icon=0x7f020071;
-        public static final int poche=0x7f020072;
+        public static final int ic_action_accept=0x7f020071;
+        public static final int icon=0x7f020072;
+        public static final int poche=0x7f020073;
     }
     public static final class id {
-        public static final int APIToken=0x7f040046;
-        public static final int APIUsername=0x7f040044;
+        public static final int APIToken=0x7f040045;
+        public static final int APIUsername=0x7f040043;
         public static final int abs__action_bar=0x7f040020;
         public static final int abs__action_bar_container=0x7f04001f;
         public static final int abs__action_bar_subtitle=0x7f040011;
@@ -950,42 +951,42 @@ containing a value of this type.
         public static final int abs__textButton=0x7f040013;
         public static final int abs__title=0x7f04001b;
         public static final int abs__up=0x7f04000b;
-        public static final int author=0x7f040049;
-        public static final int btnGetPost=0x7f04003e;
-        public static final int btnMarkRead=0x7f040038;
-        public static final int btnSync=0x7f04003f;
+        public static final int author=0x7f040048;
+        public static final int btnGetPost=0x7f04003d;
+        public static final int btnSync=0x7f04003e;
         public static final int disableHome=0x7f040009;
         public static final int edit_query=0x7f040026;
         public static final int homeAsUp=0x7f040006;
-        public static final int imageView1=0x7f04003d;
-        public static final int instructions=0x7f040047;
-        public static final int linearLayout=0x7f04003a;
+        public static final int imageView1=0x7f04003b;
+        public static final int instructions=0x7f040046;
+        public static final int linearLayout=0x7f040038;
         public static final int listMode=0x7f040002;
-        public static final int liste_articles=0x7f04003b;
-        public static final int listitem_titre=0x7f040039;
-        public static final int menuSettings=0x7f04004a;
-        public static final int menuShowAll=0x7f04004b;
-        public static final int menuWipeDb=0x7f04004c;
+        public static final int liste_articles=0x7f040039;
+        public static final int listitem_titre=0x7f040037;
+        public static final int menuSettings=0x7f040049;
+        public static final int menuShowAll=0x7f04004a;
+        public static final int menuWipeDb=0x7f04004b;
         public static final int normal=0x7f040001;
-        public static final int pageUrl_label=0x7f040041;
-        public static final int pocheUrl=0x7f040042;
-        public static final int progressBar1=0x7f040040;
-        public static final int refresh=0x7f04004d;
+        public static final int pageUrl_label=0x7f040040;
+        public static final int pocheUrl=0x7f040041;
+        public static final int progressBar1=0x7f04003f;
+        public static final int read=0x7f04004e;
+        public static final int refresh=0x7f04004c;
         public static final int scroll=0x7f040032;
-        public static final int scrollView1=0x7f04003c;
-        public static final int settings=0x7f04004e;
+        public static final int scrollView1=0x7f04003a;
+        public static final int settings=0x7f04004d;
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
         public static final int tabMode=0x7f040003;
-        public static final int txtAPIToken=0x7f040045;
-        public static final int txtAPIUsername=0x7f040043;
+        public static final int txtAPIToken=0x7f040044;
+        public static final int txtAPIUsername=0x7f040042;
         public static final int txtAuthor=0x7f040034;
         public static final int txtContent=0x7f040036;
         public static final int txtTitre=0x7f040033;
         public static final int useLogo=0x7f040004;
-        public static final int version=0x7f040048;
-        public static final int view1=0x7f040037;
+        public static final int version=0x7f040047;
+        public static final int view1=0x7f04003c;
         public static final int viewLine=0x7f040035;
         public static final int wrap_content=0x7f040000;
     }
@@ -1025,6 +1026,7 @@ containing a value of this type.
     public static final class menu {
         public static final int option=0x7f0b0000;
         public static final int option_list=0x7f0b0001;
+        public static final int option_read=0x7f0b0002;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1039,6 +1041,7 @@ containing a value of this type.
         /**  Label for the "Done" button on the far left of action mode toolbars. 
          */
         public static final int abs__action_mode_done=0x7f090003;
+        public static final int abs__activity_chooser_view_dialog_title_default=0x7f09000d;
         /**  Title for a button to expand the list of activities in ActivityChooserView [CHAR LIMIT=25] 
          */
         public static final int abs__activity_chooser_view_see_all=0x7f090004;
@@ -1060,39 +1063,41 @@ containing a value of this type.
         /**  SearchView accessibility description for voice button [CHAR LIMIT=NONE] 
          */
         public static final int abs__searchview_description_voice=0x7f09000c;
+        public static final int abs__share_action_provider_share_with=0x7f09000e;
         /**  Description of the choose target button in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with=0x7f090006;
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f090007;
-        public static final int app_name=0x7f09000e;
-        public static final int author=0x7f090010;
-        public static final int authorSite=0x7f090014;
-        public static final int btnDone=0x7f090012;
-        public static final int btnGetPost=0x7f090017;
-        public static final int btnMarkRead=0x7f090019;
-        public static final int btnSync=0x7f090018;
-        public static final int hello=0x7f09000d;
-        public static final int instructions=0x7f090011;
-        public static final int label_name=0x7f09000f;
-        public static final int menuSettings=0x7f09001a;
-        public static final int menuShowAll=0x7f09001b;
-        public static final int menuWipeDb=0x7f09001c;
-        public static final int refresh=0x7f090026;
-        public static final int txtAPIToken=0x7f090023;
-        public static final int txtAPIUsername=0x7f090022;
-        public static final int txtConfigNotSet=0x7f090020;
-        public static final int txtGlobalToken=0x7f090021;
-        public static final int txtNetOffline=0x7f09001f;
-        public static final int txtSyncDone=0x7f09001d;
-        public static final int txtSyncFailed=0x7f09001e;
-        public static final int unread_articles=0x7f090027;
-        public static final int unread_label=0x7f090025;
-        public static final int url_help=0x7f090016;
-        public static final int url_label=0x7f090015;
-        public static final int version=0x7f090024;
-        public static final int which_browser=0x7f090013;
+        public static final int app_name=0x7f090010;
+        public static final int author=0x7f090012;
+        public static final int authorSite=0x7f090016;
+        public static final int btnDone=0x7f090014;
+        public static final int btnGetPost=0x7f090019;
+        public static final int btnMarkRead=0x7f09001b;
+        public static final int btnSync=0x7f09001a;
+        public static final int hello=0x7f09000f;
+        public static final int instructions=0x7f090013;
+        public static final int label_name=0x7f090011;
+        public static final int marked_as_read=0x7f09002a;
+        public static final int menuSettings=0x7f09001c;
+        public static final int menuShowAll=0x7f09001d;
+        public static final int menuWipeDb=0x7f09001e;
+        public static final int refresh=0x7f090028;
+        public static final int txtAPIToken=0x7f090025;
+        public static final int txtAPIUsername=0x7f090024;
+        public static final int txtConfigNotSet=0x7f090022;
+        public static final int txtGlobalToken=0x7f090023;
+        public static final int txtNetOffline=0x7f090021;
+        public static final int txtSyncDone=0x7f09001f;
+        public static final int txtSyncFailed=0x7f090020;
+        public static final int unread_articles=0x7f090029;
+        public static final int unread_label=0x7f090027;
+        public static final int url_help=0x7f090018;
+        public static final int url_label=0x7f090017;
+        public static final int version=0x7f090026;
+        public static final int which_browser=0x7f090015;
     }
     public static final class style {
         /** 

@@ -343,6 +343,7 @@ public final class R {
 		public static final int abs__action_bar_up_description = 0x7f090001;
 		public static final int abs__action_menu_overflow_description = 0x7f090002;
 		public static final int abs__action_mode_done = 0x7f090003;
+		public static final int abs__activity_chooser_view_dialog_title_default = 0x7f09000d;
 		public static final int abs__activity_chooser_view_see_all = 0x7f090004;
 		public static final int abs__activitychooserview_choose_application = 0x7f090005;
 		public static final int abs__searchview_description_clear = 0x7f09000a;
@@ -350,6 +351,7 @@ public final class R {
 		public static final int abs__searchview_description_search = 0x7f090008;
 		public static final int abs__searchview_description_submit = 0x7f09000b;
 		public static final int abs__searchview_description_voice = 0x7f09000c;
+		public static final int abs__share_action_provider_share_with = 0x7f09000e;
 		public static final int abs__shareactionprovider_share_with = 0x7f090006;
 		public static final int abs__shareactionprovider_share_with_application = 0x7f090007;
 	}
