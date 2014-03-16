@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">wallabag!</string>
+    <string name="app_name">wallabag</string>
+    <string name="label_name">Adicionar ao wallabag</string>
+    <string name="author">GAULUPEAU Jonathan - 2013</string>
+    <string name="instructions">Para adicionar uma página ao wallabag, abra a página no navegador, toque em <i>Compartilhar</i> e depois em <i>Adicionar ao wallabag</i>.\nVocê será redirecionado para a página de login do seu wallabag.\nLogue-se e pronto!\nMais informações sobre o wallabag em wallabag.org.</string>
+    <string name="btnDone">Salvar</string>
+    <string name="which_browser">Qual navegador você gostaria de usar?</string>
+    <string name="authorSite">http://cv.gaulupeau.fr</string>
+    <string name="url_label"><b>URL do seu wallabag:</b></string>
+    <string name="url_help">Exemplos:\n<i>https://demo.wallabag.org</i>\n<i>https://framabag.org/u/example</i></string>
+    <string name="btnGetPost">Listar artigos</string>
+    <string name="btnSync">Sincronizar</string>
+    <string name="btnMarkRead">Marcar como lido</string>
+    <string name="menuSettings">Configurações</string>
+    <string name="menuShowAll">Mostrar todos</string>
+    <string name="menuWipeDb">Resetar banco de dados</string>
+    <string name="txtSyncDone">Sincronizado com sucesso</string>
+    <string name="txtSyncFailed">A sincronização falhou</string>
+    <string name="txtNetOffline">Verifique a conectividade à internet</string>
+    <string name="txtConfigNotSet">Antes de sincronizar, configure o aplicativo</string>
+    <string name="txtGlobalToken"><b>Token global da API:</b></string>
+    <string name="txtAPIUsername"><b>Seu ID de usuário (user_id em Feed URL):</b></string>
+    <string name="txtAPIToken"><b>Seu token (token em Feed URL):</b></string>
+    <string name="version">1.6-alpha1</string>
+</resources>
+
