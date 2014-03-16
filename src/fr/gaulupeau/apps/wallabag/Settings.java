@@ -20,12 +20,18 @@ public class Settings extends SherlockActivity {
 	EditText editAPIToken;
 	EditText editGlobalToken;
 
+	SharedPreferences settings;
+	SharedPreferences.Editor editor;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		getSupportActionBar().setHomeButtonEnabled(true);
 	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	    
+	    settings = getSharedPreferences(PREFS_NAME, 0);
+	    editor = settings.edit();
 	        
 		setContentView(R.layout.settings);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -52,16 +58,12 @@ public class Settings extends SherlockActivity {
 //        });
 	}
 	
-	protected void onDestroy() {
-		super.onDestroy();
-		//Toast.makeText(this, "foo", Toast.LENGTH_SHORT).show();
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-    	SharedPreferences.Editor editor = settings.edit();
+	protected void onPause() {
+		super.onPause();		
     	editor.putString("pocheUrl", editPocheUrl.getText().toString());
     	editor.putString("APIUsername", editAPIUsername.getText().toString());
     	editor.putString("APIToken", editAPIToken.getText().toString());
 		editor.commit();
-		finish();
 		
     }
 }

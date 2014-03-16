@@ -88,11 +88,6 @@ public class Wallabag extends SherlockActivity {
 	static String pocheUrl;
 	String action;
 	  
-	  
-	  
-	  
-	  
-	
     /** Called when the activity is first created. 
      * Will act differently depending on whether sharing or
      * displaying information page. */
@@ -156,7 +151,7 @@ public class Wallabag extends SherlockActivity {
 					 // Vérification de la connectivité Internet
 					 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 					 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-					 if (pocheUrl == "http://") {
+					 if (pocheUrl == "https://") {
 						 showToast(getString(R.string.txtConfigNotSet));
 					 } else if (activeNetwork != null && activeNetwork.isConnected()) {
 						 // Exécution de la synchro en arrière-plan
