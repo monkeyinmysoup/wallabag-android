@@ -83,12 +83,12 @@
             android:paddingTop="5sp"
             android:text="@string/instructions" />
 
-        <Button
+        <!-- <Button
             android:id="@+id/btnDone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/btnDone" />
+            android:text="@string/btnDone" /> -->
 
         <TextView
             android:id="@+id/version"

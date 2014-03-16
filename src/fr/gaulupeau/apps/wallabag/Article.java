@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche;
+package fr.gaulupeau.apps.wallabag;
 
 public class Article {
     public String url;

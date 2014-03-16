@@ -1,11 +1,11 @@
-package fr.gaulupeau.apps.Poche;
+package fr.gaulupeau.apps.wallabag;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
-import static fr.gaulupeau.apps.Poche.Helpers.zeroUpdate;
+import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
+import static fr.gaulupeau.apps.wallabag.Helpers.zeroUpdate;
 
 
 public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {

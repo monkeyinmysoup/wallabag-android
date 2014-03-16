@@ -1,10 +1,10 @@
-package fr.gaulupeau.apps.Poche;
+package fr.gaulupeau.apps.wallabag;
 
 import java.util.ArrayList;
 
 import com.actionbarsherlock.app.SherlockActivity;
 
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.*;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.*;
 import fr.gaulupeau.apps.InThePoche.R;
 import android.content.Intent;
 import android.database.Cursor;

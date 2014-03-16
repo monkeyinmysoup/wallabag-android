@@ -950,8 +950,7 @@ containing a value of this type.
         public static final int abs__textButton=0x7f040013;
         public static final int abs__title=0x7f04001b;
         public static final int abs__up=0x7f04000b;
-        public static final int author=0x7f04004a;
-        public static final int btnDone=0x7f040048;
+        public static final int author=0x7f040049;
         public static final int btnGetPost=0x7f04003e;
         public static final int btnMarkRead=0x7f040038;
         public static final int btnSync=0x7f04003f;
@@ -964,9 +963,9 @@ containing a value of this type.
         public static final int listMode=0x7f040002;
         public static final int liste_articles=0x7f04003b;
         public static final int listitem_titre=0x7f040039;
-        public static final int menuSettings=0x7f04004b;
-        public static final int menuShowAll=0x7f04004c;
-        public static final int menuWipeDb=0x7f04004d;
+        public static final int menuSettings=0x7f04004a;
+        public static final int menuShowAll=0x7f04004b;
+        public static final int menuWipeDb=0x7f04004c;
         public static final int normal=0x7f040001;
         public static final int pageUrl_label=0x7f040041;
         public static final int pocheUrl=0x7f040042;
@@ -983,7 +982,7 @@ containing a value of this type.
         public static final int txtContent=0x7f040036;
         public static final int txtTitre=0x7f040033;
         public static final int useLogo=0x7f040004;
-        public static final int version=0x7f040049;
+        public static final int version=0x7f040048;
         public static final int view1=0x7f040037;
         public static final int viewLine=0x7f040035;
         public static final int wrap_content=0x7f040000;

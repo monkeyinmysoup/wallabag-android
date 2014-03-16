@@ -6,16 +6,16 @@
  * August 2013
  */
 
-package fr.gaulupeau.apps.Poche;
+package fr.gaulupeau.apps.wallabag;
 
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
+import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -76,7 +76,7 @@ import fr.gaulupeau.apps.InThePoche.R;
 /**
  * Main activity class
  */
-public class Poche extends SherlockActivity {
+public class Wallabag extends SherlockActivity {
 	private static SQLiteDatabase database;
 	Button btnDone;
 	Button btnGetPost;
@@ -189,7 +189,7 @@ public class Poche extends SherlockActivity {
     
     private void getSettings(){
         settings = getSharedPreferences(PREFS_NAME, 0);
-        pocheUrl = settings.getString("pocheUrl", "http://");
+        pocheUrl = settings.getString("pocheUrl", "https://");
         apiUsername = settings.getString("APIUsername", "");
         apiToken = settings.getString("APIToken", "");
     }
@@ -245,7 +245,7 @@ public class Poche extends SherlockActivity {
     	runOnUiThread(new Runnable() {
     		public void run()
     		{
-    			Toast.makeText(Poche.this, toast, Toast.LENGTH_SHORT).show();
+    			Toast.makeText(Wallabag.this, toast, Toast.LENGTH_SHORT).show();
     		}
     	});
     }
