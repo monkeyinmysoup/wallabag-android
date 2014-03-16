@@ -378,6 +378,7 @@ int string label_name 0x7f09000f
 int string menuSettings 0x7f09001a
 int string menuShowAll 0x7f09001b
 int string menuWipeDb 0x7f09001c
+int string settings_text 0x7f090025
 int string txtAPIToken 0x7f090023
 int string txtAPIUsername 0x7f090022
 int string txtConfigNotSet 0x7f090020

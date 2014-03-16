@@ -100,7 +100,7 @@ public class Wallabag extends SherlockActivity {
 
         getSettings();
         // Find out if Sharing or if app has been launched from icon
-        if (action.equals(Intent.ACTION_SEND) && pocheUrl != "http://") {
+        if (action.equals(Intent.ACTION_SEND) && pocheUrl != "https://") {
         	setContentView(R.layout.main);
         	findViewById(R.id.btnSync).setVisibility(View.GONE);
         	findViewById(R.id.btnGetPost).setVisibility(View.GONE);
