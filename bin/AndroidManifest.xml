@@ -33,7 +33,7 @@
 		    		android:theme="@style/AppTheme" >
 		</activity>
 		<activity 	android:name="fr.gaulupeau.apps.wallabag.Settings"
-		    		android:label="@string/settings_text"
+		    		android:label="@string/menuSettings"
 		    		android:theme="@style/AppTheme" >		    
 		</activity>		
     </application>

@@ -1077,7 +1077,6 @@ containing a value of this type.
         public static final int menuSettings=0x7f09001a;
         public static final int menuShowAll=0x7f09001b;
         public static final int menuWipeDb=0x7f09001c;
-        public static final int settings_text=0x7f090025;
         public static final int txtAPIToken=0x7f090023;
         public static final int txtAPIUsername=0x7f090022;
         public static final int txtConfigNotSet=0x7f090020;

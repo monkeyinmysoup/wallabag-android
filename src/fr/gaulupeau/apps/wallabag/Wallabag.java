@@ -93,7 +93,7 @@ public class Wallabag extends SherlockActivity {
      * displaying information page. */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       
+        
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         action = intent.getAction();
