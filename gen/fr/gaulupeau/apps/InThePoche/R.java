@@ -906,8 +906,9 @@ containing a value of this type.
         public static final int abs__toast_frame=0x7f02006f;
         public static final int actionbar=0x7f020070;
         public static final int ic_action_accept=0x7f020071;
-        public static final int icon=0x7f020072;
-        public static final int poche=0x7f020073;
+        public static final int ic_action_undo=0x7f020072;
+        public static final int icon=0x7f020073;
+        public static final int poche=0x7f020074;
     }
     public static final class id {
         public static final int APIToken=0x7f040045;
@@ -1081,6 +1082,7 @@ containing a value of this type.
         public static final int instructions=0x7f090013;
         public static final int label_name=0x7f090011;
         public static final int marked_as_read=0x7f09002a;
+        public static final int marked_as_unread=0x7f09002b;
         public static final int menuSettings=0x7f09001c;
         public static final int menuShowAll=0x7f09001d;
         public static final int menuWipeDb=0x7f09001e;

@@ -3,11 +3,7 @@ package fr.gaulupeau.apps.wallabag;
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;

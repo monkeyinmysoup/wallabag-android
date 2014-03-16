@@ -27,6 +27,7 @@
     <string name="unread_label">não lido(s)</string>
     <string name="refresh">Atualizar</string>
     <string name="unread_articles">Você tem %d artigo(s) não lido(s)</string>
-    <string name="marked_as_read">Article marked as read</string>
+    <string name="marked_as_read">Artigo marcado como lido</string>
+    <string name="marked_as_unread">Artigo marcado como não lido</string>
 </resources>
 

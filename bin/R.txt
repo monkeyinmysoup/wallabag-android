@@ -243,8 +243,9 @@ int drawable abs__textfield_searchview_right_holo_light 0x7f02006e
 int drawable abs__toast_frame 0x7f02006f
 int drawable actionbar 0x7f020070
 int drawable ic_action_accept 0x7f020071
-int drawable icon 0x7f020072
-int drawable poche 0x7f020073
+int drawable ic_action_undo 0x7f020072
+int drawable icon 0x7f020073
+int drawable poche 0x7f020074
 int id APIToken 0x7f040045
 int id APIUsername 0x7f040043
 int id abs__action_bar 0x7f040020
@@ -382,6 +383,7 @@ int string hello 0x7f09000f
 int string instructions 0x7f090013
 int string label_name 0x7f090011
 int string marked_as_read 0x7f09002a
+int string marked_as_unread 0x7f09002b
 int string menuSettings 0x7f09001c
 int string menuShowAll 0x7f09001d
 int string menuWipeDb 0x7f09001e

@@ -28,5 +28,6 @@
     <string name="refresh">Refresh</string>
     <string name="unread_articles">You have %d unread articles</string>
     <string name="marked_as_read">Article marked as read</string>
+     <string name="marked_as_unread">Article marked as unread</string>
 </resources>
 

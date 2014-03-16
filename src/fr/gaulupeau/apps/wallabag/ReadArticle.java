@@ -8,13 +8,12 @@ import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
+
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +33,8 @@ public class ReadArticle extends SherlockActivity {
 	SQLiteDatabase database;
 	String id = "";
 	ScrollView view;
+	
+	private boolean isRead;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,7 +74,7 @@ public class ReadArticle extends SherlockActivity {
 		// finish();
 		// }
 		// });
-
+		findOutIfIsRead();
 	}
 
 	@Override
@@ -91,6 +92,7 @@ public class ReadArticle extends SherlockActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.option_read, menu);
+		setStateIcon(menu);
 		return true;
 	}
 
@@ -99,8 +101,13 @@ public class ReadArticle extends SherlockActivity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			onBackPressed();
+			return true;
 		case R.id.read:
-			markAsRead();
+			toggleMarkAsRead();
+			return true;
+		case R.id.settings:
+			startActivity(new Intent(getBaseContext(), Settings.class));
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -112,11 +119,33 @@ public class ReadArticle extends SherlockActivity {
 		database.close();
 	}
 
-	private void markAsRead() {
+	private void setStateIcon(Menu menu){
+		MenuItem item = menu.findItem(R.id.read);
+		
+		if(isRead)
+			item.setIcon(R.drawable.ic_action_undo);
+		else
+			item.setIcon(R.drawable.ic_action_accept);
+	}
+	
+	private void findOutIfIsRead(){
+		String query = "SELECT * FROM " + ARTICLE_TABLE + " WHERE " + MY_ID + " = " + id + " AND " + ARCHIVE + " = 1";
+		int read = database.rawQuery(query, null).getCount();
+		
+		isRead = read == 1 ? true : false;
+	}
+	
+	private void toggleMarkAsRead(){
+		int value = isRead ? 0 : 1;
+		
 		ContentValues values = new ContentValues();
-		values.put(ARCHIVE, 1);
+		values.put(ARCHIVE, value);
 		database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
-		showToast(getString(R.string.marked_as_read));
+		
+		if(isRead)
+			showToast(getString(R.string.marked_as_unread));
+		else
+			showToast(getString(R.string.marked_as_read));
 		finish();
 	}
 
