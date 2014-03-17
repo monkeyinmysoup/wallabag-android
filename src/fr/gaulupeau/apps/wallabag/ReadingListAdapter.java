@@ -40,10 +40,12 @@ public class ReadingListAdapter extends BaseAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     convertView = inflater.inflate(R.layout.article_list, null);
             }
-            TextView tvTitle = (TextView) convertView.findViewById(R.id.listitem_titre);
+            TextView tvTitle = (TextView) convertView.findViewById(R.id.listitem_title);
             //Log.e("title", entry.title);
             tvTitle.setText(entry.title);
-
+            
+            TextView tvDescription = (TextView) convertView.findViewById(R.id.listitem_description);
+            tvDescription.setText(entry.content.subSequence(0, 100));
             return convertView;
     }
 

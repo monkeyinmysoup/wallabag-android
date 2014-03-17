@@ -26,8 +26,14 @@
     <string name="version">1.6-alpha1</string>
     <string name="unread_label">não lido(s)</string>
     <string name="refresh">Atualizar</string>
-    <string name="unread_articles">Você tem %d artigo(s) não lido(s)</string>
+    <string name="no_unread_articles">Você não tem artigos não lidos</string>
+    <string name="one_unread_article">Você tem 1 artigo não lido</string>
+    <string name="many_unread_articles">Você tem %d artigos não lidos</string>
     <string name="marked_as_read">Artigo marcado como lido</string>
     <string name="marked_as_unread">Artigo marcado como não lido</string>
+    <string name="wipe_data_base">Limpando banco de dados</string>
+    <string name="sure">Tem certeza?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string> 
 </resources>
 

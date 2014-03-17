@@ -26,8 +26,14 @@
     <string name="version">1.6-alpha1</string>
     <string name="unread_label">unread</string>
     <string name="refresh">Refresh</string>
-    <string name="unread_articles">You have %d unread articles</string>
+    <string name="no_unread_articles">You have no unread articles</string>
+    <string name="one_unread_article">You have 1 unread article</string>
+    <string name="many_unread_articles">You have %d unread articles</string>
     <string name="marked_as_read">Article marked as read</string>
-     <string name="marked_as_unread">Article marked as unread</string>
+    <string name="marked_as_unread">Article marked as unread</string>
+    <string name="wipe_data_base">Wiping database</string>
+    <string name="sure">Are you Sure?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string> 
 </resources>
 

@@ -37,8 +37,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -105,10 +107,9 @@ public class ListArticles extends SherlockActivity {
         		setupList(true);
         		return super.onOptionsItemSelected(item);
         	case R.id.menuWipeDb:
-        		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
-        		helper.truncateTables(database);
-        		setupList(false);
-        		super.onOptionsItemSelected(item);
+        		wipeDB();
+        		return true;
+        		//super.onOptionsItemSelected(item);
         	case R.id.refresh:
         		refresh();
 				return true;
@@ -297,7 +298,7 @@ public class ListArticles extends SherlockActivity {
 	    			}
 	    			
 	    		}
-				showToast(getString(R.string.txtSyncDone));
+				//showToast(getString(R.string.txtSyncDone));
 	    		updateUnread();
 	    	} catch (MalformedURLException e)
 	    	{
@@ -351,7 +352,12 @@ public class ListArticles extends SherlockActivity {
 	    			ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
 	    			database = helper.getReadableDatabase();
 	    			int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
-	    			showToast(String.format(getString(R.string.unread_articles), news));
+	    			if(news == 0)
+	    				showToast(getString(R.string.no_unread_articles));
+	    			else if(news == 1)
+	    				showToast(getString(R.string.one_unread_article));
+	    			else
+	    				showToast(String.format(getString(R.string.many_unread_articles), news));
 	    			setupList(false);
 	    		}
 	    	});
@@ -397,4 +403,32 @@ public class ListArticles extends SherlockActivity {
 		return new ReadingListAdapter(getBaseContext(), articleInfo);
 	}
 	
+	private void wipeDB(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+	    builder.setTitle(getString(R.string.wipe_data_base));
+	    builder.setMessage(getString(R.string.sure));
+
+	    builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+	    	@Override
+	        public void onClick(DialogInterface dialog, int which) {
+	        	ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(ListArticles.this);
+        		helper.truncateTables(database);
+        		setupList(false);
+        		
+	            dialog.dismiss();
+	        }
+
+	    });
+
+	    builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+	            dialog.dismiss();
+	        }
+	    });
+
+	    AlertDialog alert = builder.create();
+	    alert.show();	
+	}
 }
