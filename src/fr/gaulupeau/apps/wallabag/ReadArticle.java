@@ -243,7 +243,7 @@ public class ReadArticle extends SherlockActivity {
 			intent.setComponent(new ComponentName(packageName,
 					ri.activityInfo.name));
 			intent.setAction(first.getAction());
-			first.setData(first.getData());
+			intent.setData(first.getData());
 			extraIntents[i] = intent;
 		}
 
