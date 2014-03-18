@@ -61,9 +61,6 @@ import android.util.Base64;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -78,9 +75,9 @@ import fr.gaulupeau.apps.InThePoche.R;
  */
 public class Wallabag extends SherlockActivity {
 	private static SQLiteDatabase database;
-	Button btnDone;
-	Button btnGetPost;
-	Button btnSync;
+	//Button btnDone;
+	//Button btnGetPost;
+	//Button btnSync;
 	EditText editPocheUrl;
 	SharedPreferences settings;
 	static String apiUsername;
@@ -102,9 +99,9 @@ public class Wallabag extends SherlockActivity {
         // Find out if Sharing or if app has been launched from icon
         if (action.equals(Intent.ACTION_SEND) && pocheUrl != "https://") {
         	setContentView(R.layout.main);
-        	findViewById(R.id.btnSync).setVisibility(View.GONE);
-        	findViewById(R.id.btnGetPost).setVisibility(View.GONE);
-        	findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
+//        	findViewById(R.id.btnSync).setVisibility(View.GONE);
+//        	findViewById(R.id.btnGetPost).setVisibility(View.GONE);
+//        	findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
         	final String pageUrl = extras.getString("android.intent.extra.TEXT");
         	// Vérification de la connectivité Internet
 			 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -171,15 +168,15 @@ public class Wallabag extends SherlockActivity {
 //				}
 //			});
             
-            btnGetPost = (Button)findViewById(R.id.btnGetPost);
-            //updateUnread();
-            
-			btnGetPost.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					startActivity(new Intent(getBaseContext(), ListArticles.class));
-				}
-			});
+//            btnGetPost = (Button)findViewById(R.id.btnGetPost);
+//            //updateUnread();
+//            
+//			btnGetPost.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					startActivity(new Intent(getBaseContext(), ListArticles.class));
+//				}
+//			});
 			
         }
     }
@@ -239,7 +236,7 @@ public class Wallabag extends SherlockActivity {
     		{
     			ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
     			database = helper.getReadableDatabase();
-    			int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
+//    			int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
 //    			btnGetPost.setText(getString(R.string.btnGetPost) + " - " + news + " " + getString(R.string.unread_label));
     		}
     	});
