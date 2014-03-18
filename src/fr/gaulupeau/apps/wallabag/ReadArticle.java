@@ -35,6 +35,7 @@ public class ReadArticle extends SherlockActivity {
 	String id = "";
 	ScrollView view;
 	
+	private String articleUrl;
 	private Menu menu;
 	private boolean isRead;
 	private boolean isFav;
@@ -51,7 +52,7 @@ public class ReadArticle extends SherlockActivity {
 				getApplicationContext());
 		database = helper.getWritableDatabase();
 		String[] getStrColumns = new String[] { ARTICLE_URL, MY_ID,
-				ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR };
+				ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR, FAV };
 		Bundle data = getIntent().getExtras();
 		if (data != null) {
 			id = data.getString("id");
@@ -66,6 +67,7 @@ public class ReadArticle extends SherlockActivity {
 
 		txtAuthor = (TextView) findViewById(R.id.txtAuthor);
 		txtAuthor.setText(ac.getString(0));
+		articleUrl = ac.getString(0);
 		
 //		btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
 		// btnMarkRead.setOnClickListener(new OnClickListener() {
@@ -78,8 +80,8 @@ public class ReadArticle extends SherlockActivity {
 		// finish();
 		// }
 		// });
-		findOutIfIsRead();
-		findOutIfIsFav();
+		findOutIfIsRead(ac.getInt(4));
+		findOutIfIsFav(ac.getInt(6));
 	}
 
 	@Override
@@ -118,9 +120,20 @@ public class ReadArticle extends SherlockActivity {
 		case R.id.settings:
 			startActivity(new Intent(getBaseContext(), Settings.class));
 			return true;
+		case R.id.share:
+			shareUrl();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void shareUrl() {
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_TEXT, articleUrl);
+		
+		startActivity(Intent.createChooser(intent, getString(R.string.share_title)));
 	}
 
 	@Override
@@ -151,16 +164,12 @@ public class ReadArticle extends SherlockActivity {
 			item.setIcon(R.drawable.ic_action_not_important);
 	}
 	
-	private void findOutIfIsRead(){
-		String query = "SELECT " + ARCHIVE + " FROM " + ARTICLE_TABLE + " WHERE " + MY_ID + " = " + id + " AND " + ARCHIVE + " = 1";
-		int read = database.rawQuery(query, null).getCount();
+	private void findOutIfIsRead(int read){
 		
 		isRead = read == 1 ? true : false;
 	}
 	
-	private void findOutIfIsFav(){
-		String query = "SELECT " + FAV + " FROM " + ARTICLE_TABLE + " WHERE " + MY_ID + " = " + id + " AND " + FAV + " = 1";
-		int fav = database.rawQuery(query, null).getCount();
+	private void findOutIfIsFav(int fav){
 		
 		isFav = fav == 1 ? true : false;
 	}

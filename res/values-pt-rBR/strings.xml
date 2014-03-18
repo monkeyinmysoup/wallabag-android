@@ -41,5 +41,6 @@
     <string name="read_title">Marcar como lido</string>
     <string name="unread_title">Marcar como não lido</string>
     <string name="no_articles">Você não tem artigos</string>
+    <string name="share_title">Compartilhar</string>
 </resources>
 

@@ -41,5 +41,6 @@
     <string name="read_title">Mark as Read</string>
     <string name="unread_title">Mark as unread</string>
     <string name="no_articles">You have no articles</string>
+    <string name="share_title">Share</string>
 </resources>
 

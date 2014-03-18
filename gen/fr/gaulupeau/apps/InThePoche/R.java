@@ -908,8 +908,9 @@ containing a value of this type.
         public static final int ic_action_accept=0x7f020071;
         public static final int ic_action_important=0x7f020072;
         public static final int ic_action_not_important=0x7f020073;
-        public static final int ic_action_undo=0x7f020074;
-        public static final int icon=0x7f020075;
+        public static final int ic_action_share=0x7f020074;
+        public static final int ic_action_undo=0x7f020075;
+        public static final int icon=0x7f020076;
     }
     public static final class id {
         public static final int APIToken=0x7f040041;
@@ -956,7 +957,7 @@ containing a value of this type.
         public static final int author=0x7f040044;
         public static final int disableHome=0x7f040009;
         public static final int edit_query=0x7f040026;
-        public static final int fav=0x7f04004a;
+        public static final int fav=0x7f04004b;
         public static final int homeAsUp=0x7f040006;
         public static final int instructions=0x7f040042;
         public static final int linearLayout=0x7f040039;
@@ -971,10 +972,11 @@ containing a value of this type.
         public static final int normal=0x7f040001;
         public static final int pageUrl_label=0x7f04003c;
         public static final int pocheUrl=0x7f04003d;
-        public static final int read=0x7f04004b;
+        public static final int read=0x7f04004c;
         public static final int refresh=0x7f040047;
         public static final int scroll=0x7f040032;
         public static final int settings=0x7f040048;
+        public static final int share=0x7f04004a;
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
@@ -1097,6 +1099,7 @@ containing a value of this type.
  <string name="unread_label">não lido(s)</string> 
          */
         public static final int refresh=0x7f090027;
+        public static final int share_title=0x7f090037;
         public static final int sure=0x7f09002e;
         public static final int txtAPIToken=0x7f090025;
         public static final int txtAPIUsername=0x7f090024;
