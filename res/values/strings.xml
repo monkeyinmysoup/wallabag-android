@@ -24,7 +24,7 @@
     <string name="txtAPIUsername"><b>Your user ID (user_id in Feed URL):</b></string>
     <string name="txtAPIToken"><b>Your token (token in Feed URL):</b></string>
     <string name="version">1.6-alpha1</string>
-    <string name="unread_label">unread</string>
+    <!-- <string name="unread_label">unread</string> -->
     <string name="refresh">Refresh</string>
     <string name="no_unread_articles">You have no unread articles</string>
     <string name="one_unread_article">You have 1 unread article</string>
@@ -35,5 +35,10 @@
     <string name="sure">Are you Sure?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string> 
+    <string name="marked_as_fav">Article added to your Favorites</string>
+    <string name="marked_as_not_fav">Article removed from your Favorites</string>
+    <string name="fav_title">Toggle favorite</string>
+    <string name="read_title">Mark as Read</string>
+    <string name="unread_title">Mark as unread</string>
 </resources>
 

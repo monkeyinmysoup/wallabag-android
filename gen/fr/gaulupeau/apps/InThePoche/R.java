@@ -906,9 +906,11 @@ containing a value of this type.
         public static final int abs__toast_frame=0x7f02006f;
         public static final int actionbar=0x7f020070;
         public static final int ic_action_accept=0x7f020071;
-        public static final int ic_action_undo=0x7f020072;
-        public static final int icon=0x7f020073;
-        public static final int poche=0x7f020074;
+        public static final int ic_action_important=0x7f020072;
+        public static final int ic_action_not_important=0x7f020073;
+        public static final int ic_action_undo=0x7f020074;
+        public static final int icon=0x7f020075;
+        public static final int poche=0x7f020076;
     }
     public static final class id {
         public static final int APIToken=0x7f040046;
@@ -957,6 +959,7 @@ containing a value of this type.
         public static final int btnSync=0x7f04003f;
         public static final int disableHome=0x7f040009;
         public static final int edit_query=0x7f040026;
+        public static final int fav=0x7f04004f;
         public static final int homeAsUp=0x7f040006;
         public static final int imageView1=0x7f04003c;
         public static final int instructions=0x7f040047;
@@ -972,7 +975,7 @@ containing a value of this type.
         public static final int pageUrl_label=0x7f040041;
         public static final int pocheUrl=0x7f040042;
         public static final int progressBar1=0x7f040040;
-        public static final int read=0x7f04004f;
+        public static final int read=0x7f040050;
         public static final int refresh=0x7f04004c;
         public static final int scroll=0x7f040032;
         public static final int scrollView1=0x7f04003b;
@@ -1079,20 +1082,27 @@ containing a value of this type.
         public static final int btnGetPost=0x7f090019;
         public static final int btnMarkRead=0x7f09001b;
         public static final int btnSync=0x7f09001a;
+        public static final int fav_title=0x7f090033;
         public static final int hello=0x7f09000f;
         public static final int instructions=0x7f090013;
         public static final int label_name=0x7f090011;
-        public static final int many_unread_articles=0x7f09002b;
-        public static final int marked_as_read=0x7f09002c;
-        public static final int marked_as_unread=0x7f09002d;
+        public static final int many_unread_articles=0x7f09002a;
+        public static final int marked_as_fav=0x7f090031;
+        public static final int marked_as_not_fav=0x7f090032;
+        public static final int marked_as_read=0x7f09002b;
+        public static final int marked_as_unread=0x7f09002c;
         public static final int menuSettings=0x7f09001c;
         public static final int menuShowAll=0x7f09001d;
         public static final int menuWipeDb=0x7f09001e;
-        public static final int no=0x7f090031;
-        public static final int no_unread_articles=0x7f090029;
-        public static final int one_unread_article=0x7f09002a;
-        public static final int refresh=0x7f090028;
-        public static final int sure=0x7f09002f;
+        public static final int no=0x7f090030;
+        public static final int no_unread_articles=0x7f090028;
+        public static final int one_unread_article=0x7f090029;
+        public static final int read_title=0x7f090034;
+        /**  <string name="unread_label">unread</string> 
+ <string name="unread_label">não lido(s)</string> 
+         */
+        public static final int refresh=0x7f090027;
+        public static final int sure=0x7f09002e;
         public static final int txtAPIToken=0x7f090025;
         public static final int txtAPIUsername=0x7f090024;
         public static final int txtConfigNotSet=0x7f090022;
@@ -1100,13 +1110,13 @@ containing a value of this type.
         public static final int txtNetOffline=0x7f090021;
         public static final int txtSyncDone=0x7f09001f;
         public static final int txtSyncFailed=0x7f090020;
-        public static final int unread_label=0x7f090027;
+        public static final int unread_title=0x7f090035;
         public static final int url_help=0x7f090018;
         public static final int url_label=0x7f090017;
         public static final int version=0x7f090026;
         public static final int which_browser=0x7f090015;
-        public static final int wipe_data_base=0x7f09002e;
-        public static final int yes=0x7f090030;
+        public static final int wipe_data_base=0x7f09002d;
+        public static final int yes=0x7f09002f;
     }
     public static final class style {
         /** 

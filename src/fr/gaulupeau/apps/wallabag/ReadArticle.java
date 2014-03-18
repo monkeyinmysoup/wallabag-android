@@ -8,6 +8,7 @@ import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -34,7 +35,9 @@ public class ReadArticle extends SherlockActivity {
 	String id = "";
 	ScrollView view;
 	
+	private Menu menu;
 	private boolean isRead;
+	private boolean isFav;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,6 +66,7 @@ public class ReadArticle extends SherlockActivity {
 
 		txtAuthor = (TextView) findViewById(R.id.txtAuthor);
 		txtAuthor.setText(ac.getString(0));
+		
 //		btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
 		// btnMarkRead.setOnClickListener(new OnClickListener() {
 		//
@@ -75,6 +79,7 @@ public class ReadArticle extends SherlockActivity {
 		// }
 		// });
 		findOutIfIsRead();
+		findOutIfIsFav();
 	}
 
 	@Override
@@ -92,7 +97,9 @@ public class ReadArticle extends SherlockActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.option_read, menu);
-		setStateIcon(menu);
+		this.menu = menu;
+		setReadStateIcon();
+		setFavStateIcon();
 		return true;
 	}
 
@@ -104,6 +111,9 @@ public class ReadArticle extends SherlockActivity {
 			return true;
 		case R.id.read:
 			toggleMarkAsRead();
+			return true;
+		case R.id.fav:
+			toggleFav();
 			return true;
 		case R.id.settings:
 			startActivity(new Intent(getBaseContext(), Settings.class));
@@ -119,20 +129,40 @@ public class ReadArticle extends SherlockActivity {
 		database.close();
 	}
 
-	private void setStateIcon(Menu menu){
+	private void setReadStateIcon(){
 		MenuItem item = menu.findItem(R.id.read);
 		
-		if(isRead)
+		if(isRead){
 			item.setIcon(R.drawable.ic_action_undo);
-		else
+			item.setTitle(getString(R.string.unread_title));
+		}
+		else{
 			item.setIcon(R.drawable.ic_action_accept);
+			item.setTitle(getString(R.string.read_title));
+		}
+	}
+	
+	private void setFavStateIcon(){
+		MenuItem item = menu.findItem(R.id.fav);
+		
+		if(isFav)
+			item.setIcon(R.drawable.ic_action_important);
+		else
+			item.setIcon(R.drawable.ic_action_not_important);
 	}
 	
 	private void findOutIfIsRead(){
-		String query = "SELECT * FROM " + ARTICLE_TABLE + " WHERE " + MY_ID + " = " + id + " AND " + ARCHIVE + " = 1";
+		String query = "SELECT " + ARCHIVE + " FROM " + ARTICLE_TABLE + " WHERE " + MY_ID + " = " + id + " AND " + ARCHIVE + " = 1";
 		int read = database.rawQuery(query, null).getCount();
 		
 		isRead = read == 1 ? true : false;
+	}
+	
+	private void findOutIfIsFav(){
+		String query = "SELECT " + FAV + " FROM " + ARTICLE_TABLE + " WHERE " + MY_ID + " = " + id + " AND " + FAV + " = 1";
+		int fav = database.rawQuery(query, null).getCount();
+		
+		isFav = fav == 1 ? true : false;
 	}
 	
 	private void toggleMarkAsRead(){
@@ -142,11 +172,33 @@ public class ReadArticle extends SherlockActivity {
 		values.put(ARCHIVE, value);
 		database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
 		
-		if(isRead)
+		if(isRead){
 			showToast(getString(R.string.marked_as_unread));
-		else
+			isRead = false;
+		}
+		else{
 			showToast(getString(R.string.marked_as_read));
-		finish();
+			finish();
+		}
+		setReadStateIcon();
+	}
+	
+	private void toggleFav(){
+		int value = isFav ? 0 : 1;
+		
+		ContentValues values = new ContentValues();
+		values.put(FAV, value);
+		database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
+		
+		if(isFav){
+			showToast(getString(R.string.marked_as_not_fav));
+			isFav = false;
+		}
+		else{
+			showToast(getString(R.string.marked_as_fav));
+			isFav = true;
+		}
+		setFavStateIcon();
 	}
 
 	public void showToast(final String toast) {

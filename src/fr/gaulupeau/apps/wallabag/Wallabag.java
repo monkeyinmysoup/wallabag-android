@@ -240,7 +240,7 @@ public class Wallabag extends SherlockActivity {
     			ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
     			database = helper.getReadableDatabase();
     			int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
-    			btnGetPost.setText(getString(R.string.btnGetPost) + " - " + news + " " + getString(R.string.unread_label));
+//    			btnGetPost.setText(getString(R.string.btnGetPost) + " - " + news + " " + getString(R.string.unread_label));
     		}
     	});
     }

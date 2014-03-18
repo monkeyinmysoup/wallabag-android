@@ -8,6 +8,7 @@ import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 
 import java.io.IOException;
@@ -85,6 +86,7 @@ public class ListArticles extends SherlockActivity {
 	
     public void onResume() {
         super.onResume();
+        getSettings();
         setupList(false);
     }
     
@@ -285,7 +287,11 @@ public class ListArticles extends SherlockActivity {
 	        				values.put(ARTICLE_URL, Html.fromHtml(arrays.PodcastURL[i]).toString());
 	        				values.put(ARTICLE_DATE, arrays.PodcastDate[i]);
 	        				values.put(ARCHIVE, 0);
+	        				values.put(FAV, 0);
 	        				values.put(ARTICLE_SYNC, 0);
+	        				
+	        				System.out.println(arrays.PodcastContent[i]);
+	        				
 	        				try {
 	        					database.insertOrThrow(ARTICLE_TABLE, null, values);
 	        				} catch (SQLiteConstraintException e) {

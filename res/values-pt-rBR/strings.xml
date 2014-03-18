@@ -24,7 +24,7 @@
     <string name="txtAPIUsername"><b>Seu ID de usuário (user_id em Feed URL):</b></string>
     <string name="txtAPIToken"><b>Seu token (token em Feed URL):</b></string>
     <string name="version">1.6-alpha1</string>
-    <string name="unread_label">não lido(s)</string>
+    <!-- <string name="unread_label">não lido(s)</string> -->
     <string name="refresh">Atualizar</string>
     <string name="no_unread_articles">Você não tem artigos não lidos</string>
     <string name="one_unread_article">Você tem 1 artigo não lido</string>
@@ -34,6 +34,11 @@
     <string name="wipe_data_base">Limpando banco de dados</string>
     <string name="sure">Tem certeza?</string>
     <string name="yes">Sim</string>
-    <string name="no">Não</string> 
+    <string name="no">Não</string>
+    <string name="marked_as_fav">Artigo adicionado aos seus Favoritos</string>
+    <string name="marked_as_not_fav">Artigo removido dos seus Favoritos</string>
+    <string name="fav_title">Alternar favorito</string>
+    <string name="read_title">Marcar como lido</string>
+    <string name="unread_title">Marcar como não lido</string>
 </resources>
 
