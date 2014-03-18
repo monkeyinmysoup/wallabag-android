@@ -10,10 +10,16 @@ import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
 
+import java.util.List;
+
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -30,11 +36,11 @@ public class ReadArticle extends SherlockActivity {
 	TextView txtTitre;
 	TextView txtContent;
 	TextView txtAuthor;
-//	Button btnMarkRead;
+	// Button btnMarkRead;
 	SQLiteDatabase database;
 	String id = "";
 	ScrollView view;
-	
+
 	private String articleUrl;
 	private Menu menu;
 	private boolean isRead;
@@ -68,8 +74,8 @@ public class ReadArticle extends SherlockActivity {
 		txtAuthor = (TextView) findViewById(R.id.txtAuthor);
 		txtAuthor.setText(ac.getString(0));
 		articleUrl = ac.getString(0);
-		
-//		btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
+
+		// btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
 		// btnMarkRead.setOnClickListener(new OnClickListener() {
 		//
 		// @Override
@@ -129,11 +135,17 @@ public class ReadArticle extends SherlockActivity {
 	}
 
 	private void shareUrl() {
-		Intent intent = new Intent(Intent.ACTION_SEND);
-		intent.setType("text/plain");
-		intent.putExtra(Intent.EXTRA_TEXT, articleUrl);
-		
-		startActivity(Intent.createChooser(intent, getString(R.string.share_title)));
+		Intent viewIntent = new Intent(Intent.ACTION_VIEW);
+		Intent sendIntent = new Intent(Intent.ACTION_SEND);
+
+		viewIntent.setData(Uri.parse(articleUrl));
+
+		sendIntent.setType("text/plain");
+		sendIntent.putExtra(Intent.EXTRA_TEXT, articleUrl);
+
+		Intent intentChooser = createIntentChooserForTwoIntents(viewIntent, sendIntent, getString(R.string.share_title));
+
+		startActivity(intentChooser);
 	}
 
 	@Override
@@ -142,68 +154,65 @@ public class ReadArticle extends SherlockActivity {
 		database.close();
 	}
 
-	private void setReadStateIcon(){
+	private void setReadStateIcon() {
 		MenuItem item = menu.findItem(R.id.read);
-		
-		if(isRead){
+
+		if (isRead) {
 			item.setIcon(R.drawable.ic_action_undo);
 			item.setTitle(getString(R.string.unread_title));
-		}
-		else{
+		} else {
 			item.setIcon(R.drawable.ic_action_accept);
 			item.setTitle(getString(R.string.read_title));
 		}
 	}
-	
-	private void setFavStateIcon(){
+
+	private void setFavStateIcon() {
 		MenuItem item = menu.findItem(R.id.fav);
-		
-		if(isFav)
+
+		if (isFav)
 			item.setIcon(R.drawable.ic_action_important);
 		else
 			item.setIcon(R.drawable.ic_action_not_important);
 	}
-	
-	private void findOutIfIsRead(int read){
-		
+
+	private void findOutIfIsRead(int read) {
+
 		isRead = read == 1 ? true : false;
 	}
-	
-	private void findOutIfIsFav(int fav){
-		
+
+	private void findOutIfIsFav(int fav) {
+
 		isFav = fav == 1 ? true : false;
 	}
-	
-	private void toggleMarkAsRead(){
+
+	private void toggleMarkAsRead() {
 		int value = isRead ? 0 : 1;
-		
+
 		ContentValues values = new ContentValues();
 		values.put(ARCHIVE, value);
 		database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
-		
-		if(isRead){
+
+		if (isRead) {
 			showToast(getString(R.string.marked_as_unread));
 			isRead = false;
-		}
-		else{
+		} else {
 			showToast(getString(R.string.marked_as_read));
 			finish();
 		}
 		setReadStateIcon();
 	}
-	
-	private void toggleFav(){
+
+	private void toggleFav() {
 		int value = isFav ? 0 : 1;
-		
+
 		ContentValues values = new ContentValues();
 		values.put(FAV, value);
 		database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
-		
-		if(isFav){
+
+		if (isFav) {
 			showToast(getString(R.string.marked_as_not_fav));
 			isFav = false;
-		}
-		else{
+		} else {
 			showToast(getString(R.string.marked_as_fav));
 			isFav = true;
 		}
@@ -213,8 +222,33 @@ public class ReadArticle extends SherlockActivity {
 	public void showToast(final String toast) {
 		runOnUiThread(new Runnable() {
 			public void run() {
-				Toast.makeText(ReadArticle.this, toast, Toast.LENGTH_SHORT).show();
+				Toast.makeText(ReadArticle.this, toast, Toast.LENGTH_SHORT)
+						.show();
 			}
 		});
+	}
+
+	private Intent createIntentChooserForTwoIntents(Intent first, Intent second, String title) {
+
+		PackageManager pm = getPackageManager();
+
+		Intent chooser = Intent.createChooser(second, title);
+
+		List<ResolveInfo> resInfo = pm.queryIntentActivities(first, 0);
+		Intent[] extraIntents = new Intent[resInfo.size()];
+		for (int i = 0; i < resInfo.size(); i++) {
+			ResolveInfo ri = resInfo.get(i);
+			String packageName = ri.activityInfo.packageName;
+			Intent intent = new Intent();
+			intent.setComponent(new ComponentName(packageName,
+					ri.activityInfo.name));
+			intent.setAction(first.getAction());
+			first.setData(first.getData());
+			extraIntents[i] = intent;
+		}
+
+		chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
+
+		return chooser;
 	}
 }
