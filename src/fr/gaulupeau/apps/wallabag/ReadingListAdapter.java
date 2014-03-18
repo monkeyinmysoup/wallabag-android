@@ -12,44 +12,45 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class ReadingListAdapter extends BaseAdapter {
-    private Context context;
-    private List<Article> listArticles;
+	private Context context;
+	private List<Article> listArticles;
 
-    public ReadingListAdapter(Context context, List<Article> listArticles) {
-            this.context = context;
-            this.listArticles = listArticles;
-    }
+	public ReadingListAdapter(Context context, List<Article> listArticles) {
+		this.context = context;
+		this.listArticles = listArticles;
+	}
 
+	public int getCount() {
+		return listArticles.size();
+	}
 
-    public int getCount() {
-            return listArticles.size();
-    }
+	public Object getItem(int position) {
+		return listArticles.get(position);
+	}
 
-    public Object getItem(int position) {
-            return listArticles.get(position);
-    }
+	public long getItemId(int position) {
+		return position;
+	}
 
-    public long getItemId(int position) {
-            return position;
-    }
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// Article entry = listArticles.get(position);
+		if (convertView == null) {
+			LayoutInflater inflater = (LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.article_list, null);
+		}
+		TextView tvTitle = (TextView) convertView
+				.findViewById(R.id.listitem_title);
+		TextView tvDescription = (TextView) convertView
+				.findViewById(R.id.listitem_description);
+		// Log.e("title", entry.title);
+		Article entry = listArticles.get(position);
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-            Article entry = listArticles.get(position);
-            if (convertView == null) {
-                    LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    convertView = inflater.inflate(R.layout.article_list, null);
-            }
-            TextView tvTitle = (TextView) convertView.findViewById(R.id.listitem_title);
-            //Log.e("title", entry.title);
-            tvTitle.setText(entry.title);
-            
-            TextView tvDescription = (TextView) convertView.findViewById(R.id.listitem_description);
-            tvDescription.setText(entry.content.subSequence(0, 100));
-            return convertView;
-    }
+		tvTitle.setText(entry.title);
 
+		tvDescription.setText(entry.content.subSequence(0, 100));
 
-
+		return convertView;
+	}
 
 }

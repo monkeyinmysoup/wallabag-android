@@ -55,6 +55,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -370,14 +371,21 @@ public class ListArticles extends SherlockActivity {
 	    }
 	    
 	    public void setupList(Boolean showAll) {
+	    TextView tvNoArticles = (TextView) findViewById(R.id.no_articles_text);
 		readList = (ListView) findViewById(R.id.liste_articles);
         readArticlesInfo = new ArrayList<Article>();
         String filter = null;
         if (showAll == false) {
 			filter = ARCHIVE + "=0";
 		}
+        
         ReadingListAdapter ad = getAdapterQuery(filter, readArticlesInfo);
         readList.setAdapter(ad);
+        
+        if(readArticlesInfo.size() == 0)
+        	tvNoArticles.setVisibility(View.VISIBLE);
+        else
+        	tvNoArticles.setVisibility(View.GONE);
         
         readList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

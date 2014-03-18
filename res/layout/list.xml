@@ -14,4 +14,14 @@
 
     </ListView>
 
+    <TextView
+        android:id="@+id/no_articles_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:enabled="false"
+        android:gravity="center"
+        android:text="@string/no_articles"
+        android:textColor="#757575"
+        android:visibility="gone" />
+
 </LinearLayout>
