@@ -140,8 +140,8 @@ public class Wallabag extends SherlockActivity {
         }
         else {
         	setContentView(R.layout.main);
-
-        	startActivityForResult(new Intent(getBaseContext(), ListArticles.class), REQUEST_EXIT);
+//
+//        	startActivityForResult(new Intent(getBaseContext(), ListArticles.class), REQUEST_EXIT);
 //        	startActivity(new Intent(getBaseContext(), ListArticles.class));
 //            btnSync = (Button)findViewById(R.id.btnSync);
 //            btnSync.setOnClickListener(new OnClickListener() {
