@@ -32,7 +32,8 @@
     <string name="marked_as_read">Artigo marcado como lido</string>
     <string name="marked_as_unread">Artigo marcado como não lido</string>
     <string name="wipe_data_base">Limpando banco de dados</string>
-    <string name="sure">Tem certeza?</string>
+    <string name="sure">Essa operação vai apagar todo o banco de dados local. Você tem certeza?</string>
+    <string name="delete_account_info">Deletar também as informações de conta</string>
     <string name="yes">Sim</string>
     <string name="no">Não</string>
     <string name="marked_as_fav">Artigo adicionado aos seus Favoritos</string>
@@ -46,7 +47,5 @@
     <string name="look_and_feel">Aparência</string>
     <string name="account">Conta</string>
     <string name="about">Sobre</string>
-    <string name="delete_account_info">Also delete account info</string>
-    <string name="delete_account_info">Deletar também as informações de conta</string>
 </resources>
 

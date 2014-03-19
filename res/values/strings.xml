@@ -32,7 +32,8 @@
     <string name="marked_as_read">Article marked as read</string>
     <string name="marked_as_unread">Article marked as unread</string>
     <string name="wipe_data_base">Wiping database</string>
-    <string name="sure">Are you Sure?</string>
+    <string name="sure">This operation will erase all the local database. Are you sure?</string>
+    <string name="delete_account_info">Also delete account info</string>
     <string name="yes">Yes</string>
     <string name="no">No</string> 
     <string name="marked_as_fav">Article added to your Favorites</string>
@@ -46,6 +47,5 @@
     <string name="look_and_feel">Look and feel</string>
     <string name="account">Account</string>
     <string name="about">About</string>
-    <string name="delete_account_info">Also delete account info</string>
 </resources>
 
