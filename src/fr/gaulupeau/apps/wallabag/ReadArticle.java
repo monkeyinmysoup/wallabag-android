@@ -12,6 +12,7 @@ import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -20,10 +21,11 @@ import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import com.actionbarsherlock.view.Window;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
+
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,11 +52,14 @@ public class ReadArticle extends SherlockActivity {
 	private boolean isRead;
 	private boolean isFav;
 
+	@SuppressLint("NewApi")
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
+		
+		goImmersive();
 		
 		actionBar = getSupportActionBar();
 		actionBar.setHomeButtonEnabled(true);
@@ -101,7 +106,6 @@ public class ReadArticle extends SherlockActivity {
 			private int goingDown, goingUp;
 			@Override
 			public void onScrollChanged(int x, int y, int oldx, int oldy) {
-				//System.out.println("was in " + oldy + " now is in " + y);
 				
 				if(actionBar.isShowing() && goingDown > 100)
 					actionBar.hide();
@@ -124,13 +128,35 @@ public class ReadArticle extends SherlockActivity {
 	}
 
 	@Override
+	public void onUserInteraction() {
+        super.onUserInteraction();
+        goImmersive();
+    }
+	
+	@SuppressLint("NewApi")
+	private void goImmersive() {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+			getWindow().getDecorView().setSystemUiVisibility(
+			          View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+			          | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+			          | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+			          | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+			          | View.SYSTEM_UI_FLAG_FULLSCREEN
+			          | View.SYSTEM_UI_FLAG_IMMERSIVE);
+		}
+		else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+			getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+		}
+		
+	}
+
+	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 
 		ContentValues values = new ContentValues();
 		values.put("read_at", view.getScrollY());
 		database.update(ARTICLE_TABLE, values, ARTICLE_ID + "=" + id, null);
-		System.out.println(view.getScrollY());
 		super.onStop();
 	}
 
