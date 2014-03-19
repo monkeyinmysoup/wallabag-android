@@ -81,6 +81,7 @@ public class ListArticles extends SherlockActivity {
 		
 		getSettings();
 		setContentView(R.layout.list);
+
 		setupDB();
 		setupList(false);
 	}

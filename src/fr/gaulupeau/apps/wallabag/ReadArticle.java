@@ -21,10 +21,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import com.actionbarsherlock.view.Window;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -39,21 +42,26 @@ public class ReadArticle extends SherlockActivity {
 	// Button btnMarkRead;
 	SQLiteDatabase database;
 	String id = "";
-	ScrollView view;
+	MyScrollView view;
 
 	private String articleUrl;
 	private Menu menu;
+	private ActionBar actionBar;
 	private boolean isRead;
 	private boolean isFav;
 
 	public void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+		
 		super.onCreate(savedInstanceState);
-
-		getSupportActionBar().setHomeButtonEnabled(true);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 		setContentView(R.layout.article);
-		view = (ScrollView) findViewById(R.id.scroll);
+		
+		actionBar = getSupportActionBar();
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
+		
+		view = (MyScrollView) findViewById(R.id.scroll);
 		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(
 				getApplicationContext());
 		database = helper.getWritableDatabase();
@@ -88,6 +96,31 @@ public class ReadArticle extends SherlockActivity {
 		// });
 		findOutIfIsRead(ac.getInt(4));
 		findOutIfIsFav(ac.getInt(6));
+		
+		view.setOnScrollViewListener(new OnViewScrollListener() {
+			private int goingDown, goingUp;
+			@Override
+			public void onScrollChanged(int x, int y, int oldx, int oldy) {
+				//System.out.println("was in " + oldy + " now is in " + y);
+				
+				if(actionBar.isShowing() && goingDown > 100)
+					actionBar.hide();
+	
+				if(!actionBar.isShowing() && goingUp > 100)
+					actionBar.show();
+				
+				if(y > oldy){
+					goingDown += y - oldy;
+					goingUp = 0;
+				}
+				
+				if(y < oldy){
+					goingUp += oldy - y;
+					goingDown = 0;
+				}
+				
+			}
+		});
 	}
 
 	@Override
