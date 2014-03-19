@@ -33,7 +33,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 		</activity>
-		<activity 	android:name="fr.gaulupeau.apps.wallabag.Settings"
+		<activity 	android:name="fr.gaulupeau.apps.settings.Settings"
+		    		android:label="@string/menuSettings"
+		    		android:theme="@style/AppTheme" >		    
+		</activity>	
+		<activity 	android:name="fr.gaulupeau.apps.settings.SettingsAccount"
 		    		android:label="@string/menuSettings"
 		    		android:theme="@style/AppTheme" >		    
 		</activity>		

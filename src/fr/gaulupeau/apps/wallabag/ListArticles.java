@@ -7,8 +7,8 @@ import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 
 import java.io.IOException;
@@ -54,6 +54,9 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +67,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.settings.Settings;
 
 public class ListArticles extends SherlockActivity {
 
@@ -75,6 +79,8 @@ public class ListArticles extends SherlockActivity {
 	private String pocheUrl;
 	private String apiUsername;
 	private String apiToken;
+	
+	private boolean checked;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -154,7 +160,7 @@ public class ListArticles extends SherlockActivity {
 		// Vérification de la connectivité Internet
 		 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-		 if (pocheUrl == "https://") {
+		 if (pocheUrl.equals("https://")) {
 			 showToast(getString(R.string.txtConfigNotSet));
 		 } else if (activeNetwork != null && activeNetwork.isConnected()) {
 			 // Exécution de la synchro en arrière-plan
@@ -419,18 +425,33 @@ public class ListArticles extends SherlockActivity {
 	}
 	
 	private void wipeDB(){
+		checked = false;
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 	    builder.setTitle(getString(R.string.wipe_data_base));
 	    builder.setMessage(getString(R.string.sure));
-
+	    
+	    View checkBoxView = View.inflate(getBaseContext(), R.layout.my_checkbox, null);
+	    CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox_delete_acoount);
+	    checkBox.setOnCheckedChangeListener(
+	    	new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				checked = isChecked;
+			}
+		});
+	    
+	    builder.setView(checkBoxView);
+	    
 	    builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
 	    	@Override
 	        public void onClick(DialogInterface dialog, int which) {
 	        	ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(ListArticles.this);
         		helper.truncateTables(database);
         		setupList(false);
-        		
+        		if(checked)
+        			cleanUserInfo();
 	            dialog.dismiss();
 	        }
 
@@ -445,5 +466,21 @@ public class ListArticles extends SherlockActivity {
 
 	    AlertDialog alert = builder.create();
 	    alert.show();	
+	}
+	
+	private void cleanUserInfo(){
+		System.out.println("called");
+		SharedPreferences settings;
+		SharedPreferences.Editor editor;
+		
+		settings = getSharedPreferences(PREFS_NAME, 0);
+	    editor = settings.edit();
+		
+		editor.putString("pocheUrl", "https://");
+    	editor.putString("APIUsername", "");
+    	editor.putString("APIToken", "");
+		editor.commit();
+		
+		getSettings();
 	}
 }

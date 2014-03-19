@@ -905,16 +905,21 @@ containing a value of this type.
         public static final int abs__textfield_searchview_right_holo_light=0x7f02006e;
         public static final int abs__toast_frame=0x7f02006f;
         public static final int actionbar=0x7f020070;
-        public static final int ic_action_accept=0x7f020071;
-        public static final int ic_action_important=0x7f020072;
-        public static final int ic_action_not_important=0x7f020073;
-        public static final int ic_action_share=0x7f020074;
-        public static final int ic_action_undo=0x7f020075;
-        public static final int icon=0x7f020076;
+        public static final int ic_action_about=0x7f020071;
+        public static final int ic_action_accept=0x7f020072;
+        public static final int ic_action_accounts=0x7f020073;
+        public static final int ic_action_brightness_medium=0x7f020074;
+        public static final int ic_action_important=0x7f020075;
+        public static final int ic_action_not_important=0x7f020076;
+        public static final int ic_action_phone=0x7f020077;
+        public static final int ic_action_settings=0x7f020078;
+        public static final int ic_action_share=0x7f020079;
+        public static final int ic_action_undo=0x7f02007a;
+        public static final int icon=0x7f02007b;
     }
     public static final class id {
-        public static final int APIToken=0x7f040042;
-        public static final int APIUsername=0x7f040040;
+        public static final int APIToken=0x7f040044;
+        public static final int APIUsername=0x7f040042;
         public static final int abs__action_bar=0x7f040020;
         public static final int abs__action_bar_container=0x7f04001f;
         public static final int abs__action_bar_subtitle=0x7f040011;
@@ -954,41 +959,45 @@ containing a value of this type.
         public static final int abs__textButton=0x7f040013;
         public static final int abs__title=0x7f04001b;
         public static final int abs__up=0x7f04000b;
-        public static final int author=0x7f040045;
+        public static final int author=0x7f040047;
+        public static final int checkbox_delete_acoount=0x7f04003d;
         public static final int disableHome=0x7f040009;
         public static final int edit_query=0x7f040026;
-        public static final int fav=0x7f04004c;
+        public static final int fav=0x7f040050;
         public static final int homeAsUp=0x7f040006;
-        public static final int instructions=0x7f040043;
+        public static final int instructions=0x7f040045;
         public static final int linear=0x7f040033;
         public static final int linearLayout=0x7f04003a;
         public static final int listMode=0x7f040002;
         public static final int liste_articles=0x7f04003b;
         public static final int listitem_description=0x7f040039;
         public static final int listitem_title=0x7f040038;
-        public static final int menuSettings=0x7f040046;
-        public static final int menuShowAll=0x7f040047;
-        public static final int menuWipeDb=0x7f04004a;
+        public static final int menuSettings=0x7f04004a;
+        public static final int menuShowAll=0x7f04004b;
+        public static final int menuWipeDb=0x7f04004e;
         public static final int no_articles_text=0x7f04003c;
         public static final int normal=0x7f040001;
-        public static final int pageUrl_label=0x7f04003d;
-        public static final int pocheUrl=0x7f04003e;
-        public static final int read=0x7f04004d;
-        public static final int refresh=0x7f040048;
+        public static final int pageUrl_label=0x7f04003f;
+        public static final int pocheUrl=0x7f040040;
+        public static final int read=0x7f040051;
+        public static final int refresh=0x7f04004c;
         public static final int scroll=0x7f040032;
-        public static final int settings=0x7f040049;
-        public static final int share=0x7f04004b;
+        public static final int settings=0x7f04004d;
+        public static final int settingsList=0x7f04003e;
+        public static final int settings_element_image=0x7f040048;
+        public static final int settings_element_text=0x7f040049;
+        public static final int share=0x7f04004f;
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
         public static final int tabMode=0x7f040003;
-        public static final int txtAPIToken=0x7f040041;
-        public static final int txtAPIUsername=0x7f04003f;
+        public static final int txtAPIToken=0x7f040043;
+        public static final int txtAPIUsername=0x7f040041;
         public static final int txtAuthor=0x7f040035;
         public static final int txtContent=0x7f040037;
         public static final int txtTitre=0x7f040034;
         public static final int useLogo=0x7f040004;
-        public static final int version=0x7f040044;
+        public static final int version=0x7f040046;
         public static final int viewLine=0x7f040036;
         public static final int wrap_content=0x7f040000;
     }
@@ -1021,9 +1030,12 @@ containing a value of this type.
         public static final int article_list=0x7f030016;
         public static final int list=0x7f030017;
         public static final int main=0x7f030018;
-        public static final int settings=0x7f030019;
-        public static final int sherlock_spinner_dropdown_item=0x7f03001a;
-        public static final int sherlock_spinner_item=0x7f03001b;
+        public static final int my_checkbox=0x7f030019;
+        public static final int settings=0x7f03001a;
+        public static final int settings_account=0x7f03001b;
+        public static final int settings_element=0x7f03001c;
+        public static final int sherlock_spinner_dropdown_item=0x7f03001d;
+        public static final int sherlock_spinner_item=0x7f03001e;
     }
     public static final class menu {
         public static final int option=0x7f0b0000;
@@ -1031,6 +1043,7 @@ containing a value of this type.
         public static final int option_read=0x7f0b0002;
     }
     public static final class string {
+        public static final int about=0x7f09003b;
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abs__action_bar_home_description=0x7f090000;
@@ -1072,6 +1085,7 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f090007;
+        public static final int account=0x7f09003a;
         public static final int app_name=0x7f090010;
         public static final int author=0x7f090012;
         public static final int authorSite=0x7f090016;
@@ -1079,10 +1093,13 @@ containing a value of this type.
         public static final int btnGetPost=0x7f090019;
         public static final int btnMarkRead=0x7f09001b;
         public static final int btnSync=0x7f09001a;
+        public static final int delete_account_info=0x7f09003c;
         public static final int fav_title=0x7f090033;
+        public static final int general=0x7f090038;
         public static final int hello=0x7f09000f;
         public static final int instructions=0x7f090013;
         public static final int label_name=0x7f090011;
+        public static final int look_and_feel=0x7f090039;
         public static final int many_unread_articles=0x7f09002a;
         public static final int marked_as_fav=0x7f090031;
         public static final int marked_as_not_fav=0x7f090032;

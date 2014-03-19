@@ -38,9 +38,14 @@
     <string name="marked_as_fav">Article added to your Favorites</string>
     <string name="marked_as_not_fav">Article removed from your Favorites</string>
     <string name="fav_title">Toggle favorite</string>
-    <string name="read_title">Mark as Read</string>
+    <string name="read_title">Mark as read</string>
     <string name="unread_title">Mark as unread</string>
     <string name="no_articles">You have no articles</string>
     <string name="share_title">Share</string>
+    <string name="general">General</string>
+    <string name="look_and_feel">Look and feel</string>
+    <string name="account">Account</string>
+    <string name="about">About</string>
+    <string name="delete_account_info">Also delete account info</string>
 </resources>
 

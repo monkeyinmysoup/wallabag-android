@@ -42,5 +42,11 @@
     <string name="unread_title">Marcar como não lido</string>
     <string name="no_articles">Você não tem artigos</string>
     <string name="share_title">Compartilhar</string>
+    <string name="general">Geral</string>
+    <string name="look_and_feel">Aparência</string>
+    <string name="account">Conta</string>
+    <string name="about">Sobre</string>
+    <string name="delete_account_info">Also delete account info</string>
+    <string name="delete_account_info">Deletar também as informações de conta</string>
 </resources>
 

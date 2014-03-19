@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.wallabag;
+package fr.gaulupeau.apps.settings;
 
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 import android.content.SharedPreferences;
@@ -10,7 +10,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import fr.gaulupeau.apps.InThePoche.R;
 
-public class Settings extends SherlockActivity {
+public class SettingsAccount extends SherlockActivity {
 //	Button btnDone;
 	EditText editPocheUrl;
 	EditText editAPIUsername;
@@ -30,7 +30,7 @@ public class Settings extends SherlockActivity {
 	    settings = getSharedPreferences(PREFS_NAME, 0);
 	    editor = settings.edit();
 	        
-		setContentView(R.layout.settings);
+		setContentView(R.layout.settings_account);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         String pocheUrl = settings.getString("pocheUrl", "https://");
         String apiUsername = settings.getString("APIUsername", "");

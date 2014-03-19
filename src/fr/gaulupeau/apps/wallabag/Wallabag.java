@@ -67,6 +67,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.settings.SettingsAccount;
 
 
 
@@ -208,7 +209,7 @@ public class Wallabag extends SherlockActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
     	case R.id.menuSettings:
-    		startActivity(new Intent(getBaseContext(), Settings.class));
+    		startActivity(new Intent(getBaseContext(), SettingsAccount.class));
     	default:
     		return super.onOptionsItemSelected(item);
     	}

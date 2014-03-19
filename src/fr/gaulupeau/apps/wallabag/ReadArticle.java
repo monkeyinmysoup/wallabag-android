@@ -36,6 +36,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.settings.SettingsAccount;
 
 public class ReadArticle extends SherlockActivity {
 	TextView txtTitre;
@@ -141,8 +142,9 @@ public class ReadArticle extends SherlockActivity {
 			          | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 			          | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 			          | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-			          | View.SYSTEM_UI_FLAG_FULLSCREEN
-			          | View.SYSTEM_UI_FLAG_IMMERSIVE);
+			        //  | View.SYSTEM_UI_FLAG_FULLSCREEN 
+			          | View.SYSTEM_UI_FLAG_IMMERSIVE
+			          | View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		}
 		else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
 			getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
@@ -183,7 +185,7 @@ public class ReadArticle extends SherlockActivity {
 			toggleFav();
 			return true;
 		case R.id.settings:
-			startActivity(new Intent(getBaseContext(), Settings.class));
+			startActivity(new Intent(getBaseContext(), SettingsAccount.class));
 			return true;
 		case R.id.share:
 			shareUrl();
