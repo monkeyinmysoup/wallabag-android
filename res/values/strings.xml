@@ -3,7 +3,7 @@
     <string name="hello">wallabag!</string>
     <string name="app_name">wallabag</string>
     <string name="label_name">Bag it!</string>
-    <string name="author">GAULUPEAU Jonathan - 2013</string>
+    <string name="author">GAULUPEAU Jonathan - 2013\nErick Pires - 2014</string>
     <string name="instructions">To save a web page to wallabag, open the page in a browser then tap <i>Share</i> and tap on <i>Bag it!</i>.\nYou could then see your wallabag login page.\nAnd it\'s done!\nMore infos about wallabag at wallabag.org.</string>
     <string name="btnDone">Save</string>
     <string name="which_browser">Which browser would you like to use?</string>
@@ -47,5 +47,11 @@
     <string name="account">Account</string>
     <string name="about">About</string>
     <string name="delete_account_info">Also delete account info</string>
+    <string name="first_page">Set First Page</string>
+    <string name="dark_theme">Use dark theme</string>
+    <string name="font_size">Font size</string>
+    <string name="font_style">Font style</string>
+    <string name="rotation">Rotation lock</string>
+    <string name="immersive">Immersive mode</string>
 </resources>
 

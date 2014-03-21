@@ -38,8 +38,12 @@
 		    		android:theme="@style/AppTheme" >		    
 		</activity>	
 		<activity 	android:name="fr.gaulupeau.apps.settings.SettingsAccount"
-		    		android:label="@string/menuSettings"
+		    		android:label="@string/account"
 		    		android:theme="@style/AppTheme" >		    
-		</activity>		
+		</activity>	
+		<activity 	android:name="fr.gaulupeau.apps.settings.SettingsLookAndFeel"
+		    		android:label="@string/look_and_feel"
+		    		android:theme="@style/AppTheme" >		    
+		</activity>	
     </application>
 </manifest>

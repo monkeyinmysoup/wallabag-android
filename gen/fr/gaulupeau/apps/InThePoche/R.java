@@ -789,6 +789,8 @@ containing a value of this type.
         /**  Minimum width of the search view text entry area. 
          */
         public static final int abs__search_view_text_min_width=0x7f07000b;
+        public static final int defaultSidePadding=0x7f070011;
+        public static final int defaultTopPadding=0x7f070010;
         public static final int toppadding=0x7f07000f;
     }
     public static final class drawable {
@@ -918,8 +920,8 @@ containing a value of this type.
         public static final int icon=0x7f02007b;
     }
     public static final class id {
-        public static final int APIToken=0x7f040044;
-        public static final int APIUsername=0x7f040042;
+        public static final int APIToken=0x7f040050;
+        public static final int APIUsername=0x7f04004e;
         public static final int abs__action_bar=0x7f040020;
         public static final int abs__action_bar_container=0x7f04001f;
         public static final int abs__action_bar_subtitle=0x7f040011;
@@ -959,45 +961,57 @@ containing a value of this type.
         public static final int abs__textButton=0x7f040013;
         public static final int abs__title=0x7f04001b;
         public static final int abs__up=0x7f04000b;
-        public static final int author=0x7f040047;
-        public static final int checkbox_delete_acoount=0x7f04003d;
+        public static final int author=0x7f040053;
+        public static final int checkbox_delete_acoount=0x7f040048;
+        public static final int dark_theme_check_box=0x7f04003c;
+        public static final int dark_theme_view=0x7f04003a;
         public static final int disableHome=0x7f040009;
         public static final int edit_query=0x7f040026;
-        public static final int fav=0x7f040050;
+        public static final int fav=0x7f04005c;
+        public static final int first_page_text=0x7f040042;
+        public static final int font_bar=0x7f04003e;
+        public static final int font_size_text=0x7f04003f;
+        public static final int font_type=0x7f040041;
         public static final int homeAsUp=0x7f040006;
-        public static final int instructions=0x7f040045;
+        public static final int immersive_check_box=0x7f040044;
+        public static final int instructions=0x7f040051;
         public static final int linear=0x7f040033;
-        public static final int linearLayout=0x7f04003a;
+        public static final int linearLayout=0x7f040045;
         public static final int listMode=0x7f040002;
-        public static final int liste_articles=0x7f04003b;
+        public static final int liste_articles=0x7f040046;
         public static final int listitem_description=0x7f040039;
         public static final int listitem_title=0x7f040038;
-        public static final int menuSettings=0x7f04004a;
-        public static final int menuShowAll=0x7f04004b;
-        public static final int menuWipeDb=0x7f04004e;
-        public static final int no_articles_text=0x7f04003c;
+        public static final int menuSettings=0x7f040056;
+        public static final int menuShowAll=0x7f040057;
+        public static final int menuWipeDb=0x7f04005a;
+        public static final int no_articles_text=0x7f040047;
         public static final int normal=0x7f040001;
-        public static final int pageUrl_label=0x7f04003f;
-        public static final int pocheUrl=0x7f040040;
-        public static final int read=0x7f040051;
-        public static final int refresh=0x7f04004c;
+        public static final int pageUrl_label=0x7f04004b;
+        public static final int pocheUrl=0x7f04004c;
+        public static final int read=0x7f04005d;
+        public static final int refresh=0x7f040058;
         public static final int scroll=0x7f040032;
-        public static final int settings=0x7f04004d;
-        public static final int settingsList=0x7f04003e;
-        public static final int settings_element_image=0x7f040048;
-        public static final int settings_element_text=0x7f040049;
-        public static final int share=0x7f04004f;
+        public static final int settings=0x7f040059;
+        public static final int settingsList=0x7f04004a;
+        public static final int settings_element_image=0x7f040054;
+        public static final int settings_element_text=0x7f040055;
+        public static final int share=0x7f04005b;
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
         public static final int tabMode=0x7f040003;
-        public static final int txtAPIToken=0x7f040043;
-        public static final int txtAPIUsername=0x7f040041;
+        public static final int textView1=0x7f04003b;
+        public static final int textView2=0x7f04003d;
+        public static final int textView4=0x7f040040;
+        public static final int textView6=0x7f040049;
+        public static final int textView7=0x7f040043;
+        public static final int txtAPIToken=0x7f04004f;
+        public static final int txtAPIUsername=0x7f04004d;
         public static final int txtAuthor=0x7f040035;
         public static final int txtContent=0x7f040037;
         public static final int txtTitre=0x7f040034;
         public static final int useLogo=0x7f040004;
-        public static final int version=0x7f040046;
+        public static final int version=0x7f040052;
         public static final int viewLine=0x7f040036;
         public static final int wrap_content=0x7f040000;
     }
@@ -1028,14 +1042,20 @@ containing a value of this type.
         public static final int abs__simple_dropdown_hint=0x7f030014;
         public static final int article=0x7f030015;
         public static final int article_list=0x7f030016;
-        public static final int list=0x7f030017;
-        public static final int main=0x7f030018;
-        public static final int my_checkbox=0x7f030019;
-        public static final int settings=0x7f03001a;
-        public static final int settings_account=0x7f03001b;
-        public static final int settings_element=0x7f03001c;
-        public static final int sherlock_spinner_dropdown_item=0x7f03001d;
-        public static final int sherlock_spinner_item=0x7f03001e;
+        public static final int dark_theme=0x7f030017;
+        public static final int font_size=0x7f030018;
+        public static final int font_style=0x7f030019;
+        public static final int general_settings=0x7f03001a;
+        public static final int immersive_mode=0x7f03001b;
+        public static final int list=0x7f03001c;
+        public static final int main=0x7f03001d;
+        public static final int my_checkbox=0x7f03001e;
+        public static final int rotation_lock=0x7f03001f;
+        public static final int settings=0x7f030020;
+        public static final int settings_account=0x7f030021;
+        public static final int settings_element=0x7f030022;
+        public static final int sherlock_spinner_dropdown_item=0x7f030023;
+        public static final int sherlock_spinner_item=0x7f030024;
     }
     public static final class menu {
         public static final int option=0x7f0b0000;
@@ -1093,10 +1113,15 @@ containing a value of this type.
         public static final int btnGetPost=0x7f090019;
         public static final int btnMarkRead=0x7f09001b;
         public static final int btnSync=0x7f09001a;
+        public static final int dark_theme=0x7f09003e;
         public static final int delete_account_info=0x7f09003c;
         public static final int fav_title=0x7f090033;
+        public static final int first_page=0x7f09003d;
+        public static final int font_size=0x7f09003f;
+        public static final int font_style=0x7f090040;
         public static final int general=0x7f090038;
         public static final int hello=0x7f09000f;
+        public static final int immersive=0x7f090042;
         public static final int instructions=0x7f090013;
         public static final int label_name=0x7f090011;
         public static final int look_and_feel=0x7f090039;
@@ -1117,6 +1142,7 @@ containing a value of this type.
  <string name="unread_label">não lido(s)</string> 
          */
         public static final int refresh=0x7f090027;
+        public static final int rotation=0x7f090041;
         public static final int share_title=0x7f090037;
         public static final int sure=0x7f09002e;
         public static final int txtAPIToken=0x7f090025;
