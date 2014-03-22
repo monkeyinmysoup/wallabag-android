@@ -538,11 +538,11 @@ public class ListArticles extends SherlockActivity {
 			imageSource = imageSource.trim();
 			
 			Bitmap bitmap = getBitmapFromURL(imageSource);
-			bitmap = resizeBitmap(bitmap, 300);
+			//bitmap = resizeBitmap(bitmap, 300);
 			
 			String savedLocation = saveBitmap(bitmap, "" + imageSource.hashCode());
 			
-			tagParams[sourceIndex] = "src=\"file://" + savedLocation + "\"";
+			tagParams[sourceIndex] = "style=\"max-width: 100%; height: auto; text-align: center; display:block;\" src=\"file://" + savedLocation + "\"";
 			
 			String newTag = recreateTag(tagParams);
 			
