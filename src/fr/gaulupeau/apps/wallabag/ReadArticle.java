@@ -7,8 +7,8 @@ import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_ID;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
 
 import java.util.List;
 
@@ -23,9 +23,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import com.actionbarsherlock.view.Window;
-
+import android.util.TypedValue;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,13 +34,13 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 
-import fr.gaulupeau.apps.wallabag.R;
 import fr.gaulupeau.apps.settings.SettingsAccount;
 
 public class ReadArticle extends SherlockActivity {
 	TextView txtTitre;
-	TextView txtContent;
+	//TextView txtContent;
 	TextView txtAuthor;
 	// Button btnMarkRead;
 	SQLiteDatabase database;
@@ -82,24 +82,24 @@ public class ReadArticle extends SherlockActivity {
 		ac.moveToFirst();
 		txtTitre = (TextView) findViewById(R.id.txtTitre);
 		txtTitre.setText(ac.getString(2));
-		txtContent = (TextView) findViewById(R.id.txtContent);
-		txtContent.setText(ac.getString(3));
-
+		//txtContent = (TextView) findViewById(R.id.txtContent);
+		//txtContent.setText(ac.getString(3));
+		
+		WebView contentWebView = (WebView) findViewById(R.id.webContent);
+		contentWebView.loadDataWithBaseURL(null, ac.getString(3), "text/html", "utf-8", null);
+		
+		TypedValue a = new TypedValue();
+		getTheme().resolveAttribute(android.R.attr.windowBackground, a, true);
+		if (a.type >= TypedValue.TYPE_FIRST_COLOR_INT && a.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+		    int color = a.data;
+		    contentWebView.setBackgroundColor(color);
+		}
+		
+		
 		txtAuthor = (TextView) findViewById(R.id.txtAuthor);
 		txtAuthor.setText(ac.getString(0));
 		articleUrl = ac.getString(0);
 
-		// btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
-		// btnMarkRead.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// ContentValues values = new ContentValues();
-		// values.put(ARCHIVE, 1);
-		// database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
-		// finish();
-		// }
-		// });
 		findOutIfIsRead(ac.getInt(4));
 		findOutIfIsFav(ac.getInt(6));
 		

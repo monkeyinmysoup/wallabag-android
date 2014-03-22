@@ -343,11 +343,11 @@ int id textView7 0x7f040043
 int id txtAPIToken 0x7f04004f
 int id txtAPIUsername 0x7f04004d
 int id txtAuthor 0x7f040035
-int id txtContent 0x7f040037
 int id txtTitre 0x7f040034
 int id useLogo 0x7f040004
 int id version 0x7f040052
 int id viewLine 0x7f040036
+int id webContent 0x7f040037
 int id wrap_content 0x7f040000
 int integer abs__max_action_buttons 0x7f080000
 int layout abs__action_bar_home 0x7f030000

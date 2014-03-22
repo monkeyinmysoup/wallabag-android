@@ -11,7 +11,11 @@ import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -48,9 +52,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
@@ -66,7 +74,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-import fr.gaulupeau.apps.wallabag.R;
 import fr.gaulupeau.apps.settings.Settings;
 
 public class ListArticles extends SherlockActivity {
@@ -290,15 +297,15 @@ public class ListArticles extends SherlockActivity {
 	    					
 	    					ContentValues values = new ContentValues();
 	    					values.put(ARTICLE_TITLE, Html.fromHtml(arrays.PodcastTitle[i]).toString());
-	        				values.put(ARTICLE_CONTENT, Html.fromHtml(arrays.PodcastContent[i]).toString());
+	        				//values.put(ARTICLE_CONTENT, Html.fromHtml(arrays.PodcastContent[i]).toString());
+	    					
+	    					values.put(ARTICLE_CONTENT, changeImagesUrl(arrays.PodcastContent[i]));
 	        				//values.put(ARTICLE_ID, Html.fromHtml(article.getString("id")).toString());
 	        				values.put(ARTICLE_URL, Html.fromHtml(arrays.PodcastURL[i]).toString());
 	        				values.put(ARTICLE_DATE, arrays.PodcastDate[i]);
 	        				values.put(ARCHIVE, 0);
 	        				values.put(FAV, 0);
 	        				values.put(ARTICLE_SYNC, 0);
-	        				
-	        				System.out.println(arrays.PodcastContent[i]);
 	        				
 	        				try {
 	        					database.insertOrThrow(ARTICLE_TABLE, null, values);
@@ -483,4 +490,123 @@ public class ListArticles extends SherlockActivity {
 		
 		getSettings();
 	}
+	
+	private String changeImagesUrl(String html){
+		int lastImageTag = 0;
+		while(true){
+			int openTagPosition = html.indexOf("<img", lastImageTag);
+			
+			if(openTagPosition == -1)
+				break;
+			
+			
+			int closeTagPosition = html.indexOf('>', openTagPosition);
+			
+			if(closeTagPosition == -1)
+				throw new RuntimeException("Error while parsing html");
+			
+			String tagContent = html.substring(openTagPosition, closeTagPosition + 1);
+			
+			String[] tagParams = tagContent.split(" ");
+			String imageSource = "";
+			int sourceIndex = 0;
+			for(String param : tagParams){
+				if(param.startsWith("src")){
+					imageSource = param;
+					break;
+				}
+				sourceIndex++;
+			}
+			
+			imageSource = imageSource.replaceAll("src=", "");
+			imageSource = imageSource.replaceAll("\"", "");
+			imageSource = imageSource.trim();
+			
+			Bitmap bitmap = getBitmapFromURL(imageSource);
+			bitmap = resizeBitmap(bitmap, 300);
+			
+			String savedLocation = saveBitmap(bitmap, "" + imageSource.hashCode());
+			
+			tagParams[sourceIndex] = "src=\"file://" + savedLocation + "\"";
+			
+			String newTag = recreateTag(tagParams);
+			
+			html = html.replace(tagContent, newTag);
+			
+			lastImageTag = closeTagPosition + 1;
+		}
+		
+		return html;
+	}
+	
+	private String recreateTag(String[] tagParams) {
+		String tag = "";
+		for(String param : tagParams)
+			tag += param + " ";
+		
+		tag = tag.trim();
+		return tag;
+	}
+
+	public Bitmap getBitmapFromURL(String src) {
+	    try {
+	        URL url = new URL(src);
+	        HttpURLConnection connection = (HttpURLConnection) url
+	                .openConnection();
+	        connection.setDoInput(true);
+	        connection.connect();
+	        InputStream input = connection.getInputStream();
+	        Bitmap myBitmap = BitmapFactory.decodeStream(input);
+	        return myBitmap;
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
+
+	public Bitmap resizeBitmap(Bitmap bitmap, int newWidth) {
+	    int width = bitmap.getWidth();
+	    int height = bitmap.getHeight();
+	    
+	    if(width < newWidth)
+	    	return bitmap;
+	    
+	    float scale = ((float) newWidth) / width;
+
+	    Matrix matrix = new Matrix();
+	    matrix.postScale(scale, scale);
+
+	    Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height,
+	            matrix, false);
+
+	    return resizedBitmap;
+	}
+
+	public String saveBitmap(Bitmap bitmap, String fileName){
+		
+		File saveFolder = new File(Environment.getExternalStorageDirectory()
+	            + "/Android/data/"
+	            + getApplicationContext().getPackageName()
+	            + "/files");
+		
+		if(!saveFolder.exists())
+			saveFolder.mkdirs();
+		
+		File saveLocation = new File(saveFolder, fileName);
+		
+		if(!saveLocation.exists()){
+			FileOutputStream outputStream;
+			try {
+				outputStream = new FileOutputStream(saveLocation);
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+				outputStream.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}			
+		}
+		return saveLocation.getAbsolutePath();
+	}
+
 }
