@@ -55,7 +55,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -129,7 +128,6 @@ public class ListArticles extends SherlockActivity {
         	case R.id.menuWipeDb:
         		wipeDB();
         		return true;
-        		//super.onOptionsItemSelected(item);
         	case R.id.refresh:
         		refresh();
 				return true;
@@ -176,7 +174,6 @@ public class ListArticles extends SherlockActivity {
 			 // ExÃ©cution de la synchro en arriÃ¨re-plan
 			 new Thread(new Runnable() {
 				 public void run() {
-					 //pushRead();
 					 parseRSS();
 				 }
 			 }).start();
@@ -214,16 +211,10 @@ public class ListArticles extends SherlockActivity {
 	    					.newInstance();
 	    			DocumentBuilder db = dbf.newDocumentBuilder();
 	    			Document doc;
-//	    			doc = db.parse(url.openStream());
 	    			InputSource is = new InputSource(
 					        new InputStreamReader(
 					                url.openStream()));
 	    			doc = db.parse(is);
-//	    			doc = db.parse(
-//	    				    new InputSource(
-//	    				        new InputStreamReader(
-//	    				                url.openStream(),
-//	    				                "latin-1")));
 	    			doc.getDocumentElement().normalize();
 	    			
 	    			// This is the root node of each section you want to parse
@@ -253,13 +244,6 @@ public class ListArticles extends SherlockActivity {
 	    					NodeList date = ielem.getElementsByTagName("pubDate");
 	    					NodeList content = ielem
 	    							.getElementsByTagName("description");
-	    					//NodeList media = ielem
-	    					//		.getElementsByTagName("media:content");
-
-	    					// This is an attribute of an element so I create
-	    					// a string to make it easier to use
-	    					//String mediaurl = media.item(0).getAttributes()
-	    					//		.getNamedItem("url").getNodeValue();
 
 	    					// This section adds an entry to the arrays with the
 	    					// data retrieved from above. I have surrounded each
@@ -267,7 +251,7 @@ public class ListArticles extends SherlockActivity {
 	    					// exist
 	    					try
 	    					{
-	    						arrays.PodcastTitle[i] = Wallabag.cleanString(title.item(0).getChildNodes().item(0).getNodeValue());
+	    						arrays.PodcastTitle[i] = cleanString(title.item(0).getChildNodes().item(0).getNodeValue());
 	    					} catch (NullPointerException e)
 	    					{
 	    						e.printStackTrace();
@@ -300,11 +284,9 @@ public class ListArticles extends SherlockActivity {
 	    					
 	    					ContentValues values = new ContentValues();
 	    					values.put(ARTICLE_TITLE, Html.fromHtml(arrays.PodcastTitle[i]).toString());
-	        				//values.put(ARTICLE_CONTENT, Html.fromHtml(arrays.PodcastContent[i]).toString());
 	    					
 	    					values.put(ARTICLE_CONTENT, changeImagesUrl(arrays.PodcastContent[i]));
 	    					values.put(ARTICLE_SUMMARY, makeDescription(arrays.PodcastContent[i]));
-	        				//values.put(ARTICLE_ID, Html.fromHtml(article.getString("id")).toString());
 	        				values.put(ARTICLE_URL, Html.fromHtml(arrays.PodcastURL[i]).toString());
 	        				values.put(ARTICLE_DATE, arrays.PodcastDate[i]);
 	        				values.put(ARCHIVE, 0);
@@ -323,7 +305,6 @@ public class ListArticles extends SherlockActivity {
 	    			}
 	    			
 	    		}
-				//showToast(getString(R.string.txtSyncDone));
 	    		updateUnread();
 	    	} catch (MalformedURLException e)
 	    	{
@@ -417,8 +398,6 @@ public class ListArticles extends SherlockActivity {
 	}
 	
 	public ReadingListAdapter getAdapterQuery(String filter, ArrayList<Article> articleInfo) {
-		//Log.e("getAdapterQuery", "running query");
-		//String url, String domain, String id, String title, String content
 		String[] getStrColumns = new String[] {ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_SUMMARY};
 		Cursor ac = database.query(
 				ARTICLE_TABLE,
@@ -538,7 +517,6 @@ public class ListArticles extends SherlockActivity {
 			imageSource = imageSource.trim();
 			
 			Bitmap bitmap = getBitmapFromURL(imageSource);
-			//bitmap = resizeBitmap(bitmap, 300);
 			
 			String savedLocation = saveBitmap(bitmap, "" + imageSource.hashCode());
 			
@@ -577,24 +555,6 @@ public class ListArticles extends SherlockActivity {
 	        e.printStackTrace();
 	        return null;
 	    }
-	}
-
-	public Bitmap resizeBitmap(Bitmap bitmap, int newWidth) {
-	    int width = bitmap.getWidth();
-	    int height = bitmap.getHeight();
-	    
-	    if(width < newWidth)
-	    	return bitmap;
-	    
-	    float scale = ((float) newWidth) / width;
-
-	    Matrix matrix = new Matrix();
-	    matrix.postScale(scale, scale);
-
-	    Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height,
-	            matrix, false);
-
-	    return resizedBitmap;
 	}
 
 	public String saveBitmap(Bitmap bitmap, String fileName){
@@ -642,5 +602,25 @@ public class ListArticles extends SherlockActivity {
 		}
 		return desc;
 	}
-
+	
+	 private static String cleanString(String s){
+	    	
+	    	s = s.replace("&Atilde;&copy;", "&eacute;");
+	    	s = s.replace("&Atilde;&uml;", "&egrave;");
+	    	s = s.replace("&Atilde;&ordf;", "&ecirc;");
+	    	s = s.replace("&Atilde;&laquo;", "&euml;");
+	    	s = s.replace("&Atilde;&nbsp;", "&agrave;");
+	    	s = s.replace("&Atilde;&curren;", "&auml;");
+	    	s = s.replace("&Atilde;&cent;", "&acirc;");
+	    	s = s.replace("&Atilde;&sup1;", "&ugrave;");
+	    	s = s.replace("&Atilde;&raquo;", "&ucirc;");
+	    	s = s.replace("&Atilde;&frac14;", "&uuml;");
+	    	s = s.replace("&Atilde;&acute;", "&ocirc;");
+	    	s = s.replace("&Atilde;&para;", "&ouml;");
+	    	s = s.replace("&Atilde;&reg;", "&icirc;");
+	    	s = s.replace("&Atilde;&macr;", "&iuml;");
+	    	s = s.replace("&Atilde;&sect;", "&ccedil;");
+	    	s = s.replace("&amp;", "&amp;");	
+	    	return s;
+	    }
 }

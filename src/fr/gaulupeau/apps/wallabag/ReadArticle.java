@@ -40,9 +40,7 @@ import fr.gaulupeau.apps.settings.SettingsAccount;
 
 public class ReadArticle extends SherlockActivity {
 	TextView txtTitre;
-	//TextView txtContent;
 	TextView txtAuthor;
-	// Button btnMarkRead;
 	SQLiteDatabase database;
 	String id = "";
 	MyScrollView view;
@@ -53,7 +51,6 @@ public class ReadArticle extends SherlockActivity {
 	private boolean isRead;
 	private boolean isFav;
 
-	@SuppressLint("NewApi")
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		
@@ -82,8 +79,6 @@ public class ReadArticle extends SherlockActivity {
 		ac.moveToFirst();
 		txtTitre = (TextView) findViewById(R.id.txtTitre);
 		txtTitre.setText(ac.getString(2));
-		//txtContent = (TextView) findViewById(R.id.txtContent);
-		//txtContent.setText(ac.getString(3));
 		
 		WebView contentWebView = (WebView) findViewById(R.id.webContent);
 		contentWebView.loadDataWithBaseURL(null, ac.getString(3), "text/html", "utf-8", null);
@@ -136,17 +131,7 @@ public class ReadArticle extends SherlockActivity {
 	
 	@SuppressLint("NewApi")
 	private void goImmersive() {
-		/*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-			getWindow().getDecorView().setSystemUiVisibility(
-			          View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-			          | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-			          | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-			          | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-			        //  | View.SYSTEM_UI_FLAG_FULLSCREEN 
-			          | View.SYSTEM_UI_FLAG_IMMERSIVE
-			          | View.SYSTEM_UI_FLAG_LOW_PROFILE);
-		}
-		else */if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
 			getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 		}
 		

@@ -5,7 +5,6 @@ import java.util.List;
 import fr.gaulupeau.apps.wallabag.R;
 
 import android.content.Context;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,6 @@ public class ReadingListAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// Article entry = listArticles.get(position);
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -45,7 +43,6 @@ public class ReadingListAdapter extends BaseAdapter {
 				.findViewById(R.id.listitem_title);
 		TextView tvDescription = (TextView) convertView
 				.findViewById(R.id.listitem_description);
-		// Log.e("title", entry.title);
 		Article entry = listArticles.get(position);
 
 		tvTitle.setText(entry.title);
