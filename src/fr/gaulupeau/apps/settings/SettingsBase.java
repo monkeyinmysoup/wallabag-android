@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
-import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.wallabag.R;
 
 public abstract class SettingsBase extends SherlockActivity{
 	protected ListView list;

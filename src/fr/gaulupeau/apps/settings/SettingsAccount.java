@@ -8,7 +8,7 @@ import android.widget.EditText;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 
-import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.wallabag.R;
 
 public class SettingsAccount extends SherlockActivity {
 //	Button btnDone;

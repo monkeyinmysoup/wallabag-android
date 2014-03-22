@@ -2,7 +2,7 @@ package fr.gaulupeau.apps.wallabag;
 
 import java.util.List;
 
-import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.wallabag.R;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -2,7 +2,6 @@ package fr.gaulupeau.apps.settings;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,19 +10,12 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.wallabag.R;
 
 public class SettingsLookAndFeel extends SettingsBase {
 	private static final String[] items = new String[] {"Sans serif", "Serif"};
 	private int fontSize = 16;
 	private static final int fontSizeMin = 14;
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		
-	}
 
 	private int progressFromSize() {
 		return fontSize - fontSizeMin;

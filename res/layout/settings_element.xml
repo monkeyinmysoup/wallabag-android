@@ -3,7 +3,7 @@
     android:layout_height="fill_parent"
     android:clickable="true"
     android:paddingBottom="@dimen/defaultTopPadding"
-    android:paddingLeft="5dp"
+    android:paddingLeft="@dimen/defaultSidePadding"
     android:paddingTop="@dimen/defaultTopPadding" >
 
     <ImageView

@@ -1,5 +1,5 @@
 /**
- * Android to Poche
+ * Android to wallabag
  * A simple app to make the full save bookmark to Poche
  * web page available via the Share menu on Android tablets
  * @author GAULUPEAU Jonathan
@@ -66,7 +66,7 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 
-import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.wallabag.R;
 import fr.gaulupeau.apps.settings.SettingsAccount;
 
 

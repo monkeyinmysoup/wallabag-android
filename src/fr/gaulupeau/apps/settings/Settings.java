@@ -1,6 +1,6 @@
 package fr.gaulupeau.apps.settings;
 
-import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.wallabag.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;

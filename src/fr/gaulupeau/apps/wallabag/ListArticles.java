@@ -66,7 +66,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.wallabag.R;
 import fr.gaulupeau.apps.settings.Settings;
 
 public class ListArticles extends SherlockActivity {
@@ -412,7 +412,7 @@ public class ListArticles extends SherlockActivity {
 		Cursor ac = database.query(
 				ARTICLE_TABLE,
 				getStrColumns,
-				filter, null, null, null, ARTICLE_DATE + " DESC");
+				filter, null, null, null, ARTICLE_DATE/* + " DESC"*/);
 		ac.moveToFirst();
 		if(!ac.isAfterLast()) {
 			do {
