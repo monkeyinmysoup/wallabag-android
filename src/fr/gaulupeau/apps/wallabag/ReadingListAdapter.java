@@ -5,11 +5,13 @@ import java.util.List;
 import fr.gaulupeau.apps.wallabag.R;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 
 public class ReadingListAdapter extends BaseAdapter {
 	private Context context;
@@ -48,9 +50,13 @@ public class ReadingListAdapter extends BaseAdapter {
 
 		tvTitle.setText(entry.title);
 
-		tvDescription.setText(entry.content.subSequence(0, 100));
+		String description = entry.summary;
+		
+		tvDescription.setText(description);
 
 		return convertView;
 	}
+
+	
 
 }

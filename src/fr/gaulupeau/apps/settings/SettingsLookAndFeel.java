@@ -26,7 +26,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 	}
 	
 	@Override
-	protected void createUI(ListView list, ListViewAdapter adapter, LayoutInflater inflater){
+	protected void createUI(ListView list, GeneralPurposeListViewAdapter adapter, LayoutInflater inflater){
 		View darkThemeLayout = inflater.inflate(R.layout.dark_theme, null);
 		final CheckBox darkThemeCheckBox = (CheckBox) darkThemeLayout
 				.findViewById(R.id.dark_theme_check_box);

@@ -26,12 +26,12 @@ public abstract class SettingsBase extends SherlockActivity{
 	    list = (ListView) findViewById(R.id.settingsList);
 	    
 	    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		ListViewAdapter adapter = new ListViewAdapter();
+		GeneralPurposeListViewAdapter adapter = new GeneralPurposeListViewAdapter();
 
 		createUI(list, adapter, inflater);
 	}
 	
-	abstract protected void createUI(ListView list, ListViewAdapter adapter, LayoutInflater inflater);
+	abstract protected void createUI(ListView list, GeneralPurposeListViewAdapter adapter, LayoutInflater inflater);
 	
 	protected View inflateIfNotNull(View convertView, int layoutId){
 		LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);

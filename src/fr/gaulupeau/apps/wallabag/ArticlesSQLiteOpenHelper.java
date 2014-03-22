@@ -10,7 +10,7 @@ import static fr.gaulupeau.apps.wallabag.Helpers.zeroUpdate;
 
 public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
 
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     public static final String DB_NAME = "article_db.sqlite";
     public static String MY_ID = "my_id";
     public static String ARTICLE_TABLE = "article";
@@ -24,6 +24,7 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
     public static String ARTICLE_SYNC = "sync";
     public static String ARTICLE_READAT = "read_at";
     public static String FAV = "favorite";
+    public static String ARTICLE_SUMMARY = "summary";
     Context c;
     
     public ArticlesSQLiteOpenHelper(Context context) {
@@ -67,6 +68,7 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
                             FAV + " integer, " +
                             ARTICLE_SYNC + " integer," +
                             ARTICLE_READAT + " integer," +
+                            ARTICLE_SUMMARY + " text," +
                             "UNIQUE (" + ARTICLE_URL + ")" +
                             ");"
             );

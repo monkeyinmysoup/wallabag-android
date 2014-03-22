@@ -9,6 +9,7 @@ import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_SUMMARY;
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 
 import java.io.File;
@@ -78,6 +79,8 @@ import fr.gaulupeau.apps.settings.Settings;
 
 public class ListArticles extends SherlockActivity {
 
+	private static int maxChars = 100;
+	
     private ArrayList<Article> readArticlesInfo;
 	private ListView readList;
 	private SQLiteDatabase database;
@@ -164,13 +167,13 @@ public class ListArticles extends SherlockActivity {
 		});
 	}
 	 public void refresh(){
-		// Vérification de la connectivité Internet
+		// VÃ©rification de la connectivitÃ© Internet
 		 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
 		 if (pocheUrl.equals("https://")) {
 			 showToast(getString(R.string.txtConfigNotSet));
 		 } else if (activeNetwork != null && activeNetwork.isConnected()) {
-			 // Exécution de la synchro en arrière-plan
+			 // ExÃ©cution de la synchro en arriÃ¨re-plan
 			 new Thread(new Runnable() {
 				 public void run() {
 					 //pushRead();
@@ -178,7 +181,7 @@ public class ListArticles extends SherlockActivity {
 				 }
 			 }).start();
 		 } else {
-			 // Afficher alerte connectivité
+			 // Afficher alerte connectivitÃ©
 			 showToast(getString(R.string.txtNetOffline));
 		 }
 	 }
@@ -300,6 +303,7 @@ public class ListArticles extends SherlockActivity {
 	        				//values.put(ARTICLE_CONTENT, Html.fromHtml(arrays.PodcastContent[i]).toString());
 	    					
 	    					values.put(ARTICLE_CONTENT, changeImagesUrl(arrays.PodcastContent[i]));
+	    					values.put(ARTICLE_SUMMARY, makeDescription(arrays.PodcastContent[i]));
 	        				//values.put(ARTICLE_ID, Html.fromHtml(article.getString("id")).toString());
 	        				values.put(ARTICLE_URL, Html.fromHtml(arrays.PodcastURL[i]).toString());
 	        				values.put(ARTICLE_DATE, arrays.PodcastDate[i]);
@@ -415,7 +419,7 @@ public class ListArticles extends SherlockActivity {
 	public ReadingListAdapter getAdapterQuery(String filter, ArrayList<Article> articleInfo) {
 		//Log.e("getAdapterQuery", "running query");
 		//String url, String domain, String id, String title, String content
-		String[] getStrColumns = new String[] {ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE};
+		String[] getStrColumns = new String[] {ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_SUMMARY};
 		Cursor ac = database.query(
 				ARTICLE_TABLE,
 				getStrColumns,
@@ -423,7 +427,7 @@ public class ListArticles extends SherlockActivity {
 		ac.moveToFirst();
 		if(!ac.isAfterLast()) {
 			do {
-				Article tempArticle = new Article(ac.getString(0),ac.getString(1),ac.getString(2),ac.getString(3),ac.getString(4));
+				Article tempArticle = new Article(ac.getString(0),ac.getString(1),ac.getString(2),ac.getString(3),ac.getString(4), ac.getString(5));
 				articleInfo.add(tempArticle);
 			} while (ac.moveToNext());
 		}
@@ -618,6 +622,25 @@ public class ListArticles extends SherlockActivity {
 			}			
 		}
 		return saveLocation.getAbsolutePath();
+	}
+	
+	private String makeDescription(String html) {
+		int chars = 0;
+		String desc = "";
+		String tmp = Html.fromHtml(html).toString();
+		
+		tmp = tmp.replaceAll("\n", " ");
+		tmp = tmp.replaceAll(" [ ]*", " ");
+		tmp = tmp.replaceAll("￼", "");
+		
+		String[] words = tmp.split(" ");
+		
+		for(int i = 0; i < words.length && chars < maxChars; i++){
+			
+			chars += words[i].length();
+			desc += words[i] + " ";
+		}
+		return desc;
 	}
 
 }

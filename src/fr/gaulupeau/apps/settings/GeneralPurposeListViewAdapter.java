@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-public class ListViewAdapter extends BaseAdapter {
+public class GeneralPurposeListViewAdapter extends BaseAdapter {
 	private List<View> views = new ArrayList<View>();
 
 	@Override

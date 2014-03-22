@@ -20,7 +20,7 @@ public class Settings extends SettingsBase {
 	}
 
 	@Override
-	protected void createUI(ListView list, ListViewAdapter adapter,
+	protected void createUI(ListView list, GeneralPurposeListViewAdapter adapter,
 			LayoutInflater inflater) {
 		int[] images = new int[] { R.drawable.ic_action_settings,
 				R.drawable.ic_action_brightness_medium,
