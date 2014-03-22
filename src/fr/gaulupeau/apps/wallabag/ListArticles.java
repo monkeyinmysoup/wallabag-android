@@ -456,6 +456,7 @@ public class ListArticles extends SherlockActivity {
 	        public void onClick(DialogInterface dialog, int which) {
 	        	ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(ListArticles.this);
         		helper.truncateTables(database);
+        		deleteFiles();
         		setupList(false);
         		if(checked)
         			cleanUserInfo();
@@ -475,6 +476,16 @@ public class ListArticles extends SherlockActivity {
 	    alert.show();	
 	}
 	
+	protected void deleteFiles() {
+		File filesDir = new File(Environment.getExternalStorageDirectory()
+	            + "/Android/data/"
+	            + getApplicationContext().getPackageName()
+	            + "/files");
+		
+		for(File file : filesDir.listFiles())
+			file.delete();		
+	}
+
 	private void cleanUserInfo(){
 		System.out.println("called");
 		SharedPreferences settings;
