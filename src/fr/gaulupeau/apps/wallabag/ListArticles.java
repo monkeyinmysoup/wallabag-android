@@ -221,11 +221,11 @@ public class ListArticles extends SherlockActivity {
 	    			NodeList itemLst = doc.getElementsByTagName("item");
 
 	    			// This sets up some arrays to hold the data parsed
-	    			arrays.PodcastTitle = new String[itemLst.getLength()];
-	    			arrays.PodcastURL = new String[itemLst.getLength()];
-	    			arrays.PodcastContent = new String[itemLst.getLength()];
-	    			arrays.PodcastMedia = new String[itemLst.getLength()];
-	    			arrays.PodcastDate = new String[itemLst.getLength()];
+//	    			arrays.PodcastTitle = new String[itemLst.getLength()];
+//	    			arrays.PodcastURL = new String[itemLst.getLength()];
+//	    			arrays.PodcastContent = new String[itemLst.getLength()];
+//	    			arrays.PodcastMedia = new String[itemLst.getLength()];
+//	    			arrays.PodcastDate = new String[itemLst.getLength()];
 
 	    			ArrayList<String> urlsInBD = new ArrayList<String>(); 
 	    			String[] getStrColumns = new String[] {ARTICLE_URL};
@@ -247,6 +247,11 @@ public class ListArticles extends SherlockActivity {
 	    				if (item.getNodeType() == Node.ELEMENT_NODE)
 	    				{
 	    					Element ielem = (Element) item;
+	    					
+	    					String articleTitle;
+	    					String articleDate;
+	    					String articleUrl;
+	    					String articleContent;
 
 	    					// This section gets the elements from the XML
 	    					// that we want to use you will need to add
@@ -263,49 +268,49 @@ public class ListArticles extends SherlockActivity {
 	    					// exist
 	    					try
 	    					{
-	    						arrays.PodcastTitle[i] = cleanString(title.item(0).getChildNodes().item(0).getNodeValue());
-	    					} catch (NullPointerException e)
-	    					{
-	    						e.printStackTrace();
-	    						arrays.PodcastTitle[i] = "Echec";
-	    					}
-	    					try {
-								arrays.PodcastDate[i] = date.item(0).getChildNodes().item(0).getNodeValue();
-							} catch (NullPointerException e) {
-								e.printStackTrace();
-	    						arrays.PodcastDate[i] = null;
-							}
-	    					try
-	    					{
-	    						arrays.PodcastURL[i] = link.item(0).getChildNodes()
+	    						articleUrl = link.item(0).getChildNodes()
 	    								.item(0).getNodeValue();
 	    					} catch (NullPointerException e)
 	    					{
 	    						e.printStackTrace();
-	    						arrays.PodcastURL[i] = "Echec";
+	    						articleUrl = "Echec";
+	    					}
+	    					articleUrl = Html.fromHtml(articleUrl).toString();
+	    					if(urlsInBD.contains(articleUrl)){
+	    						System.out.println("Already in bd");
+	    						continue;
 	    					}
 	    					try
 	    					{
-	    						arrays.PodcastContent[i] = content.item(0)
+	    						articleTitle = cleanString(title.item(0).getChildNodes().item(0).getNodeValue());
+	    					} catch (NullPointerException e)
+	    					{
+	    						e.printStackTrace();
+	    						articleTitle = "Echec";
+	    					}
+	    					try {
+	    						articleDate = date.item(0).getChildNodes().item(0).getNodeValue();
+							} catch (NullPointerException e) {
+								e.printStackTrace();
+								articleDate = null;
+							}    					
+	    					try
+	    					{
+	    						articleContent = content.item(0)
 	    								.getChildNodes().item(0).getNodeValue();
 	    					} catch (NullPointerException e)
 	    					{
 	    						e.printStackTrace();
-	    						arrays.PodcastContent[i] = "Echec";
-	    					}
-	    					
-	    					if(urlsInBD.contains(Html.fromHtml(arrays.PodcastURL[i]).toString())){
-	    						System.out.println("Already in bd");
-	    						continue;
+	    						articleContent = "Echec";
 	    					}
 	    					
 	    					ContentValues values = new ContentValues();
-	    					values.put(ARTICLE_TITLE, Html.fromHtml(arrays.PodcastTitle[i]).toString());
+	    					values.put(ARTICLE_TITLE, Html.fromHtml(articleTitle).toString());
 	    					
-	    					values.put(ARTICLE_CONTENT, changeImagesUrl(arrays.PodcastContent[i]));
-	    					values.put(ARTICLE_SUMMARY, makeDescription(arrays.PodcastContent[i]));
-	        				values.put(ARTICLE_URL, Html.fromHtml(arrays.PodcastURL[i]).toString());
-	        				values.put(ARTICLE_DATE, arrays.PodcastDate[i]);
+	    					values.put(ARTICLE_CONTENT, changeImagesUrl(articleContent));
+	    					values.put(ARTICLE_SUMMARY, makeDescription(articleContent));
+	        				values.put(ARTICLE_URL, articleUrl);
+	        				values.put(ARTICLE_DATE, articleDate);
 	        				values.put(ARCHIVE, 0);
 	        				values.put(FAV, 0);
 	        				values.put(ARTICLE_SYNC, 0);
