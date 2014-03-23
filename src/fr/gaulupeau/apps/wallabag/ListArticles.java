@@ -227,6 +227,18 @@ public class ListArticles extends SherlockActivity {
 	    			arrays.PodcastMedia = new String[itemLst.getLength()];
 	    			arrays.PodcastDate = new String[itemLst.getLength()];
 
+	    			ArrayList<String> urlsInBD = new ArrayList<String>(); 
+	    			String[] getStrColumns = new String[] {ARTICLE_URL};
+	    			Cursor ac = database.query(
+	    					ARTICLE_TABLE,
+	    					getStrColumns,
+	    					null, null, null, null, null);
+	    			ac.moveToFirst();
+	    			if(!ac.isAfterLast()) {
+	    				do{
+	    				urlsInBD.add(ac.getString(0));
+	    				}while(ac.moveToNext());
+	    			}
 	    			// Loop through the XML passing the data to the arrays
 	    			for (int i = 0; i < itemLst.getLength(); i++)
 	    			{
@@ -280,6 +292,11 @@ public class ListArticles extends SherlockActivity {
 	    					{
 	    						e.printStackTrace();
 	    						arrays.PodcastContent[i] = "Echec";
+	    					}
+	    					
+	    					if(urlsInBD.contains(Html.fromHtml(arrays.PodcastURL[i]).toString())){
+	    						System.out.println("Already in bd");
+	    						continue;
 	    					}
 	    					
 	    					ContentValues values = new ContentValues();
