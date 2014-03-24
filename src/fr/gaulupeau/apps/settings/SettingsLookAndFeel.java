@@ -107,6 +107,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 					public void onClick(DialogInterface dialog, int which) {
 						fontStyle = which;
 						fontType.setText(getStringFontStyle(which));
+						dialog.dismiss();
 					}
 				});
 				AlertDialog alert = builder.create();
@@ -131,6 +132,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 					public void onClick(DialogInterface dialog, int which) {
 						orientation = which;
 						orientationTypeView.setText(getStringOrientation(which));
+						dialog.dismiss();
 					}
 				});
 				AlertDialog alert = builder.create();

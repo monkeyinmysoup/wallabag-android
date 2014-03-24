@@ -241,7 +241,7 @@ public class ReadArticle extends SherlockActivity {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 			break;
 		case SettingsLookAndFeel.DYMAMIC:
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
 			break;
 		default:
 			break;
