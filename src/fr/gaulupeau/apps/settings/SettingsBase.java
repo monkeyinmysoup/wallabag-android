@@ -1,9 +1,12 @@
 package fr.gaulupeau.apps.settings;
 
+import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
+
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +14,8 @@ import android.widget.ListView;
 import fr.gaulupeau.apps.wallabag.R;
 
 public abstract class SettingsBase extends SherlockActivity{
+	protected SharedPreferences settings;
+	
 	protected ListView list;
 	
 	@Override
@@ -20,6 +25,10 @@ public abstract class SettingsBase extends SherlockActivity{
 		
 		getSupportActionBar().setHomeButtonEnabled(true);
 	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	    
+	    settings = getSharedPreferences(PREFS_NAME, 0);
+	    
+	    getSettings();
 	    
 	    setContentView(R.layout.settings);
 	    
@@ -31,6 +40,15 @@ public abstract class SettingsBase extends SherlockActivity{
 		createUI(list, adapter, inflater);
 	}
 	
+	@Override
+	protected void onPause(){
+		saveSettings();
+		super.onPause();
+	}
+	
+	abstract protected void getSettings();
+	abstract protected void saveSettings();
+
 	abstract protected void createUI(ListView list, GeneralPurposeListViewAdapter adapter, LayoutInflater inflater);
 	
 	protected View inflateIfNotNull(View convertView, int layoutId){

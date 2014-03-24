@@ -9,6 +9,7 @@ import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
+import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
@@ -25,6 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,34 +40,39 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 
-import fr.gaulupeau.apps.settings.SettingsAccount;
+import fr.gaulupeau.apps.settings.SettingsLookAndFeel;
 
 public class ReadArticle extends SherlockActivity {
-	TextView txtTitre;
-	TextView txtAuthor;
-	SQLiteDatabase database;
-	String id = "";
-	MyScrollView view;
+	private TextView txtTitre;
+	private TextView txtAuthor;
+	private SQLiteDatabase database;
+	private String id = "";
+	private MyScrollView view;
+	private WebView contentWebView;
+	private WebSettings webSettings;
+	private SharedPreferences preferences;
 
 	private String articleUrl;
 	private Menu menu;
 	private ActionBar actionBar;
 	private boolean isRead;
 	private boolean isFav;
+	private String articleContent;
+	private String fontFamily;
+	private boolean canGoImmersive;
 
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
-		
+
+		preferences = getSharedPreferences(PREFS_NAME, 0);
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
-		
-		goImmersive();
-		
+
 		actionBar = getSupportActionBar();
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
-		
+
 		view = (MyScrollView) findViewById(R.id.scroll);
 		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(
 				getApplicationContext());
@@ -79,62 +88,83 @@ public class ReadArticle extends SherlockActivity {
 		ac.moveToFirst();
 		txtTitre = (TextView) findViewById(R.id.txtTitre);
 		txtTitre.setText(ac.getString(2));
-		
-		WebView contentWebView = (WebView) findViewById(R.id.webContent);
-		contentWebView.loadDataWithBaseURL(null, ac.getString(3), "text/html", "utf-8", null);
-		
-		TypedValue a = new TypedValue();
-		getTheme().resolveAttribute(android.R.attr.windowBackground, a, true);
-		if (a.type >= TypedValue.TYPE_FIRST_COLOR_INT && a.type <= TypedValue.TYPE_LAST_COLOR_INT) {
-		    int color = a.data;
-		    contentWebView.setBackgroundColor(color);
-		}
-		
-		
+
+		contentWebView = (WebView) findViewById(R.id.webContent);
+		webSettings = contentWebView.getSettings();
+
+		articleContent = ac.getString(3);
+
 		txtAuthor = (TextView) findViewById(R.id.txtAuthor);
 		txtAuthor.setText(ac.getString(0));
 		articleUrl = ac.getString(0);
 
 		findOutIfIsRead(ac.getInt(4));
 		findOutIfIsFav(ac.getInt(6));
-		
+
+		ac.close();
 		view.setOnScrollViewListener(new OnViewScrollListener() {
 			private int goingDown, goingUp;
+
 			@Override
 			public void onScrollChanged(int x, int y, int oldx, int oldy) {
-				
-				if(actionBar.isShowing() && goingDown > 100)
+
+				if (actionBar.isShowing() && goingDown > 100)
 					actionBar.hide();
-	
-				if(!actionBar.isShowing() && goingUp > 100)
+
+				if (!actionBar.isShowing() && goingUp > 100)
 					actionBar.show();
-				
-				if(y > oldy){
+
+				if (y > oldy) {
 					goingDown += y - oldy;
 					goingUp = 0;
 				}
-				
-				if(y < oldy){
+
+				if (y < oldy) {
 					goingUp += oldy - y;
 					goingDown = 0;
 				}
-				
+
 			}
 		});
 	}
 
 	@Override
-	public void onUserInteraction() {
-        super.onUserInteraction();
-        goImmersive();
-    }
+	protected void onResume() {
+		super.onResume();
+		getSttings();
+		goImmersive();
+		loadDataToWebView();
+	}
+
+	private void loadDataToWebView() {
+		contentWebView.loadDataWithBaseURL(null, Style.getHead(fontFamily)
+				+ articleContent + "</html>", "text/html", "utf-8", null);
+
+		TypedValue a = new TypedValue();
+		getTheme().resolveAttribute(android.R.attr.windowBackground, a, true);
+		if (a.type >= TypedValue.TYPE_FIRST_COLOR_INT
+				&& a.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+			int color = a.data;
+			contentWebView.setBackgroundColor(color);
+		}
+	}
 	
+	@Override
+	public void onUserInteraction() {
+		super.onUserInteraction();
+		goImmersive();
+	}
+
 	@SuppressLint("NewApi")
 	private void goImmersive() {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
-			getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-		}
-		
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+			if (canGoImmersive) {
+				getWindow().getDecorView().setSystemUiVisibility(
+						View.SYSTEM_UI_FLAG_LOW_PROFILE);
+			}
+			else
+				getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
 	}
 
 	@Override
@@ -170,13 +200,51 @@ public class ReadArticle extends SherlockActivity {
 			toggleFav();
 			return true;
 		case R.id.settings:
-			startActivity(new Intent(getBaseContext(), SettingsAccount.class));
+			startActivity(new Intent(getBaseContext(),
+					SettingsLookAndFeel.class));
 			return true;
 		case R.id.share:
 			shareUrl();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private void getSttings() {
+		int fontSize = preferences.getInt(SettingsLookAndFeel.FONT_SIZE, 16);
+		webSettings.setDefaultFontSize(fontSize);
+
+		canGoImmersive = preferences.getBoolean(SettingsLookAndFeel.IMMERSIVE, true);
+		
+		int fontStyle = preferences.getInt(SettingsLookAndFeel.FONT_STYLE, 0);
+
+		switch (fontStyle) {
+		case SettingsLookAndFeel.SERIF:
+			fontFamily = Style.fontFamilySerif;
+			break;
+		case SettingsLookAndFeel.SANS:
+			fontFamily = Style.fontFamilySans;
+			break;
+		default:
+			break;
+		}
+
+		int screenOrientation = preferences.getInt(
+				SettingsLookAndFeel.ORIENTATION, 0);
+
+		switch (screenOrientation) {
+		case SettingsLookAndFeel.PORTRAIT:
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+			break;
+		case SettingsLookAndFeel.LANDSCAPE:
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+			break;
+		case SettingsLookAndFeel.DYMAMIC:
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -189,7 +257,8 @@ public class ReadArticle extends SherlockActivity {
 		sendIntent.setType("text/plain");
 		sendIntent.putExtra(Intent.EXTRA_TEXT, articleUrl);
 
-		Intent intentChooser = createIntentChooserForTwoIntents(viewIntent, sendIntent, getString(R.string.share_title));
+		Intent intentChooser = createIntentChooserForTwoIntents(viewIntent,
+				sendIntent, getString(R.string.share_title));
 
 		startActivity(intentChooser);
 	}
@@ -274,7 +343,8 @@ public class ReadArticle extends SherlockActivity {
 		});
 	}
 
-	private Intent createIntentChooserForTwoIntents(Intent first, Intent second, String title) {
+	private Intent createIntentChooserForTwoIntents(Intent first,
+			Intent second, String title) {
 
 		PackageManager pm = getPackageManager();
 

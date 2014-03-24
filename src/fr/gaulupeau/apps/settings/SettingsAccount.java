@@ -31,7 +31,7 @@ public class SettingsAccount extends SherlockActivity {
 	    editor = settings.edit();
 	        
 		setContentView(R.layout.settings_account);
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        //SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         String pocheUrl = settings.getString("pocheUrl", "https://");
         String apiUsername = settings.getString("APIUsername", "");
         String apiToken = settings.getString("APIToken", "");

@@ -52,7 +52,12 @@
     <string name="dark_theme">Use dark theme</string>
     <string name="font_size">Font size</string>
     <string name="font_style">Font style</string>
-    <string name="rotation">Rotation lock</string>
+    <string name="rotation">Orientation mode</string>
     <string name="immersive">Immersive mode</string>
+    <string name="sans_serif">Sans serif</string>
+    <string name="serif">Serif</string>
+    <string name="dynamic">Dynamic</string>
+    <string name="landscape">Landscape</string>
+    <string name="portrait">Portrait</string>
 </resources>
 

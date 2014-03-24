@@ -53,7 +53,12 @@
     <string name="dark_theme">Usar tema escuro</string>
     <string name="font_size">Tamanho da fonte</string>
     <string name="font_style">Estilo da fonte</string>
-    <string name="rotation">Travar rotação</string>
+    <string name="rotation">Orientação</string>
     <string name="immersive">Modo imersivo</string>
+    <string name="sans_serif">Sans serif</string>
+    <string name="serif">Serif</string>
+    <string name="dynamic">Dinâmico</string>
+    <string name="landscape">Paisagem</string>
+    <string name="portrait">Retrato</string>
 </resources>
 

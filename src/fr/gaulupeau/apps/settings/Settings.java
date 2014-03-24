@@ -56,4 +56,12 @@ public class Settings extends SettingsBase {
 
 		list.setAdapter(adapter);
 	}
+
+	@Override
+	protected void saveSettings() {
+	}
+
+	@Override
+	protected void getSettings() {	
+	}
 }
