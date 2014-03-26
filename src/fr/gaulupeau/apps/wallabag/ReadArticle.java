@@ -61,6 +61,7 @@ public class ReadArticle extends SherlockActivity {
 	private String fontFamily;
 	private int textAlign;
 	private boolean canGoImmersive;
+	private boolean keepScreenOn;
 
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
@@ -135,6 +136,7 @@ public class ReadArticle extends SherlockActivity {
 		getSettings();
 		goImmersive();
 		loadDataToWebView();
+		contentWebView.setKeepScreenOn(keepScreenOn);
 	}
 
 	private void loadDataToWebView() {
@@ -217,6 +219,8 @@ public class ReadArticle extends SherlockActivity {
 		webSettings.setDefaultFontSize(fontSize);
 
 		canGoImmersive = preferences.getBoolean(SettingsLookAndFeel.IMMERSIVE, true);
+		
+		keepScreenOn = preferences.getBoolean(SettingsLookAndFeel.KEEP_SCREEN_ON, false);
 		
 		int fontStyle = preferences.getInt(SettingsLookAndFeel.FONT_STYLE, 0);
 

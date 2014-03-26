@@ -64,5 +64,6 @@
     <string name="center">Center</string>
     <string name="right">Right</string>
     <string name="justified">Justified</string>
+    <string name="keep_screen_on">Keep screen always on</string>
 </resources>
 

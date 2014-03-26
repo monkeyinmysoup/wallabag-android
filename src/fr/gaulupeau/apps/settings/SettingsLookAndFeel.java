@@ -193,7 +193,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 		
 		//Keep screen on
 		View screenOnLayout = inflater.inflate(R.layout.look_and_feel_keep_screen_on, null);
-		final CheckBox screenOnCheckBox = (CheckBox) screenOnLayout.findViewById(R.id.immersive_check_box);
+		final CheckBox screenOnCheckBox = (CheckBox) screenOnLayout.findViewById(R.id.screen_on_check_box);
 		
 		screenOnCheckBox.setChecked(isScreenAlwaysOn);
 		
@@ -244,6 +244,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 		editor.putInt(ALIGN, textAlign);
 		editor.putInt(ORIENTATION, orientation);
 		editor.putBoolean(IMMERSIVE, isImmerviveModeSelected);
+		editor.putBoolean(KEEP_SCREEN_ON, isScreenAlwaysOn);
 		
 		editor.commit();
 	}

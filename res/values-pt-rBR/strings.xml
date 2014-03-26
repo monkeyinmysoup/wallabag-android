@@ -65,5 +65,6 @@
     <string name="center">Centro</string>
     <string name="right">Direita</string>
     <string name="justified">Justificado</string>
+    <string name="keep_screen_on">Manter a tela sempre ligada</string>
 </resources>
 

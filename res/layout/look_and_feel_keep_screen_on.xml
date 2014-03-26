@@ -10,7 +10,7 @@
         android:paddingBottom="@dimen/defaultTopPadding"
         android:paddingLeft="@dimen/defaultSidePadding"
         android:paddingTop="@dimen/defaultTopPadding"
-        android:text="@string/immersive"
+        android:text="@string/keep_screen_on"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <CheckBox
