@@ -59,6 +59,7 @@ public class ReadArticle extends SherlockActivity {
 	private boolean isFav;
 	private String articleContent;
 	private String fontFamily;
+	private int textAlign;
 	private boolean canGoImmersive;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -131,14 +132,14 @@ public class ReadArticle extends SherlockActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		getSttings();
+		getSettings();
 		goImmersive();
 		loadDataToWebView();
 	}
 
 	private void loadDataToWebView() {
-		contentWebView.loadDataWithBaseURL(null, Style.getHead(fontFamily)
-				+ articleContent + "</html>", "text/html", "utf-8", null);
+		contentWebView.loadDataWithBaseURL(null, Style.getHead(fontFamily, textAlign)
+				+ articleContent + Style.endTag, "text/html", "utf-8", null);
 
 		TypedValue a = new TypedValue();
 		getTheme().resolveAttribute(android.R.attr.windowBackground, a, true);
@@ -211,7 +212,7 @@ public class ReadArticle extends SherlockActivity {
 		}
 	}
 
-	private void getSttings() {
+	private void getSettings() {
 		int fontSize = preferences.getInt(SettingsLookAndFeel.FONT_SIZE, 16);
 		webSettings.setDefaultFontSize(fontSize);
 
@@ -230,6 +231,8 @@ public class ReadArticle extends SherlockActivity {
 			break;
 		}
 
+		textAlign = preferences.getInt(SettingsLookAndFeel.ALIGN, 0);
+		
 		int screenOrientation = preferences.getInt(
 				SettingsLookAndFeel.ORIENTATION, 0);
 

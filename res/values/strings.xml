@@ -59,5 +59,10 @@
     <string name="dynamic">Dynamic</string>
     <string name="landscape">Landscape</string>
     <string name="portrait">Portrait</string>
+    <string name="text_align">Text align</string>
+    <string name="left">Left</string>
+    <string name="center">Center</string>
+    <string name="right">Right</string>
+    <string name="justified">Justified</string>
 </resources>
 

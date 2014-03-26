@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ListView;
 import fr.gaulupeau.apps.wallabag.R;
 
@@ -51,14 +50,14 @@ public abstract class SettingsBase extends SherlockActivity{
 
 	abstract protected void createUI(ListView list, GeneralPurposeListViewAdapter adapter, LayoutInflater inflater);
 	
-	protected View inflateIfNotNull(View convertView, int layoutId){
-		LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		if (convertView == null) {	
-			convertView = inflater.inflate(layoutId, null);
-		}
-		
-		return convertView;
-	}
+//	protected View inflateIfNotNull(View convertView, int layoutId){
+//		LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//		if (convertView == null) {	
+//			convertView = inflater.inflate(layoutId, null);
+//		}
+//		
+//		return convertView;
+//	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
