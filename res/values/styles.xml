@@ -1,5 +1,6 @@
 <resources>
-	<color name="bg_color">#FFE3E3E3</color>
+	<color name="white_opaque">#FFFFFFFF</color>
+	<color name="pitch_black">#FF000000</color>
     <!--
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
@@ -13,9 +14,15 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="AppThemeWhite" parent="AppBaseTheme">
         
-        <item name="android:windowBackground">@color/bg_color</item> 
+        <item name="android:windowBackground">@color/white_opaque</item> 
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    
+    <style name="AppThemeBlack" parent="AppBaseTheme">
+        
+        <item name="android:windowBackground">@color/pitch_black</item> 
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 

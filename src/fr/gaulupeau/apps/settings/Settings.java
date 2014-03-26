@@ -60,8 +60,4 @@ public class Settings extends SettingsBase {
 	@Override
 	protected void saveSettings() {
 	}
-
-	@Override
-	protected void getSettings() {	
-	}
 }

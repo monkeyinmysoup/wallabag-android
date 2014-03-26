@@ -3,6 +3,7 @@ package fr.gaulupeau.apps.settings;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +15,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import fr.gaulupeau.apps.wallabag.R;
+import fr.gaulupeau.apps.wallabag.Utils;
 
 public class SettingsLookAndFeel extends SettingsBase {
 	public static final int SANS = 0;
@@ -25,7 +27,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 	private static final int[] fontStyleOptions = new int[] {R.string.sans_serif, R.string.serif};
 	private static final int[] orientationOptions = new int[] {R.string.dynamic, R.string.landscape, R.string.portrait};
 	private static final int[] alignOptions = new int[] {R.string.left, R.string.center, R.string.right, R.string.justified};
-	public static final String DARK_THEME = "DarkTheme";
+	public static final String DARK_THEME = "IsDarkTheme";
 	public static final String FONT_SIZE = "FontSize";
 	public static final String FONT_STYLE = "FontStyle";
 	public static final String ORIENTATION = "Orientation";
@@ -33,15 +35,15 @@ public class SettingsLookAndFeel extends SettingsBase {
 	public static final String ALIGN = "TextAlign";
 	public static final String KEEP_SCREEN_ON = "KeepScreenOn";
 	
-	private static final int fontSizeMin = 14;
+	private static final int fontSizeMin = 10;
 	
-	private boolean isDarkThemeSelected;
 	private int fontSize;
 	private int fontStyle;
 	private int textAlign;
 	private int orientation;
 	private boolean isImmerviveModeSelected;
 	private boolean isScreenAlwaysOn;
+	private boolean changed;
 
 	private int progressFromSize() {
 		return fontSize - fontSizeMin;
@@ -52,7 +54,27 @@ public class SettingsLookAndFeel extends SettingsBase {
 	}
 	
 	@Override
+	protected void onSaveInstanceState(Bundle outState){
+		outState.putBoolean("Changed", changed);
+		super.onSaveInstanceState(outState);
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState){
+		changed = savedInstanceState.getBoolean("Changed"); 
+	}
+	
+	@Override
+	public void finish() {
+	   if(changed)
+		   setResult(Utils.RESULT_CHANGE_THEME);
+	    super.finish();
+	}
+	
+	@Override
 	protected void createUI(ListView list, GeneralPurposeListViewAdapter adapter, LayoutInflater inflater){
+		
+		boolean isDarkThemeSelected = themeId == R.style.AppThemeBlack;
 		
 		//Dark theme
 		View darkThemeLayout = inflater.inflate(R.layout.look_and_feel_dark_theme, null);
@@ -71,7 +93,13 @@ public class SettingsLookAndFeel extends SettingsBase {
 		darkThemeCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				isDarkThemeSelected = isChecked;
+				if(isChecked)
+					themeId = R.style.AppThemeBlack;
+				else
+					themeId = R.style.AppThemeWhite;
+				
+				changed = !changed;
+				Utils.restartActivity(SettingsLookAndFeel.this);
 			}
 		});
 
@@ -225,7 +253,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 
 	@Override
 	protected void getSettings(){
-		isDarkThemeSelected = settings.getBoolean(DARK_THEME, false);
+		themeId = settings.getInt(DARK_THEME, R.style.AppThemeWhite);
 		fontSize = settings.getInt(FONT_SIZE, 16);
 		fontStyle = settings.getInt(FONT_STYLE, 0);
 		textAlign = settings.getInt(ALIGN, 0);
@@ -238,7 +266,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 	protected void saveSettings() {
 		Editor editor = settings.edit();
 
-		editor.putBoolean(DARK_THEME, isDarkThemeSelected);
+		editor.putInt(DARK_THEME, themeId);
 		editor.putInt(FONT_SIZE , fontSize);
 		editor.putInt(FONT_STYLE, fontStyle);
 		editor.putInt(ALIGN, textAlign);

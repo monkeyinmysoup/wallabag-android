@@ -6,29 +6,30 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.ListView;
 import fr.gaulupeau.apps.wallabag.R;
+import fr.gaulupeau.apps.wallabag.Utils;
 
 public abstract class SettingsBase extends SherlockActivity{
 	protected SharedPreferences settings;
 	
 	protected ListView list;
-	
+	protected int themeId;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		settings = getSharedPreferences(PREFS_NAME, 0);
+		getSettings();
+		 
+		setTheme(themeId);
 		
 		getSupportActionBar().setHomeButtonEnabled(true);
 	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-	    
-	    settings = getSharedPreferences(PREFS_NAME, 0);
-	    
-	    getSettings();
-	    
+
 	    setContentView(R.layout.settings);
 	    
 	    list = (ListView) findViewById(R.id.settingsList);
@@ -45,7 +46,9 @@ public abstract class SettingsBase extends SherlockActivity{
 		super.onPause();
 	}
 	
-	abstract protected void getSettings();
+	protected void getSettings(){
+		themeId = settings.getInt(SettingsLookAndFeel.DARK_THEME, R.style.AppThemeWhite);
+	}
 	abstract protected void saveSettings();
 
 	abstract protected void createUI(ListView list, GeneralPurposeListViewAdapter adapter, LayoutInflater inflater);
@@ -59,6 +62,7 @@ public abstract class SettingsBase extends SherlockActivity{
 //		return convertView;
 //	}
 	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	      case android.R.id.home:
@@ -67,5 +71,14 @@ public abstract class SettingsBase extends SherlockActivity{
 	      default:
 	        return super.onOptionsItemSelected(item);
 	    }
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    System.out.println("Result: " + resultCode);    
+		if (resultCode == Utils.RESULT_CHANGE_THEME) {
+	        	getSettings();
+	            Utils.restartActivity(this);
+	        }
 	}
 }

@@ -28,7 +28,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +48,6 @@ public class ReadArticle extends SherlockActivity {
 	private String id = "";
 	private MyScrollView view;
 	private WebView contentWebView;
-	private WebSettings webSettings;
 	private SharedPreferences preferences;
 
 	private String articleUrl;
@@ -62,13 +60,18 @@ public class ReadArticle extends SherlockActivity {
 	private int textAlign;
 	private boolean canGoImmersive;
 	private boolean keepScreenOn;
+	private int themeId;
+	private int fontSize;
 
 	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
 		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 
 		preferences = getSharedPreferences(PREFS_NAME, 0);
-
-		super.onCreate(savedInstanceState);
+		getSettings();
+		setTheme(themeId);
+		
 		setContentView(R.layout.article);
 
 		actionBar = getSupportActionBar();
@@ -92,7 +95,6 @@ public class ReadArticle extends SherlockActivity {
 		txtTitre.setText(ac.getString(2));
 
 		contentWebView = (WebView) findViewById(R.id.webContent);
-		webSettings = contentWebView.getSettings();
 
 		articleContent = ac.getString(3);
 
@@ -140,7 +142,7 @@ public class ReadArticle extends SherlockActivity {
 	}
 
 	private void loadDataToWebView() {
-		contentWebView.loadDataWithBaseURL(null, Style.getHead(fontFamily, textAlign)
+		contentWebView.loadDataWithBaseURL(null, Style.getHead(fontFamily, textAlign, fontSize)
 				+ articleContent + Style.endTag, "text/html", "utf-8", null);
 
 		TypedValue a = new TypedValue();
@@ -203,8 +205,8 @@ public class ReadArticle extends SherlockActivity {
 			toggleFav();
 			return true;
 		case R.id.settings:
-			startActivity(new Intent(getBaseContext(),
-					SettingsLookAndFeel.class));
+			startActivityForResult(new Intent(getBaseContext(),
+					SettingsLookAndFeel.class), this.hashCode());
 			return true;
 		case R.id.share:
 			shareUrl();
@@ -215,8 +217,8 @@ public class ReadArticle extends SherlockActivity {
 	}
 
 	private void getSettings() {
-		int fontSize = preferences.getInt(SettingsLookAndFeel.FONT_SIZE, 16);
-		webSettings.setDefaultFontSize(fontSize);
+		fontSize = preferences.getInt(SettingsLookAndFeel.FONT_SIZE, 16);
+		//webSettings.setDefaultFontSize(fontSize);
 
 		canGoImmersive = preferences.getBoolean(SettingsLookAndFeel.IMMERSIVE, true);
 		
@@ -253,6 +255,8 @@ public class ReadArticle extends SherlockActivity {
 		default:
 			break;
 		}
+		
+		themeId = preferences.getInt(SettingsLookAndFeel.DARK_THEME, R.style.AppThemeWhite);
 	}
 
 	private void shareUrl() {
@@ -270,6 +274,14 @@ public class ReadArticle extends SherlockActivity {
 		startActivity(intentChooser);
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	        if (resultCode == Utils.RESULT_CHANGE_THEME) {
+	        	getSettings();
+	            Utils.restartActivity(this);
+	        }
+	}
+	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

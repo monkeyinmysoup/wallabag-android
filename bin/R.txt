@@ -108,11 +108,12 @@ int color abs__bright_foreground_disabled_holo_dark 0x7f060004
 int color abs__bright_foreground_disabled_holo_light 0x7f060005
 int color abs__bright_foreground_holo_dark 0x7f060002
 int color abs__bright_foreground_holo_light 0x7f060003
-int color abs__primary_text_disable_only_holo_dark 0x7f060007
-int color abs__primary_text_disable_only_holo_light 0x7f060008
-int color abs__primary_text_holo_dark 0x7f060009
-int color abs__primary_text_holo_light 0x7f06000a
-int color bg_color 0x7f060006
+int color abs__primary_text_disable_only_holo_dark 0x7f060008
+int color abs__primary_text_disable_only_holo_light 0x7f060009
+int color abs__primary_text_holo_dark 0x7f06000a
+int color abs__primary_text_holo_light 0x7f06000b
+int color pitch_black 0x7f060007
+int color white_opaque 0x7f060006
 int dimen abs__action_bar_default_height 0x7f070001
 int dimen abs__action_bar_icon_vertical_padding 0x7f070002
 int dimen abs__action_bar_subtitle_bottom_margin 0x7f070006
@@ -476,7 +477,8 @@ int string which_browser 0x7f090015
 int string wipe_data_base 0x7f09002d
 int string yes 0x7f090030
 int style AppBaseTheme 0x7f0a0059
-int style AppTheme 0x7f0a005a
+int style AppThemeBlack 0x7f0a005b
+int style AppThemeWhite 0x7f0a005a
 int style Sherlock___TextAppearance_Small 0x7f0a0046
 int style Sherlock___Theme 0x7f0a0051
 int style Sherlock___Theme_DarkActionBar 0x7f0a0053

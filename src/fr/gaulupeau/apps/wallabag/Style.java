@@ -10,21 +10,21 @@ public abstract class Style {
 	public final static String fontFamilySerif = "\"Times New Roman\", Times, serif;";
 	public final static String endTag = "</body></html>";
 	
-	public static String getHead(String fontFamily, int textAlign){
+	public static String getHead(String fontFamily, int textAlign, int fontSize){
 		String align = ";";
 		
 		switch (textAlign) {
 		case LEFT_ALIGN:
-			align = "left;";
+			align = "left";
 			break;
 		case CENTER_ALIGN:
-			align = "center;";
+			align = "center";
 			break;
 		case RIGHT_ALIGN:
-			align = "right;";
+			align = "right";
 			break;
 		case JUSTIFY:
-			align = "justify;";
+			align = "justify";
 			break;
 		default:
 			break;
@@ -35,7 +35,8 @@ public abstract class Style {
 				"<style type=\"text/css\">" +
 				"body {" +
 				"    font-family: " + fontFamily +
-				"text-align: " + align +
+				"text-align: " + align + ";" +
+				"font-size: " + fontSize + "pt;" +
 				"} " +
 				"img {" +
 				"	max-width: 100%;" +
