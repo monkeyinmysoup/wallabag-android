@@ -200,6 +200,7 @@ public class ListArticles extends SherlockActivity {
 		final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
 		if (pocheUrl.equals("https://")) {
 			showToast(getString(R.string.txtConfigNotSet));
+			pullToRefreshLayout.setRefreshComplete();
 		} else if (activeNetwork != null && activeNetwork.isConnected()) {
 			// ExÃ©cution de la synchro en arriÃ¨re-plan
 			 new AsyncTask<Void, Void, Void>() {
@@ -217,6 +218,7 @@ public class ListArticles extends SherlockActivity {
 		} else {
 			// Afficher alerte connectivitÃ©
 			showToast(getString(R.string.txtNetOffline));
+			pullToRefreshLayout.setRefreshComplete();
 		}
 	}
 
@@ -271,7 +273,7 @@ public class ListArticles extends SherlockActivity {
 					} while (ac.moveToNext());
 				}
 				// Loop through the XML passing the data to the arrays
-				for (int i = 0; i < itemLst.getLength(); i++) {
+				for (int i = itemLst.getLength() - 1; i >= 0; i--) {
 
 					Node item = itemLst.item(i);
 					if (item.getNodeType() == Node.ELEMENT_NODE) {
@@ -304,7 +306,7 @@ public class ListArticles extends SherlockActivity {
 						}
 						articleUrl = Html.fromHtml(articleUrl).toString();
 						if (urlsInBD.contains(articleUrl)) {
-							System.out.println("Already in bd");
+							urlsInBD.remove(articleUrl);
 							continue;
 						}
 						try {
@@ -355,7 +357,7 @@ public class ListArticles extends SherlockActivity {
 						}
 					}
 				}
-
+				removeDeletedArticlesFromDB(urlsInBD);
 			}
 			updateUnread();
 		} catch (MalformedURLException e) {
@@ -372,6 +374,11 @@ public class ListArticles extends SherlockActivity {
 			e.printStackTrace();
 		}
 
+	}
+
+	private void removeDeletedArticlesFromDB(ArrayList<String> urlsInBD) {
+		for(String url : urlsInBD)
+			database.execSQL("DELETE FROM " + ARTICLE_TABLE + " WHERE " + ARTICLE_URL + "=" + "'" + url + "'" + ";");
 	}
 
 	private void trustEveryone() {
@@ -458,7 +465,7 @@ public class ListArticles extends SherlockActivity {
 		String[] getStrColumns = new String[] { ARTICLE_URL, MY_ID,
 				ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_SUMMARY };
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, filter, null,
-				null, null, ARTICLE_DATE/* + " DESC" */);
+				null, null, MY_ID + " DESC");
 		ac.moveToFirst();
 		if (!ac.isAfterLast()) {
 			do {
@@ -650,7 +657,7 @@ public class ListArticles extends SherlockActivity {
 		int chars = 0;
 		String desc = "";
 		String tmp = Html.fromHtml(html).toString();
-
+		
 		tmp = tmp.replaceAll("\n", " ");
 		tmp = tmp.replaceAll(" [ ]*", " ");
 		tmp = tmp.replaceAll("￼", "");
