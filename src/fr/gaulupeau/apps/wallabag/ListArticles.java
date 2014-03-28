@@ -86,7 +86,7 @@ public class ListArticles extends SherlockActivity {
 	private ActionBar actionBar;
 	private PullToRefreshLayout pullToRefreshLayout;
 	
-	private static int maxChars = 100;
+	private static int maxChars = 250;
 
 	private ArrayList<Article> readArticlesInfo;
 	private ListView readList;
@@ -658,14 +658,16 @@ public class ListArticles extends SherlockActivity {
 		String desc = "";
 		String tmp = Html.fromHtml(html).toString();
 		
-		tmp = tmp.replaceAll("\n", " ");
-		tmp = tmp.replaceAll(" [ ]*", " ");
+		
+		
 		tmp = tmp.replaceAll("￼", "");
+		tmp = tmp.replaceAll("\n", " ");
+		tmp = tmp.replace("\t", "");
+		tmp = tmp.replaceAll(" [ ]*", " ");
 
 		String[] words = tmp.split(" ");
 
 		for (int i = 0; i < words.length && chars < maxChars; i++) {
-
 			chars += words[i].length();
 			desc += words[i] + " ";
 		}
