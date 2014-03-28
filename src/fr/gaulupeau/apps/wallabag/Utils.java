@@ -1,5 +1,7 @@
 package fr.gaulupeau.apps.wallabag;
 
+import com.actionbarsherlock.app.ActionBar;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +14,13 @@ public class Utils {
 	
 	public static final boolean isDarkTheme(int themeId){
 		return themeId == R.style.AppThemeBlack;
+	}
+	
+	public static final void setActionBarIcon(ActionBar actionBar, int themeId){
+		if(isDarkTheme(themeId))
+			actionBar.setLogo(R.drawable.actionbar_dark);
+		else
+			actionBar.setLogo(R.drawable.actionbar);
 	}
 	
 	@SuppressLint("NewApi")

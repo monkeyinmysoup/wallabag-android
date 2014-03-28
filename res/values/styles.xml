@@ -1,36 +1,32 @@
-<resources 	xmlns:android="http://schemas.android.com/apk/res/android"
-    		xmlns:tools="http://schemas.android.com/tools">
-	<color name="white_opaque">#FFFFFFFF</color>
-	<color name="background_black">#FF151515</color>
-	<color name="action_bar_black">#FF000000</color>
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
+    <color name="white_opaque">#FFFFFFFF</color>
+    <color name="background_black">#FF151515</color>
+    <color name="action_bar_black">#FF000000</color>
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="Theme.Sherlock.Light">
-    </style>
+    <style name="AppBaseTheme" parent="Theme.Sherlock.Light"></style>
 
-    
     <style name="MyActionBarBlackStyle" parent="@style/Widget.Sherlock.ActionBar.Solid">
         <item name="android:background">@color/action_bar_black</item>
         <item name="background">@color/action_bar_black</item>
     </style>
+   
     
-    
-    
-    <!-- Application theme. -->
     <style name="AppThemeWhite" parent="AppBaseTheme">
-        
-        <item name="android:windowBackground">@color/white_opaque</item> 
+        <item name="android:windowBackground">@color/white_opaque</item>
+
     </style>
+
+    
     
     <style name="AppThemeBlack" parent="Theme.Sherlock">
-        
-         <item name="android:windowBackground">@color/background_black</item> 
-         
-         <item name="android:actionBarStyle" tools:targetApi="11">@style/MyActionBarBlackStyle</item>   
-         <item name="actionBarStyle">@style/MyActionBarBlackStyle</item>
-         
+        <item name="android:windowBackground">@color/background_black</item>
+        <item name="android:actionBarStyle" tools:targetApi="11">@style/MyActionBarBlackStyle</item>
+        <item name="actionBarStyle">@style/MyActionBarBlackStyle</item>
+
     </style>
 
 </resources>

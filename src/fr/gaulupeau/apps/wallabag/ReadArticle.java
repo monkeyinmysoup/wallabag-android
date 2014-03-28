@@ -77,6 +77,7 @@ public class ReadArticle extends SherlockActivity {
 		actionBar = getSupportActionBar();
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		Utils.setActionBarIcon(actionBar, themeId);
 
 		view = (MyScrollView) findViewById(R.id.scroll);
 		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(
@@ -189,6 +190,7 @@ public class ReadArticle extends SherlockActivity {
 		this.menu = menu;
 		setReadStateIcon();
 		setFavStateIcon();
+		setShareIcon();
 		return true;
 	}
 
@@ -281,10 +283,17 @@ public class ReadArticle extends SherlockActivity {
 		MenuItem item = menu.findItem(R.id.read);
 
 		if (isRead) {
-			item.setIcon(R.drawable.ic_action_undo);
+			if(Utils.isDarkTheme(themeId))
+				item.setIcon(R.drawable.ic_action_undo_dark);
+			else
+				item.setIcon(R.drawable.ic_action_undo);
+			
 			item.setTitle(getString(R.string.unread_title));
 		} else {
-			item.setIcon(R.drawable.ic_action_accept);
+			if(Utils.isDarkTheme(themeId))
+				item.setIcon(R.drawable.ic_action_accept_dark);
+			else
+				item.setIcon(R.drawable.ic_action_accept);
 			item.setTitle(getString(R.string.read_title));
 		}
 	}
@@ -293,11 +302,26 @@ public class ReadArticle extends SherlockActivity {
 		MenuItem item = menu.findItem(R.id.fav);
 
 		if (isFav)
-			item.setIcon(R.drawable.ic_action_important);
+			if(Utils.isDarkTheme(themeId))
+				item.setIcon(R.drawable.ic_action_important_dark);
+			else
+				item.setIcon(R.drawable.ic_action_important);
 		else
-			item.setIcon(R.drawable.ic_action_not_important);
+			if(Utils.isDarkTheme(themeId))
+				item.setIcon(R.drawable.ic_action_not_important_dark);
+			else
+				item.setIcon(R.drawable.ic_action_not_important);
 	}
 
+	private void setShareIcon(){
+		MenuItem item = menu.findItem(R.id.share);
+		
+		if(Utils.isDarkTheme(themeId))
+			item.setIcon(R.drawable.ic_action_share_dark);
+		else
+			item.setIcon(R.drawable.ic_action_share);
+	}
+	
 	private void findOutIfIsRead(int read) {
 
 		isRead = read == 1 ? true : false;

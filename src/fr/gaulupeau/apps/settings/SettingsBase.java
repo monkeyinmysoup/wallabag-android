@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.settings;
 
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 
@@ -16,6 +17,7 @@ import fr.gaulupeau.apps.wallabag.Utils;
 
 public abstract class SettingsBase extends SherlockActivity{
 	protected SharedPreferences settings;
+	protected ActionBar actionBar;
 	
 	protected ListView list;
 	protected int themeId;
@@ -27,8 +29,11 @@ public abstract class SettingsBase extends SherlockActivity{
 		 
 		setTheme(themeId);
 		
-		getSupportActionBar().setHomeButtonEnabled(true);
-	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		actionBar = getSupportActionBar();
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(true);
+	    
+	    Utils.setActionBarIcon(actionBar, themeId);
 
 	    setContentView(R.layout.settings);
 	    

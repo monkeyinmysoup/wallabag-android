@@ -63,7 +63,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.SyncStateContract.Constants;
 import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
@@ -74,6 +73,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -83,7 +83,7 @@ import fr.gaulupeau.apps.settings.Settings;
 import fr.gaulupeau.apps.settings.SettingsLookAndFeel;
 
 public class ListArticles extends SherlockActivity {
-
+	private ActionBar actionBar;
 	private PullToRefreshLayout pullToRefreshLayout;
 	
 	private static int maxChars = 100;
@@ -106,6 +106,10 @@ public class ListArticles extends SherlockActivity {
 
 		getSettings();
 		setTheme(themeId);
+		
+		actionBar = getSupportActionBar();
+		Utils.setActionBarIcon(actionBar, themeId);
+		
 		setContentView(R.layout.list);
 
 		pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
