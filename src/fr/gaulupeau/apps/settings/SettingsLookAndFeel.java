@@ -18,8 +18,6 @@ import fr.gaulupeau.apps.wallabag.R;
 import fr.gaulupeau.apps.wallabag.Utils;
 
 public class SettingsLookAndFeel extends SettingsBase {
-	public static final int SANS = 0;
-	public static final int SERIF = 1;
 	public static final int DYMAMIC = 0;
 	public static final int LANDSCAPE = 1;
 	public static final int PORTRAIT = 2;

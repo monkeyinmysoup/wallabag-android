@@ -56,7 +56,7 @@ public class ReadArticle extends SherlockActivity {
 	private boolean isRead;
 	private boolean isFav;
 	private String articleContent;
-	private String fontFamily;
+	private int fontStyle;
 	private int textAlign;
 	private boolean canGoImmersive;
 	private boolean keepScreenOn;
@@ -142,7 +142,7 @@ public class ReadArticle extends SherlockActivity {
 	}
 
 	private void loadDataToWebView() {
-		contentWebView.loadDataWithBaseURL(null, Style.getHead(fontFamily, textAlign, fontSize)
+		contentWebView.loadDataWithBaseURL(null, Style.getHead(fontStyle, textAlign, fontSize, Utils.isDarkTheme(themeId))
 				+ articleContent + Style.endTag, "text/html", "utf-8", null);
 
 		TypedValue a = new TypedValue();
@@ -224,18 +224,7 @@ public class ReadArticle extends SherlockActivity {
 		
 		keepScreenOn = preferences.getBoolean(SettingsLookAndFeel.KEEP_SCREEN_ON, false);
 		
-		int fontStyle = preferences.getInt(SettingsLookAndFeel.FONT_STYLE, 0);
-
-		switch (fontStyle) {
-		case SettingsLookAndFeel.SERIF:
-			fontFamily = Style.fontFamilySerif;
-			break;
-		case SettingsLookAndFeel.SANS:
-			fontFamily = Style.fontFamilySans;
-			break;
-		default:
-			break;
-		}
+		fontStyle = preferences.getInt(SettingsLookAndFeel.FONT_STYLE, 0);
 
 		textAlign = preferences.getInt(SettingsLookAndFeel.ALIGN, 0);
 		

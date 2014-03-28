@@ -3,13 +3,13 @@ package fr.gaulupeau.apps.wallabag;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_SUMMARY;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_SUMMARY;
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 
 import java.io.File;
@@ -43,6 +43,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -57,8 +60,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.SyncStateContract.Constants;
 import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
@@ -79,6 +84,8 @@ import fr.gaulupeau.apps.settings.SettingsLookAndFeel;
 
 public class ListArticles extends SherlockActivity {
 
+	private PullToRefreshLayout pullToRefreshLayout;
+	
 	private static int maxChars = 100;
 
 	private ArrayList<Article> readArticlesInfo;
@@ -101,6 +108,17 @@ public class ListArticles extends SherlockActivity {
 		setTheme(themeId);
 		setContentView(R.layout.list);
 
+		pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
+		
+		ActionBarPullToRefresh.from(this).allChildrenArePullable().listener(new OnRefreshListener() {
+			
+			@Override
+			public void onRefreshStarted(View view) {
+				refresh();
+				
+			}
+		}).setup(pullToRefreshLayout);
+		
 		setupDB();
 		setupList(false);
 	}
@@ -133,6 +151,7 @@ public class ListArticles extends SherlockActivity {
 			wipeDB();
 			return true;
 		case R.id.refresh:
+			pullToRefreshLayout.setRefreshing(true);
 			refresh();
 			return true;
 		case R.id.settings:
@@ -179,11 +198,18 @@ public class ListArticles extends SherlockActivity {
 			showToast(getString(R.string.txtConfigNotSet));
 		} else if (activeNetwork != null && activeNetwork.isConnected()) {
 			// ExÃ©cution de la synchro en arriÃ¨re-plan
-			new Thread(new Runnable() {
-				public void run() {
-					parseRSS();
-				}
-			}).start();
+			 new AsyncTask<Void, Void, Void>() {
+	                @Override
+	                protected Void doInBackground(Void... params) {
+	                	parseRSS();
+	                    return null;
+	                }
+	                @Override
+	                protected void onPostExecute(Void result) {
+	                    super.onPostExecute(result);
+	                    pullToRefreshLayout.setRefreshComplete();
+	                    }
+	            }.execute();
 		} else {
 			// Afficher alerte connectivitÃ©
 			showToast(getString(R.string.txtNetOffline));

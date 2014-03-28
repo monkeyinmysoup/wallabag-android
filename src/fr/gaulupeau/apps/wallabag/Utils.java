@@ -10,8 +10,12 @@ public class Utils {
 	
 	public static final int RESULT_CHANGE_THEME = 42;
 	
+	public static final boolean isDarkTheme(int themeId){
+		return themeId == R.style.AppThemeBlack;
+	}
+	
 	@SuppressLint("NewApi")
-	public static void restartActivity(final Activity activity) {
+	public static final void restartActivity(final Activity activity) {
 		Handler handler = new Handler();
 		handler.postDelayed(new Runnable() {
 			
