@@ -22,8 +22,8 @@
 
     
     
-    <style name="AppThemeBlack" parent="Theme.Sherlock">
-        <item name="android:windowBackground">@color/background_black</item>
+    <style name="AppThemeBlack" parent="@style/Theme.Sherlock">
+       	<item name="android:windowBackground">@color/background_black</item>
         <item name="android:actionBarStyle" tools:targetApi="11">@style/MyActionBarBlackStyle</item>
         <item name="actionBarStyle">@style/MyActionBarBlackStyle</item>
 

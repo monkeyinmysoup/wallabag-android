@@ -229,6 +229,7 @@ public class ListArticles extends SherlockActivity {
 			// Set the url (you will need to change this to your RSS URL
 			url = new URL(pocheUrl + "/?feed&type=home&user_id=" + apiUsername
 					+ "&token=" + apiToken);
+			System.out.println(url);
 			// Setup the connection
 			HttpsURLConnection conn_s = null;
 			HttpURLConnection conn = null;
@@ -305,6 +306,9 @@ public class ListArticles extends SherlockActivity {
 							articleUrl = "Echec";
 						}
 						articleUrl = Html.fromHtml(articleUrl).toString();
+						
+						System.out.println(articleUrl);
+						
 						if (urlsInBD.contains(articleUrl)) {
 							urlsInBD.remove(articleUrl);
 							continue;
@@ -556,6 +560,7 @@ public class ListArticles extends SherlockActivity {
 
 	private String changeImagesUrl(String html) {
 		int lastImageTag = 0;
+		
 		while (true) {
 			int openTagPosition = html.indexOf("<img", lastImageTag);
 
@@ -567,6 +572,8 @@ public class ListArticles extends SherlockActivity {
 			if (closeTagPosition == -1)
 				throw new RuntimeException("Error while parsing html");
 
+			lastImageTag = closeTagPosition + 1;
+			
 			String tagContent = html.substring(openTagPosition,
 					closeTagPosition + 1);
 
@@ -584,8 +591,11 @@ public class ListArticles extends SherlockActivity {
 			imageSource = imageSource.replaceAll("src=", "");
 			imageSource = imageSource.replaceAll("\"", "");
 			imageSource = imageSource.trim();
-
+			
 			Bitmap bitmap = getBitmapFromURL(imageSource);
+			
+			if(bitmap == null)
+				continue;
 
 			String savedLocation = saveBitmap(bitmap,
 					"" + imageSource.hashCode());
@@ -594,9 +604,7 @@ public class ListArticles extends SherlockActivity {
 
 			String newTag = recreateTag(tagParams);
 
-			html = html.replace(tagContent, newTag);
-
-			lastImageTag = closeTagPosition + 1;
+			html = html.replace(tagContent, newTag);	
 		}
 
 		return html;
@@ -621,8 +629,9 @@ public class ListArticles extends SherlockActivity {
 			InputStream input = connection.getInputStream();
 			Bitmap myBitmap = BitmapFactory.decodeStream(input);
 			return myBitmap;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("here");
 			return null;
 		}
 	}

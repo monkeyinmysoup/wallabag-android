@@ -252,7 +252,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 	@Override
 	protected void getSettings(){
 		themeId = settings.getInt(DARK_THEME, R.style.AppThemeWhite);
-		fontSize = settings.getInt(FONT_SIZE, 16);
+		fontSize = settings.getInt(FONT_SIZE, 12);
 		fontStyle = settings.getInt(FONT_STYLE, 0);
 		textAlign = settings.getInt(ALIGN, 0);
 		orientation = settings.getInt(ORIENTATION, 0);
