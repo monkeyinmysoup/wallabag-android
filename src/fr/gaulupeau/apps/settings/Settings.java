@@ -36,7 +36,7 @@ public class Settings extends SettingsBase {
 		int[] strings = new int[] { R.string.general, R.string.look_and_feel,
 				R.string.account, R.string.about };
 
-		Class<?>[] activities = new Class[] { SettingsAccount.class,
+		Class<?>[] activities = new Class[] { SettingsGeneral.class,
 				SettingsLookAndFeel.class, SettingsAccount.class,
 				SettingsAccount.class };
 

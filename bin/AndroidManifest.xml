@@ -62,6 +62,12 @@
             android:label="@string/look_and_feel"
             android:theme="@style/AppThemeWhite" >
         </activity>
+        
+        <activity
+            android:name="fr.gaulupeau.apps.settings.SettingsGeneral"
+            android:label="@string/general"
+            android:theme="@style/AppThemeWhite" >
+        </activity>
     </application>
 
 </manifest>

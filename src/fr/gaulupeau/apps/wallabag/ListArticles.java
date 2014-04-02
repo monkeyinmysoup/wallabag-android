@@ -46,10 +46,8 @@ import org.xml.sax.SAXException;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -66,9 +64,6 @@ import android.os.Environment;
 import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,6 +75,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import fr.gaulupeau.apps.settings.Settings;
+import fr.gaulupeau.apps.settings.SettingsGeneral;
 import fr.gaulupeau.apps.settings.SettingsLookAndFeel;
 
 public class ListArticles extends SherlockActivity {
@@ -99,7 +95,7 @@ public class ListArticles extends SherlockActivity {
 
 	private int themeId;
 
-	private boolean willAlsoDeleteUserAccount;
+	private boolean sortOlder;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -150,9 +146,6 @@ public class ListArticles extends SherlockActivity {
 		switch (item.getItemId()) {
 		case R.id.menuShowAll:
 			setupList(true);
-			return super.onOptionsItemSelected(item);
-		case R.id.menuWipeDb:
-			wipeDB();
 			return true;
 		case R.id.refresh:
 			pullToRefreshLayout.setRefreshing(true);
@@ -183,6 +176,10 @@ public class ListArticles extends SherlockActivity {
 		}
 		else
 			themeId = newThemeId;
+		
+		int sortType = settings.getInt(SettingsGeneral.SORT_TYPE, SettingsGeneral.NEWER);
+		
+		sortOlder = sortType == SettingsGeneral.OLDER;
 	}
 
 	public void showToast(final String toast) {
@@ -466,10 +463,13 @@ public class ListArticles extends SherlockActivity {
 
 	public ReadingListAdapter getAdapterQuery(String filter,
 			ArrayList<Article> articleInfo) {
+		
+		String orderByComplement = sortOlder ? "" : " DESC";
+		
 		String[] getStrColumns = new String[] { ARTICLE_URL, MY_ID,
 				ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_SUMMARY };
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, filter, null,
-				null, null, MY_ID + " DESC");
+				null, null, MY_ID + orderByComplement);
 		ac.moveToFirst();
 		if (!ac.isAfterLast()) {
 			do {
@@ -481,81 +481,6 @@ public class ListArticles extends SherlockActivity {
 		}
 		ac.close();
 		return new ReadingListAdapter(getBaseContext(), articleInfo);
-	}
-
-	private void wipeDB() {
-		willAlsoDeleteUserAccount = false;
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-		builder.setTitle(getString(R.string.wipe_data_base));
-		builder.setMessage(getString(R.string.sure));
-
-		View checkBoxView = View.inflate(getBaseContext(),
-				R.layout.my_checkbox, null);
-		CheckBox checkBox = (CheckBox) checkBoxView
-				.findViewById(R.id.checkbox_delete_acoount);
-		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				willAlsoDeleteUserAccount = isChecked;
-			}
-		});
-
-		builder.setView(checkBoxView);
-
-		builder.setPositiveButton(getString(R.string.yes),
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(
-								ListArticles.this);
-						helper.truncateTables(database);
-						deleteFiles();
-						setupList(false);
-						if (willAlsoDeleteUserAccount)
-							cleanUserInfo();
-						dialog.dismiss();
-					}
-
-				});
-
-		builder.setNegativeButton(getString(R.string.no),
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-
-		AlertDialog alert = builder.create();
-		alert.show();
-	}
-
-	protected void deleteFiles() {
-		File filesDir = new File(Environment.getExternalStorageDirectory()
-				+ "/Android/data/" + getApplicationContext().getPackageName()
-				+ "/files");
-
-		for (File file : filesDir.listFiles())
-			file.delete();
-	}
-
-	private void cleanUserInfo() {
-		System.out.println("called");
-		SharedPreferences settings;
-		SharedPreferences.Editor editor;
-
-		settings = getSharedPreferences(PREFS_NAME, 0);
-		editor = settings.edit();
-
-		editor.putString("pocheUrl", "https://");
-		editor.putString("APIUsername", "");
-		editor.putString("APIToken", "");
-		editor.commit();
-
-		getSettings();
 	}
 
 	private String changeImagesUrl(String html) {

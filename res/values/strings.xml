@@ -65,5 +65,8 @@
     <string name="right">Right</string>
     <string name="justified">Justified</string>
     <string name="keep_screen_on">Keep screen always on</string>
+    <string name="sort">Sort</string>
+    <string name="newer">Newers</string>
+    <string name="older">Olders</string>
 </resources>
 

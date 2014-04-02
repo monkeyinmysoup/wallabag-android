@@ -66,5 +66,8 @@
     <string name="right">Direita</string>
     <string name="justified">Justificado</string>
     <string name="keep_screen_on">Manter a tela sempre ligada</string>
+    <string name="sort">Ordenar</string>
+    <string name="newer">Mais novos</string>
+    <string name="older">Mais antigos</string>
 </resources>
 
