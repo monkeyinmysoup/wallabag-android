@@ -25,10 +25,11 @@ import fr.gaulupeau.apps.wallabag.R;
 public class SettingsGeneral extends SettingsBase {
 
 	private SQLiteDatabase database;
-	private static final int[] sortTypeOptions = new int[] {R.string.newer, R.string.older};
+	private static final int[] sortTypeOptions = new int[] {R.string.newer, R.string.older, R.string.alphabetical};
 	
 	public static final int NEWER = 0;
 	public static final int OLDER = 1;
+	public static final int ALPHA = 2;
 	
 	public static final String SORT_TYPE = "SortType";
 	
@@ -71,7 +72,7 @@ public class SettingsGeneral extends SettingsBase {
 			@Override
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(SettingsGeneral.this);
-				String[] choices = new String[] {getStringSortType(0), getStringSortType(1)};
+				String[] choices = new String[] {getStringSortType(0), getStringSortType(1), getStringSortType(2)};
 				builder.setSingleChoiceItems(choices, sortType, new DialogInterface.OnClickListener() {				
 					@Override
 					public void onClick(DialogInterface dialog, int which) {

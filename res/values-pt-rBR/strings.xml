@@ -69,5 +69,6 @@
     <string name="sort">Ordenar</string>
     <string name="newer">Mais novos</string>
     <string name="older">Mais antigos</string>
+    <string name="alphabetical">Ordem Alfabética</string>
 </resources>
 

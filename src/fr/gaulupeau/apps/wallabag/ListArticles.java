@@ -95,7 +95,7 @@ public class ListArticles extends SherlockActivity {
 
 	private int themeId;
 
-	private boolean sortOlder;
+	private int sortType;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -177,9 +177,7 @@ public class ListArticles extends SherlockActivity {
 		else
 			themeId = newThemeId;
 		
-		int sortType = settings.getInt(SettingsGeneral.SORT_TYPE, SettingsGeneral.NEWER);
-		
-		sortOlder = sortType == SettingsGeneral.OLDER;
+		sortType = settings.getInt(SettingsGeneral.SORT_TYPE, SettingsGeneral.NEWER);
 	}
 
 	public void showToast(final String toast) {
@@ -464,12 +462,28 @@ public class ListArticles extends SherlockActivity {
 	public ReadingListAdapter getAdapterQuery(String filter,
 			ArrayList<Article> articleInfo) {
 		
-		String orderByComplement = sortOlder ? "" : " DESC";
+		String orderBy = MY_ID;
+		
+		switch (sortType) {
+		case SettingsGeneral.NEWER:
+			orderBy = MY_ID + " DESC";
+			break;
+		case SettingsGeneral.OLDER:
+			orderBy = MY_ID;
+			break;
+		case SettingsGeneral.ALPHA:
+			orderBy = ARTICLE_TITLE + " COLLATE NOCASE";
+			break;
+		default:
+			System.out.println(sortType);
+			orderBy = "";
+			break;
+		}
 		
 		String[] getStrColumns = new String[] { ARTICLE_URL, MY_ID,
 				ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_SUMMARY };
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, filter, null,
-				null, null, MY_ID + orderByComplement);
+				null, null, orderBy);
 		ac.moveToFirst();
 		if (!ac.isAfterLast()) {
 			do {
