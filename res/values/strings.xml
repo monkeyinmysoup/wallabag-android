@@ -69,5 +69,8 @@
     <string name="newer">Newers first</string>
     <string name="older">Olders first</string>
     <string name="alphabetical">Alphabetical order</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="fail_to_update">The app failed to update</string>
 </resources>
 

@@ -50,6 +50,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
@@ -61,6 +62,8 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
@@ -81,7 +84,7 @@ import fr.gaulupeau.apps.settings.SettingsLookAndFeel;
 public class ListArticles extends SherlockActivity {
 	private ActionBar actionBar;
 	private PullToRefreshLayout pullToRefreshLayout;
-	
+
 	private static int maxChars = 250;
 
 	private ArrayList<Article> readArticlesInfo;
@@ -97,30 +100,76 @@ public class ListArticles extends SherlockActivity {
 
 	private int sortType;
 
+	private DrawerLayout drawerLayout;
+	private ListView drawerList;
+	private ActionBarDrawerToggle drawerToggle;
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		getSettings();
 		setTheme(themeId);
-		
+
 		actionBar = getSupportActionBar();
 		Utils.setActionBarIcon(actionBar, themeId);
-		
+
 		setContentView(R.layout.list);
 
 		pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
-		
-		ActionBarPullToRefresh.from(this).allChildrenArePullable().listener(new OnRefreshListener() {
-			
-			@Override
-			public void onRefreshStarted(View view) {
-				refresh();
-				
-			}
-		}).setup(pullToRefreshLayout);
-		
+
+		ActionBarPullToRefresh.from(this).allChildrenArePullable()
+				.listener(new OnRefreshListener() {
+
+					@Override
+					public void onRefreshStarted(View view) {
+						refresh();
+
+					}
+				}).setup(pullToRefreshLayout);
+
 		setupDB();
 		setupList(false);
+
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		drawerList = (ListView) findViewById(R.id.left_drawer);
+
+		// Set the adapter for the list view
+		DrawerListAdapter adapter = new DrawerListAdapter(this, 0);
+		drawerList.setAdapter(adapter);
+
+		drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+		drawerLayout, /* DrawerLayout object */
+		R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+		R.string.drawer_open, /* "open drawer" description */
+		R.string.drawer_close /* "close drawer" description */
+		) {
+
+			/** Called when a drawer has settled in a completely closed state. */
+			public void onDrawerClosed(View view) {
+			}
+
+			/** Called when a drawer has settled in a completely open state. */
+			public void onDrawerOpened(View drawerView) {
+			}
+		};
+
+		// Set the drawer toggle as the DrawerListener
+		drawerLayout.setDrawerListener(drawerToggle);
+
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
+	}
+	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		drawerToggle.syncState();
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		drawerToggle.onConfigurationChanged(newConfig);
 	}
 
 	public void onResume() {
@@ -144,6 +193,12 @@ public class ListArticles extends SherlockActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case android.R.id.home:
+			if(drawerLayout.isDrawerOpen(drawerList))
+				drawerLayout.closeDrawer(drawerList);
+			else
+				drawerLayout.openDrawer(drawerList);
+			return true;
 		case R.id.menuShowAll:
 			setupList(true);
 			return true;
@@ -152,7 +207,9 @@ public class ListArticles extends SherlockActivity {
 			refresh();
 			return true;
 		case R.id.settings:
-			startActivityForResult(new Intent(getBaseContext(), Settings.class), this.hashCode());
+			startActivityForResult(
+					new Intent(getBaseContext(), Settings.class),
+					this.hashCode());
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -168,16 +225,17 @@ public class ListArticles extends SherlockActivity {
 		pocheUrl = settings.getString("pocheUrl", "https://");
 		apiUsername = settings.getString("APIUsername", "");
 		apiToken = settings.getString("APIToken", "");
-		
-		int newThemeId = settings.getInt(SettingsLookAndFeel.DARK_THEME, R.style.AppThemeWhite);
-		if(themeId != 0 && newThemeId != themeId){
+
+		int newThemeId = settings.getInt(SettingsLookAndFeel.DARK_THEME,
+				R.style.AppThemeWhite);
+		if (themeId != 0 && newThemeId != themeId) {
 			themeId = newThemeId;
 			Utils.restartActivity(this);
-		}
-		else
+		} else
 			themeId = newThemeId;
-		
-		sortType = settings.getInt(SettingsGeneral.SORT_TYPE, SettingsGeneral.NEWER);
+
+		sortType = settings.getInt(SettingsGeneral.SORT_TYPE,
+				SettingsGeneral.NEWER);
 	}
 
 	public void showToast(final String toast) {
@@ -198,18 +256,19 @@ public class ListArticles extends SherlockActivity {
 			pullToRefreshLayout.setRefreshComplete();
 		} else if (activeNetwork != null && activeNetwork.isConnected()) {
 			// ExÃ©cution de la synchro en arriÃ¨re-plan
-			 new AsyncTask<Void, Void, Void>() {
-	                @Override
-	                protected Void doInBackground(Void... params) {
-	                	parseRSS();
-	                    return null;
-	                }
-	                @Override
-	                protected void onPostExecute(Void result) {
-	                    super.onPostExecute(result);
-	                    pullToRefreshLayout.setRefreshComplete();
-	                    }
-	            }.execute();
+			new AsyncTask<Void, Void, Void>() {
+				@Override
+				protected Void doInBackground(Void... params) {
+					parseRSS();
+					return null;
+				}
+
+				@Override
+				protected void onPostExecute(Void result) {
+					super.onPostExecute(result);
+					pullToRefreshLayout.setRefreshComplete();
+				}
+			}.execute();
 		} else {
 			// Afficher alerte connectivitÃ©
 			showToast(getString(R.string.txtNetOffline));
@@ -301,9 +360,9 @@ public class ListArticles extends SherlockActivity {
 							articleUrl = "Echec";
 						}
 						articleUrl = Html.fromHtml(articleUrl).toString();
-						
+
 						System.out.println(articleUrl);
-						
+
 						if (urlsInBD.contains(articleUrl)) {
 							urlsInBD.remove(articleUrl);
 							continue;
@@ -360,24 +419,31 @@ public class ListArticles extends SherlockActivity {
 			}
 			updateUnread();
 		} catch (MalformedURLException e) {
+			showToast(getString(R.string.fail_to_update));
 			e.printStackTrace();
 		} catch (DOMException e) {
+			showToast(getString(R.string.fail_to_update));
 			e.printStackTrace();
 		} catch (IOException e) {
+			showToast(getString(R.string.fail_to_update));
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
+			showToast(getString(R.string.fail_to_update));
 			e.printStackTrace();
 		} catch (SAXException e) {
+			showToast(getString(R.string.fail_to_update));
 			e.printStackTrace();
 		} catch (Exception e) {
+			showToast(getString(R.string.fail_to_update));
 			e.printStackTrace();
 		}
 
 	}
 
 	private void removeDeletedArticlesFromDB(ArrayList<String> urlsInBD) {
-		for(String url : urlsInBD)
-			database.execSQL("DELETE FROM " + ARTICLE_TABLE + " WHERE " + ARTICLE_URL + "=" + "'" + url + "'" + ";");
+		for (String url : urlsInBD)
+			database.execSQL("DELETE FROM " + ARTICLE_TABLE + " WHERE "
+					+ ARTICLE_URL + "=" + "'" + url + "'" + ";");
 	}
 
 	private void trustEveryone() {
@@ -461,9 +527,9 @@ public class ListArticles extends SherlockActivity {
 
 	public ReadingListAdapter getAdapterQuery(String filter,
 			ArrayList<Article> articleInfo) {
-		
+
 		String orderBy = MY_ID;
-		
+
 		switch (sortType) {
 		case SettingsGeneral.NEWER:
 			orderBy = MY_ID + " DESC";
@@ -479,7 +545,7 @@ public class ListArticles extends SherlockActivity {
 			orderBy = "";
 			break;
 		}
-		
+
 		String[] getStrColumns = new String[] { ARTICLE_URL, MY_ID,
 				ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_SUMMARY };
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, filter, null,
@@ -499,7 +565,7 @@ public class ListArticles extends SherlockActivity {
 
 	private String changeImagesUrl(String html) {
 		int lastImageTag = 0;
-		
+
 		while (true) {
 			int openTagPosition = html.indexOf("<img", lastImageTag);
 
@@ -512,7 +578,7 @@ public class ListArticles extends SherlockActivity {
 				throw new RuntimeException("Error while parsing html");
 
 			lastImageTag = closeTagPosition + 1;
-			
+
 			String tagContent = html.substring(openTagPosition,
 					closeTagPosition + 1);
 
@@ -530,10 +596,10 @@ public class ListArticles extends SherlockActivity {
 			imageSource = imageSource.replaceAll("src=", "");
 			imageSource = imageSource.replaceAll("\"", "");
 			imageSource = imageSource.trim();
-			
+
 			Bitmap bitmap = getBitmapFromURL(imageSource);
-			
-			if(bitmap == null)
+
+			if (bitmap == null)
 				continue;
 
 			String savedLocation = saveBitmap(bitmap,
@@ -543,7 +609,7 @@ public class ListArticles extends SherlockActivity {
 
 			String newTag = recreateTag(tagParams);
 
-			html = html.replace(tagContent, newTag);	
+			html = html.replace(tagContent, newTag);
 		}
 
 		return html;
@@ -605,9 +671,7 @@ public class ListArticles extends SherlockActivity {
 		int chars = 0;
 		String desc = "";
 		String tmp = Html.fromHtml(html).toString();
-		
-		
-		
+
 		tmp = tmp.replaceAll("￼", "");
 		tmp = tmp.replaceAll("\n", " ");
 		tmp = tmp.replace("\t", "");

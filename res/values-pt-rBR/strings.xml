@@ -70,5 +70,8 @@
     <string name="newer">Mais novos</string>
     <string name="older">Mais antigos</string>
     <string name="alphabetical">Ordem Alfabética</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="fail_to_update">Falha ao atualizar</string>
 </resources>
 
