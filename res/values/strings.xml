@@ -23,7 +23,6 @@
     <string name="txtGlobalToken"><b>API global token:</b></string>
     <string name="txtAPIUsername"><b>Your user ID (user_id in Feed URL):</b></string>
     <string name="txtAPIToken"><b>Your token (token in Feed URL):</b></string>
-    <string name="version">1.6-alpha1</string>
     <!-- <string name="unread_label">unread</string> -->
     <string name="refresh">Refresh</string>
     <string name="no_unread_articles">You have no unread articles</string>
@@ -72,5 +71,9 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="fail_to_update">The app failed to update</string>
+    <string name="all_text">All</string>
+    <string name="unread_text">Unread</string>
+    <string name="read_text">Read</string>
+    <string name="favorites_text">Favorites</string>
 </resources>
 

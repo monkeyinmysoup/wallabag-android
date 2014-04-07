@@ -23,7 +23,6 @@
     <string name="txtGlobalToken"><b>Token global da API:</b></string>
     <string name="txtAPIUsername"><b>Seu ID de usuário (user_id em Feed URL):</b></string>
     <string name="txtAPIToken"><b>Seu token (token em Feed URL):</b></string>
-    <string name="version">1.6-alpha1</string>
     <!-- <string name="unread_label">não lido(s)</string> -->
     <string name="refresh">Atualizar</string>
     <string name="no_unread_articles">Você não tem artigos não lidos</string>
@@ -73,5 +72,9 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="fail_to_update">Falha ao atualizar</string>
+    <string name="all_text">Todos</string>
+    <string name="unread_text">Não lidos</string>
+    <string name="read_text">Lidos</string>
+    <string name="favorites_text">Favoritos</string>
 </resources>
 

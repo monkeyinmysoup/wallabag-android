@@ -2,8 +2,11 @@ package fr.gaulupeau.apps.settings;
 
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
@@ -41,18 +44,15 @@ public class SettingsAccount extends SherlockActivity {
     	editAPIUsername.setText(apiUsername);
     	editAPIToken = (EditText)findViewById(R.id.APIToken);
     	editAPIToken.setText(apiToken);
-//        btnDone = (Button)findViewById(R.id.btnDone);
-//        btnDone.setOnClickListener(new OnClickListener() {
-//			public void onClick(View v) {
-//				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-//	        	SharedPreferences.Editor editor = settings.edit();
-//	        	editor.putString("pocheUrl", editPocheUrl.getText().toString());
-//	        	editor.putString("APIUsername", editAPIUsername.getText().toString());
-//	        	editor.putString("APIToken", editAPIToken.getText().toString());
-//				editor.commit();
-//				finish();
-//			}
-//        });
+
+    	PackageInfo packageInfo;
+		try {
+			packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			TextView version = (TextView) findViewById(R.id.version);	    	
+	    	version.setText(packageInfo.versionName);
+		} catch (NameNotFoundException e) {}
+    	
+    	
 	}
 	
 	@Override

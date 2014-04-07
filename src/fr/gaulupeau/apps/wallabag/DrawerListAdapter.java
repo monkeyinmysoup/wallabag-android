@@ -7,15 +7,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DrawerListAdapter extends BaseAdapter {
 	
-	private Context context;
+	private ListArticles listArticles;
 	private int choosen;
 
-	public DrawerListAdapter(Context context, int choosen){
-		this.context = context;
+	public DrawerListAdapter(ListArticles listArticles, int choosen){
+		this.listArticles = listArticles;
 		this.choosen = choosen;
 	}
 	
@@ -23,23 +24,30 @@ public class DrawerListAdapter extends BaseAdapter {
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater;
 		if(convertView == null){
-			inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			inflater = (LayoutInflater) listArticles.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(R.layout.drawer_list_item, null);
 		}
 		
 		TextView text = (TextView)convertView.findViewById(R.id.drawer_element_text);
+		ImageView image = (ImageView) convertView.findViewById(R.id.drawer_element_image);
 		
 		switch (position) {
-		case 0:
-			text.setText("One");
+		case Constants.ALL:
+			text.setText(listArticles.getString(R.string.all_text));
+			image.setImageResource(R.drawable.ic_action_about_dark);
 			break;
-		case 1:
-			text.setText("Two");
+		case Constants.UNREAD:
+			text.setText(listArticles.getString(R.string.unread_text));
+			image.setImageResource(R.drawable.ic_action_accounts_dark);
 			break;
-		case 2:
-			text.setText("Three");
+		case Constants.READ:
+			text.setText(listArticles.getString(R.string.read_text));
+			image.setImageResource(R.drawable.ic_action_accept_dark);
 			break;
-
+		case Constants.FAVS:
+			text.setText(listArticles.getString(R.string.favorites_text));
+			image.setImageResource(R.drawable.ic_action_important_dark);
+			break;
 		default:
 			break;
 		}
@@ -55,6 +63,8 @@ public class DrawerListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				choosen = position;
 				notifyDataSetChanged();
+				listArticles.setListFilterOption(position);
+				listArticles.closeDrawer();
 			}
 		});
 		
@@ -73,7 +83,7 @@ public class DrawerListAdapter extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
-		return 3;
+		return 4;
 	}
 
 }

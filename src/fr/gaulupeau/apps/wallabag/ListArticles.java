@@ -50,6 +50,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
@@ -99,6 +100,8 @@ public class ListArticles extends SherlockActivity {
 	private int themeId;
 
 	private int sortType;
+	
+	private int listFilterOption;
 
 	private DrawerLayout drawerLayout;
 	private ListView drawerList;
@@ -115,37 +118,39 @@ public class ListArticles extends SherlockActivity {
 
 		setContentView(R.layout.list);
 
+		
+		//Pull to refresh
 		pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
 
 		ActionBarPullToRefresh.from(this).allChildrenArePullable()
 				.listener(new OnRefreshListener() {
-
 					@Override
 					public void onRefreshStarted(View view) {
 						refresh();
-
 					}
 				}).setup(pullToRefreshLayout);
 
 		setupDB();
-		setupList(false);
+		setupList();
 
+		
+		//Drawer
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerList = (ListView) findViewById(R.id.left_drawer);
 
-		// Set the adapter for the list view
-		DrawerListAdapter adapter = new DrawerListAdapter(this, 0);
+		DrawerListAdapter adapter = new DrawerListAdapter(this, listFilterOption);
 		drawerList.setAdapter(adapter);
 
 		drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
 		drawerLayout, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+		R.drawable.ic_drawer, /* nav drawer icon */
 		R.string.drawer_open, /* "open drawer" description */
 		R.string.drawer_close /* "close drawer" description */
 		) {
 
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
+				setupList();
 			}
 
 			/** Called when a drawer has settled in a completely open state. */
@@ -175,7 +180,7 @@ public class ListArticles extends SherlockActivity {
 	public void onResume() {
 		super.onResume();
 		getSettings();
-		setupList(false);
+		setupList();
 	}
 
 	public void onDestroy() {
@@ -198,9 +203,6 @@ public class ListArticles extends SherlockActivity {
 				drawerLayout.closeDrawer(drawerList);
 			else
 				drawerLayout.openDrawer(drawerList);
-			return true;
-		case R.id.menuShowAll:
-			setupList(true);
 			return true;
 		case R.id.refresh:
 			pullToRefreshLayout.setRefreshing(true);
@@ -236,6 +238,8 @@ public class ListArticles extends SherlockActivity {
 
 		sortType = settings.getInt(SettingsGeneral.SORT_TYPE,
 				SettingsGeneral.NEWER);
+		
+		listFilterOption = settings.getInt(Constants.LIST_FILTER_OPTION, Constants.ALL);
 	}
 
 	public void showToast(final String toast) {
@@ -491,18 +495,33 @@ public class ListArticles extends SherlockActivity {
 				else
 					showToast(String.format(
 							getString(R.string.many_unread_articles), news));
-				setupList(false);
+				setupList();
 			}
 		});
 	}
 
-	public void setupList(Boolean showAll) {
+	public void setupList() {
 		TextView tvNoArticles = (TextView) findViewById(R.id.no_articles_text);
 		readList = (ListView) findViewById(R.id.liste_articles);
 		readArticlesInfo = new ArrayList<Article>();
-		String filter = null;
-		if (showAll == false) {
-			filter = ARCHIVE + "=0";
+		String filter;
+		
+		switch (listFilterOption) {
+		case Constants.ALL:
+			filter = null;
+			break;
+		case Constants.UNREAD:
+			filter = ARCHIVE + " = 0";
+			break;
+		case Constants.READ:
+			filter = ARCHIVE + " = 1";
+			break;
+		case Constants.FAVS:
+			filter = FAV + " = 1";
+			break;
+		default:
+			filter = null;
+			break;
 		}
 
 		ReadingListAdapter ad = getAdapterQuery(filter, readArticlesInfo);
@@ -705,5 +724,17 @@ public class ListArticles extends SherlockActivity {
 		s = s.replace("&Atilde;&sect;", "&ccedil;");
 		s = s.replace("&amp;", "&amp;");
 		return s;
+	}
+
+	public void closeDrawer() {
+		drawerLayout.closeDrawer(drawerList);
+	}
+
+	public void setListFilterOption(int option) {
+		listFilterOption = option;
+		Editor editor = settings.edit();
+		
+		editor.putInt(Constants.LIST_FILTER_OPTION, option);
+		editor.commit();
 	}
 }
