@@ -486,6 +486,7 @@ int string alphabetical 0x7f090054
 int string app_name 0x7f090014
 int string author 0x7f090016
 int string authorSite 0x7f09001a
+int string bag_it 0x7f090015
 int string btnDone 0x7f090018
 int string btnGetPost 0x7f09001d
 int string btnMarkRead 0x7f09001f
@@ -508,7 +509,6 @@ int string immersive 0x7f090045
 int string instructions 0x7f090017
 int string justified 0x7f09004f
 int string keep_screen_on 0x7f090050
-int string label_name 0x7f090015
 int string landscape 0x7f090049
 int string left 0x7f09004c
 int string look_and_feel 0x7f09003d

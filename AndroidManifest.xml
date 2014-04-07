@@ -35,10 +35,10 @@
         </activity>
         <activity
             android:name="fr.gaulupeau.apps.wallabag.SendHandler"
-            android:label=""
+            android:label="@string/bag_it"
             android:theme="@style/AppThemeWhite" >
             
-            <intent-filter android:label="@string/label_name" >
+            <intent-filter android:label="@string/bag_it" >
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />

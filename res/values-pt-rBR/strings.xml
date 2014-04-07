@@ -2,7 +2,7 @@
 <resources>
     <string name="hello">wallabag!</string>
     <string name="app_name">wallabag</string>
-    <string name="label_name">Adicionar ao wallabag</string>
+    <string name="bag_it">Adicionar ao wallabag</string>
     <string name="author">GAULUPEAU Jonathan - 2013\nErick Pires - 2014</string>
     <string name="instructions">Para adicionar uma página ao wallabag, abra a página no navegador, toque em <i>Compartilhar</i> e depois em <i>Adicionar ao wallabag</i>.\nVocê será redirecionado para a página de login do seu wallabag.\nLogue-se e pronto!\nMais informações sobre o wallabag em wallabag.org.</string>
     <string name="btnDone">Salvar</string>

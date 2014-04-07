@@ -150,7 +150,6 @@ public class ListArticles extends SherlockActivity {
 
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
-				setupList();
 			}
 
 			/** Called when a drawer has settled in a completely open state. */

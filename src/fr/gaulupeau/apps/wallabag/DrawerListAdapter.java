@@ -64,6 +64,7 @@ public class DrawerListAdapter extends BaseAdapter {
 				choosen = position;
 				notifyDataSetChanged();
 				listArticles.setListFilterOption(position);
+				listArticles.setupList();
 				listArticles.closeDrawer();
 			}
 		});

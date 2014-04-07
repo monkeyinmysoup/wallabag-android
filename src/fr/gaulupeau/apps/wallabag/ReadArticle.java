@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,7 +97,31 @@ public class ReadArticle extends SherlockActivity {
 		txtTitre.setText(ac.getString(2));
 
 		contentWebView = (WebView) findViewById(R.id.webContent);
+		
+		WebViewClient mWebClient = new WebViewClient(){
 
+	        @Override
+	        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+	        	Intent intent = new Intent(Intent.ACTION_VIEW);
+	        	intent.setData(Uri.parse(url));
+	        	
+	        	
+	        	Intent bagItIntent = new Intent(ReadArticle.this, SendHandler.class);
+	        	
+	        	bagItIntent.setAction(Intent.ACTION_SEND);
+	        	bagItIntent.setType("text/plain");
+	        	bagItIntent.putExtra(Intent.EXTRA_TEXT, url);
+	        	
+	        	Intent chooser = Intent.createChooser(intent, "");
+	        	chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {bagItIntent});
+	        	startActivity(chooser);
+	        	System.out.println(url);
+	        	return true;
+	       }
+		};
+
+		contentWebView.setWebViewClient(mWebClient);
+		
 		articleContent = ac.getString(3);
 
 		txtAuthor = (TextView) findViewById(R.id.txtAuthor);
