@@ -9,112 +9,71 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/general_layout"
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/general_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:paddingBottom="@dimen/defaultTopPadding"
+            android:drawablePadding="@dimen/defaultSidePadding"
             android:paddingLeft="@dimen/defaultSidePadding"
-            android:paddingTop="@dimen/defaultTopPadding" >
-
-            <ImageView
-                android:id="@+id/image_general"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/actionbar" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/defaultSidePadding"
-                android:text="@string/general"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </LinearLayout>
+            android:paddingTop="@dimen/defaultTopPadding"
+            android:paddingBottom="@dimen/defaultTopPadding"
+            android:text="@string/general"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </TextView>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/divider" />
+            android:src="@drawable/divider"
+            tools:ignore="ContentDescription" />
 
-        <LinearLayout
-            android:id="@+id/look_and_feel_layout"
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/look_and_feel_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:paddingBottom="@dimen/defaultTopPadding"
+            android:drawablePadding="@dimen/defaultSidePadding"
             android:paddingLeft="@dimen/defaultSidePadding"
-            android:paddingTop="@dimen/defaultTopPadding" >
-
-            <ImageView
-                android:id="@+id/image_look_and_feel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/actionbar" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/defaultSidePadding"
-                android:text="@string/look_and_feel"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </LinearLayout>
+            android:paddingTop="@dimen/defaultTopPadding"
+            android:paddingBottom="@dimen/defaultTopPadding"
+            android:text="@string/look_and_feel"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </TextView>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/divider" />
+            android:src="@drawable/divider"
+            tools:ignore="ContentDescription" />
 
-        <LinearLayout
-            android:id="@+id/account_layout"
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/account_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:paddingBottom="@dimen/defaultTopPadding"
+            android:drawablePadding="@dimen/defaultSidePadding"
             android:paddingLeft="@dimen/defaultSidePadding"
-            android:paddingTop="@dimen/defaultTopPadding" >
-
-            <ImageView
-                android:id="@+id/image_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/actionbar" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/defaultSidePadding"
-                android:text="@string/account"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </LinearLayout>
+            android:paddingTop="@dimen/defaultTopPadding"
+            android:paddingBottom="@dimen/defaultTopPadding"
+            android:text="@string/account"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </TextView>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/divider" />
+            android:src="@drawable/divider"
+            tools:ignore="ContentDescription" />
 
-        <LinearLayout
-            android:id="@+id/about_layout"
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/about_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:paddingBottom="@dimen/defaultTopPadding"
+            android:drawablePadding="@dimen/defaultSidePadding"
             android:paddingLeft="@dimen/defaultSidePadding"
-            android:paddingTop="@dimen/defaultTopPadding" >
-
-            <ImageView
-                android:id="@+id/image_about"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/actionbar" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/defaultSidePadding"
-                android:text="@string/about"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </LinearLayout>
+            android:paddingTop="@dimen/defaultTopPadding"
+            android:paddingBottom="@dimen/defaultTopPadding"
+            android:text="@string/about"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </TextView>
     </LinearLayout>
 
 </ScrollView>

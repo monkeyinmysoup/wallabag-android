@@ -3,10 +3,10 @@ package fr.gaulupeau.apps.settings;
 import fr.gaulupeau.apps.wallabag.R;
 import fr.gaulupeau.apps.wallabag.Utils;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 public class Settings extends SettingsBase {
 
@@ -22,17 +22,12 @@ public class Settings extends SettingsBase {
 			R.drawable.ic_action_accounts_dark,
 			R.drawable.ic_action_about_dark };
 	
-	private static final int[] layouts_ids = new int[] {
-			R.id.general_layout,
-			R.id.look_and_feel_layout,
-			R.id.account_layout,
-			R.id.about_layout };
+	private static final int[] texts_ids = new int[] {
+			R.id.general_text,
+			R.id.look_and_feel_text,
+			R.id.account_text,
+			R.id.about_text };
 	
-	private static final int [] images_resources_id = new int [] {
-			R.id.image_general,
-			R.id.image_look_and_feel,
-			R.id.image_account,
-			R.id.image_about };
 
 	private static final Class<?>[] activities = new Class[] {
 			SettingsGeneral.class, SettingsLookAndFeel.class,
@@ -57,16 +52,16 @@ public class Settings extends SettingsBase {
 			Intent optionIntent;
 			OnClickListener listener;
 
-			View view = findViewById(layouts_ids[i]);
+			TextView textView = (TextView) findViewById(texts_ids[i]);
 
-			ImageView imageView = (ImageView) findViewById(images_resources_id[i]);
-
-				imageView.setImageDrawable(getResources().getDrawable(
-						imagesArray[i]));
+			Drawable drawble = getResources().getDrawable(
+					imagesArray[i]);
+			
+			textView.setCompoundDrawablesWithIntrinsicBounds(drawble, null, null, null);
 
 			optionIntent = new Intent(this, activities[i]);
 			listener = new SettingsOnClickListener(this, optionIntent);
-			view.setOnClickListener(listener);
+			textView.setOnClickListener(listener);
 		}
 	}
 
