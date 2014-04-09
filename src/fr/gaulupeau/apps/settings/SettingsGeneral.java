@@ -22,7 +22,6 @@ import fr.gaulupeau.apps.wallabag.Utils;
 
 public class SettingsGeneral extends SettingsBase {
 
-	private SQLiteDatabase database;
 	private static final int[] sortTypeOptions = new int[] {R.string.newer, R.string.older, R.string.alphabetical};
 	
 	public static final int NEWER = 0;
@@ -39,19 +38,11 @@ public class SettingsGeneral extends SettingsBase {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-
-	    setContentView(R.layout.general_settings);
-	    
-	    createUI();
-		
-		
-		setupDB();
 	}
 	
 	@Override
 	protected void onDestroy(){
 		super.onDestroy();
-		database.close();
 	}
 
 	protected void saveSettings() {
@@ -139,10 +130,17 @@ public class SettingsGeneral extends SettingsBase {
 					public void onClick(DialogInterface dialog, int which) {
 						ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(
 								SettingsGeneral.this);
+						SQLiteDatabase database = helper.getWritableDatabase();
+						
 						helper.truncateTables(database);
+						
 						deleteFiles();
+						
 						if (willAlsoDeleteUserAccount)
 							cleanUserInfo();
+						
+						database.close();
+						
 						dialog.dismiss();
 					}
 
@@ -180,13 +178,13 @@ public class SettingsGeneral extends SettingsBase {
 			file.delete();
 	}
 	
-	public void setupDB() {
-		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
-		database = helper.getWritableDatabase();
-	}
-	
 	private String getStringSortType(int which) {
 		return getString(sortTypeOptions[which]);
+	}
+
+	@Override
+	protected int getContentView() {
+		return R.layout.general_settings;
 	}
 }
 

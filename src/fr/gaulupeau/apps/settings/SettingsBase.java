@@ -30,8 +30,14 @@ public abstract class SettingsBase extends SherlockActivity{
 		actionBar.setDisplayHomeAsUpEnabled(true);
 	    
 	    Utils.setActionBarIcon(actionBar, themeId);
+	    
+	    setContentView(getContentView());
+	    
+	    createUI();
 	}
 	
+	abstract protected int getContentView();
+
 	@Override
 	protected void onPause(){
 		saveSettings();

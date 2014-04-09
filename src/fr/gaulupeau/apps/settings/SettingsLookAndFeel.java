@@ -40,18 +40,6 @@ public class SettingsLookAndFeel extends SettingsBase {
 	private boolean isImmerviveModeSelected;
 	private boolean isScreenAlwaysOn;
 	private boolean changed;
-
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		
-		super.onCreate(savedInstanceState);
-
-	    setContentView(R.layout.look_and_feel_settings);
-	    
-	    createUI();
-	    
-	}
 	
 	private int progressFromSize() {
 		return fontSize - fontSizeMin;
@@ -285,5 +273,10 @@ public class SettingsLookAndFeel extends SettingsBase {
 	
 	private String getStringAlign(int which) {
 		return getString(alignOptions[which]);
+	}
+
+	@Override
+	protected int getContentView() {
+		return R.layout.look_and_feel_settings;
 	}
 }

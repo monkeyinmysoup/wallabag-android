@@ -4,7 +4,6 @@ import fr.gaulupeau.apps.wallabag.R;
 import fr.gaulupeau.apps.wallabag.Utils;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
@@ -34,16 +33,6 @@ public class Settings extends SettingsBase {
 			SettingsAccount.class, SettingsAccount.class };
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-
-		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.settings);
-
-		createUI();
-	}
-
-	@Override
 	protected void createUI() {
 
 		int[] imagesArray = Utils.isDarkTheme(themeId) ? images_dark : images;
@@ -67,5 +56,10 @@ public class Settings extends SettingsBase {
 
 	@Override
 	protected void saveSettings() {
+	}
+
+	@Override
+	protected int getContentView() {
+		return R.layout.settings;
 	}
 }
