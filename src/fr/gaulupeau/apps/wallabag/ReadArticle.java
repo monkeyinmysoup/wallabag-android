@@ -114,10 +114,13 @@ public class ReadArticle extends SherlockActivity {
 	        	bagItIntent.setType("text/plain");
 	        	bagItIntent.putExtra(Intent.EXTRA_TEXT, url);
 	        	
-	        	Intent chooser = Intent.createChooser(intent, "");
+	        	Intent chooser = Intent.createChooser(intent, getString(R.string.share_title));
 	        	chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {bagItIntent});
+	        	try {
+					Utils.showToast(ReadArticle.this, new URL(url).getHost(), Toast.LENGTH_LONG);
+				} catch (MalformedURLException e) {}
+	        	
 	        	startActivity(chooser);
-	        	System.out.println(url);
 	        	return true;
 	       }
 		};
@@ -384,10 +387,10 @@ public class ReadArticle extends SherlockActivity {
 		database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
 
 		if (isRead) {
-			showToast(getString(R.string.marked_as_unread));
+			Utils.showToast(this, getString(R.string.marked_as_unread));
 			isRead = false;
 		} else {
-			showToast(getString(R.string.marked_as_read));
+			Utils.showToast(this, getString(R.string.marked_as_read));
 			finish();
 		}
 		setReadStateIcon();
@@ -401,22 +404,13 @@ public class ReadArticle extends SherlockActivity {
 		database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
 
 		if (isFav) {
-			showToast(getString(R.string.marked_as_not_fav));
+			Utils.showToast(this, getString(R.string.marked_as_not_fav));
 			isFav = false;
 		} else {
-			showToast(getString(R.string.marked_as_fav));
+			Utils.showToast(this, getString(R.string.marked_as_fav));
 			isFav = true;
 		}
 		setFavStateIcon();
-	}
-
-	public void showToast(final String toast) {
-		runOnUiThread(new Runnable() {
-			public void run() {
-				Toast.makeText(ReadArticle.this, toast, Toast.LENGTH_SHORT)
-						.show();
-			}
-		});
 	}
 
 	private Intent createIntentChooserForTwoIntents(Intent first,

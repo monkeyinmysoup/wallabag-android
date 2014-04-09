@@ -69,7 +69,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -240,21 +239,12 @@ public class ListArticles extends SherlockActivity {
 		listFilterOption = settings.getInt(Constants.LIST_FILTER_OPTION, Constants.ALL);
 	}
 
-	public void showToast(final String toast) {
-		runOnUiThread(new Runnable() {
-			public void run() {
-				Toast.makeText(ListArticles.this, toast, Toast.LENGTH_SHORT)
-						.show();
-			}
-		});
-	}
-
 	public void refresh() {
 		// VÃ©rification de la connectivitÃ© Internet
 		final ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
 		if (pocheUrl.equals("https://")) {
-			showToast(getString(R.string.txtConfigNotSet));
+			Utils.showToast(this, getString(R.string.txtConfigNotSet));
 			pullToRefreshLayout.setRefreshComplete();
 		} else if (activeNetwork != null && activeNetwork.isConnected()) {
 			// ExÃ©cution de la synchro en arriÃ¨re-plan
@@ -273,7 +263,7 @@ public class ListArticles extends SherlockActivity {
 			}.execute();
 		} else {
 			// Afficher alerte connectivitÃ©
-			showToast(getString(R.string.txtNetOffline));
+			Utils.showToast(this, getString(R.string.txtNetOffline));
 			pullToRefreshLayout.setRefreshComplete();
 		}
 	}
@@ -421,22 +411,22 @@ public class ListArticles extends SherlockActivity {
 			}
 			updateUnread();
 		} catch (MalformedURLException e) {
-			showToast(getString(R.string.fail_to_update));
+			Utils.showToast(this, getString(R.string.fail_to_update));
 			e.printStackTrace();
 		} catch (DOMException e) {
-			showToast(getString(R.string.fail_to_update));
+			Utils.showToast(this, getString(R.string.fail_to_update));
 			e.printStackTrace();
 		} catch (IOException e) {
-			showToast(getString(R.string.fail_to_update));
+			Utils.showToast(this, getString(R.string.fail_to_update));
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
-			showToast(getString(R.string.fail_to_update));
+			Utils.showToast(this, getString(R.string.fail_to_update));
 			e.printStackTrace();
 		} catch (SAXException e) {
-			showToast(getString(R.string.fail_to_update));
+			Utils.showToast(this, getString(R.string.fail_to_update));
 			e.printStackTrace();
 		} catch (Exception e) {
-			showToast(getString(R.string.fail_to_update));
+			Utils.showToast(this, getString(R.string.fail_to_update));
 			e.printStackTrace();
 		}
 
@@ -487,11 +477,11 @@ public class ListArticles extends SherlockActivity {
 				int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0",
 						null, null, null, null).getCount();
 				if (news == 0)
-					showToast(getString(R.string.no_unread_articles));
+					Utils.showToast(ListArticles.this, getString(R.string.no_unread_articles));
 				else if (news == 1)
-					showToast(getString(R.string.one_unread_article));
+					Utils.showToast(ListArticles.this, getString(R.string.one_unread_article));
 				else
-					showToast(String.format(
+					Utils.showToast(ListArticles.this, String.format(
 							getString(R.string.many_unread_articles), news));
 				setupList();
 			}
