@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -195,7 +195,8 @@ public class ReadArticle extends SherlockActivity {
 		goImmersive();
 	}
 
-	@SuppressLint("NewApi")
+	
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	private void goImmersive() {
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -252,9 +253,9 @@ public class ReadArticle extends SherlockActivity {
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	private void getSettings() {
 		fontSize = preferences.getInt(SettingsLookAndFeel.FONT_SIZE, 16);
-		//webSettings.setDefaultFontSize(fontSize);
 
 		canGoImmersive = preferences.getBoolean(SettingsLookAndFeel.IMMERSIVE, true);
 		
@@ -269,13 +270,22 @@ public class ReadArticle extends SherlockActivity {
 
 		switch (screenOrientation) {
 		case SettingsLookAndFeel.PORTRAIT:
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+			else
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			
 			break;
 		case SettingsLookAndFeel.LANDSCAPE:
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+			else
+				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			
 			break;
 		case SettingsLookAndFeel.DYMAMIC:
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+			
 			break;
 		default:
 			break;
