@@ -4,13 +4,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -43,6 +41,18 @@ public class SettingsLookAndFeel extends SettingsBase {
 	private boolean isScreenAlwaysOn;
 	private boolean changed;
 
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		
+		super.onCreate(savedInstanceState);
+
+	    setContentView(R.layout.look_and_feel_settings);
+	    
+	    createUI();
+	    
+	}
+	
 	private int progressFromSize() {
 		return fontSize - fontSizeMin;
 	}
@@ -70,13 +80,13 @@ public class SettingsLookAndFeel extends SettingsBase {
 	}
 	
 	@Override
-	protected void createUI(ListView list, GeneralPurposeListViewAdapter adapter, LayoutInflater inflater){
+	protected void createUI(){
 		
-		boolean isDarkThemeSelected = themeId == R.style.AppThemeBlack;
+		boolean isDarkThemeSelected = Utils.isDarkTheme(themeId);
 		
 		//Dark theme
-		View darkThemeLayout = inflater.inflate(R.layout.look_and_feel_dark_theme, null);
-		final CheckBox darkThemeCheckBox = (CheckBox) darkThemeLayout.findViewById(R.id.dark_theme_check_box);
+		View darkThemeLayout = findViewById(R.id.dark_theme_layout);
+		final CheckBox darkThemeCheckBox = (CheckBox) findViewById(R.id.dark_theme_check_box);
 		
 		darkThemeCheckBox.setChecked(isDarkThemeSelected);
 		
@@ -102,9 +112,9 @@ public class SettingsLookAndFeel extends SettingsBase {
 		});
 
 		//Font size		
-		View fontSizeLayout = inflater.inflate(R.layout.look_and_feel_font_size, null);
-		SeekBar fontBar = (SeekBar) fontSizeLayout.findViewById(R.id.font_bar);
-		final TextView fontSizeText = (TextView) fontSizeLayout.findViewById(R.id.font_size_text);
+//		View fontSizeLayout = findViewById(R.id.font_size_layout);
+		SeekBar fontBar = (SeekBar) findViewById(R.id.font_bar);
+		final TextView fontSizeText = (TextView) findViewById(R.id.font_size_text);
 		fontSizeText.setText(fontSize + "pt");
 		fontBar.setProgress(progressFromSize());
 		fontBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {						
@@ -122,8 +132,8 @@ public class SettingsLookAndFeel extends SettingsBase {
 		});
 
 		//Font style
-		View fontStyleLayout = inflater.inflate(R.layout.look_and_feel_font_style, null);
-		final TextView fontType = (TextView) fontStyleLayout.findViewById(R.id.font_type);
+		View fontStyleLayout = findViewById(R.id.font_style_layout);
+		final TextView fontType = (TextView) findViewById(R.id.font_type);
 		
 		fontType.setText(getStringFontStyle(fontStyle));
 		
@@ -148,8 +158,8 @@ public class SettingsLookAndFeel extends SettingsBase {
 		
 		
 		//Text align
-		View textAlignLayout = inflater.inflate(R.layout.look_and_feel_text_align, null);
-		final TextView textAlignTextView = (TextView)textAlignLayout.findViewById(R.id.align_type);
+		View textAlignLayout = findViewById(R.id.text_align_layout);
+		final TextView textAlignTextView = (TextView)findViewById(R.id.align_type);
 		
 		textAlignTextView.setText(getStringAlign(textAlign));
 		
@@ -172,7 +182,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 		});
 		
 		//Orientation
-		View orientationLayout = inflater.inflate(R.layout.look_and_feel_orientation, null);
+		View orientationLayout = findViewById(R.id.orientation_layout);
 		final TextView orientationTypeView = (TextView) orientationLayout.findViewById(R.id.orientation_type);
 		
 		orientationTypeView.setText(getStringOrientation(orientation));
@@ -197,8 +207,8 @@ public class SettingsLookAndFeel extends SettingsBase {
 		});
 		
 		//Immersive mode
-		View immersiveModeLayout = inflater.inflate(R.layout.look_and_feel_immersive_mode, null);
-		final CheckBox immmersiveCheckBox = (CheckBox) immersiveModeLayout.findViewById(R.id.immersive_check_box);
+		View immersiveModeLayout = findViewById(R.id.immersive_mode_layout);
+		final CheckBox immmersiveCheckBox = (CheckBox) findViewById(R.id.immersive_check_box);
 		
 		immmersiveCheckBox.setChecked(isImmerviveModeSelected);
 		
@@ -218,8 +228,8 @@ public class SettingsLookAndFeel extends SettingsBase {
 		});
 		
 		//Keep screen on
-		View screenOnLayout = inflater.inflate(R.layout.look_and_feel_keep_screen_on, null);
-		final CheckBox screenOnCheckBox = (CheckBox) screenOnLayout.findViewById(R.id.screen_on_check_box);
+		View screenOnLayout = findViewById(R.id.keep_screen_on_layout);
+		final CheckBox screenOnCheckBox = (CheckBox) findViewById(R.id.screen_on_check_box);
 		
 		screenOnCheckBox.setChecked(isScreenAlwaysOn);
 		
@@ -237,16 +247,6 @@ public class SettingsLookAndFeel extends SettingsBase {
 				isScreenAlwaysOn = isChecked;
 			}
 		});
-		
-		adapter.addView(darkThemeLayout);
-		adapter.addView(fontSizeLayout);
-		adapter.addView(fontStyleLayout);
-		adapter.addView(textAlignLayout);
-		adapter.addView(orientationLayout);
-		adapter.addView(immersiveModeLayout);
-		adapter.addView(screenOnLayout);
-		
-		list.setAdapter(adapter);
 	}
 
 	@Override

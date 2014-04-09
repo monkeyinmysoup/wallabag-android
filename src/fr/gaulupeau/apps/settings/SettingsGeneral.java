@@ -10,17 +10,15 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper;
 import fr.gaulupeau.apps.wallabag.R;
+import fr.gaulupeau.apps.wallabag.Utils;
 
 public class SettingsGeneral extends SettingsBase {
 
@@ -33,16 +31,29 @@ public class SettingsGeneral extends SettingsBase {
 	
 	public static final String SORT_TYPE = "SortType";
 	
+	
 	private int sortType;
 	private boolean willAlsoDeleteUserAccount;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
+
+	    setContentView(R.layout.general_settings);
+	    
+	    createUI();
+		
+		
 		setupDB();
 	}
 	
 	@Override
+	protected void onDestroy(){
+		super.onDestroy();
+		database.close();
+	}
+
 	protected void saveSettings() {
 		Editor editor = settings.edit();
 		
@@ -57,12 +68,11 @@ public class SettingsGeneral extends SettingsBase {
 	}
 
 	@Override
-	protected void createUI(ListView list,
-			GeneralPurposeListViewAdapter adapter, LayoutInflater inflater) {
+	protected void createUI() {
 		
 		
 		//Sort
-		View sortLayout = inflater.inflate(R.layout.general_sort, null);
+		View sortLayout = findViewById(R.id.sort_layout);
 		final TextView sortTypeView = (TextView) sortLayout.findViewById(R.id.sort_text);
 		
 		sortTypeView.setText(getStringSortType(sortType));
@@ -89,7 +99,7 @@ public class SettingsGeneral extends SettingsBase {
 		
 		//Wipe database
 		
-		View wipeDatabaseLayout = inflater.inflate(R.layout.general_wipe_database, null);
+		View wipeDatabaseLayout = findViewById(R.id.wipe_database_layout);
 		
 		wipeDatabaseLayout.setOnClickListener(new OnClickListener() {
 			
@@ -98,11 +108,6 @@ public class SettingsGeneral extends SettingsBase {
 				wipeDB();				
 			}
 		});
-		
-		
-		adapter.addView(sortLayout);
-		adapter.addView(wipeDatabaseLayout);
-		list.setAdapter(adapter);
 	}
 
 	
@@ -169,9 +174,7 @@ public class SettingsGeneral extends SettingsBase {
 	}
 	
 	protected void deleteFiles() {
-		File filesDir = new File(Environment.getExternalStorageDirectory()
-				+ "/Android/data/" + getApplicationContext().getPackageName()
-				+ "/files");
+		File filesDir = Utils.getSaveDir(this);
 
 		for (File file : filesDir.listFiles())
 			file.delete();
@@ -186,3 +189,4 @@ public class SettingsGeneral extends SettingsBase {
 		return getString(sortTypeOptions[which]);
 	}
 }
+

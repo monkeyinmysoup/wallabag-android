@@ -1,15 +1,120 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="wrap_content" >
 
-    <ListView
-        android:id="@+id/settingsList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:clickable="true" >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
-    </ListView>
+        <LinearLayout
+            android:id="@+id/general_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:paddingBottom="@dimen/defaultTopPadding"
+            android:paddingLeft="@dimen/defaultSidePadding"
+            android:paddingTop="@dimen/defaultTopPadding" >
 
-</RelativeLayout>
+            <ImageView
+                android:id="@+id/image_general"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/actionbar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/defaultSidePadding"
+                android:text="@string/general"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/divider" />
+
+        <LinearLayout
+            android:id="@+id/look_and_feel_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:paddingBottom="@dimen/defaultTopPadding"
+            android:paddingLeft="@dimen/defaultSidePadding"
+            android:paddingTop="@dimen/defaultTopPadding" >
+
+            <ImageView
+                android:id="@+id/image_look_and_feel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/actionbar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/defaultSidePadding"
+                android:text="@string/look_and_feel"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/divider" />
+
+        <LinearLayout
+            android:id="@+id/account_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:paddingBottom="@dimen/defaultTopPadding"
+            android:paddingLeft="@dimen/defaultSidePadding"
+            android:paddingTop="@dimen/defaultTopPadding" >
+
+            <ImageView
+                android:id="@+id/image_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/actionbar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/defaultSidePadding"
+                android:text="@string/account"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/divider" />
+
+        <LinearLayout
+            android:id="@+id/about_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:paddingBottom="@dimen/defaultTopPadding"
+            android:paddingLeft="@dimen/defaultSidePadding"
+            android:paddingTop="@dimen/defaultTopPadding" >
+
+            <ImageView
+                android:id="@+id/image_about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/actionbar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/defaultSidePadding"
+                android:text="@string/about"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

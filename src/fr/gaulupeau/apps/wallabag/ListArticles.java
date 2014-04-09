@@ -62,7 +62,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
@@ -615,15 +614,21 @@ public class ListArticles extends SherlockActivity {
 			imageSource = imageSource.replaceAll("\"", "");
 			imageSource = imageSource.trim();
 
-			Bitmap bitmap = getBitmapFromURL(imageSource);
+			File imageFileDestination = getImageFileDestination("" + imageSource.hashCode());
+			
+			if(!imageFileDestination.exists()){
+				
+			
+				Bitmap bitmap = getBitmapFromURL(imageSource);
 
-			if (bitmap == null)
+				if (bitmap == null)
+					continue;
+			
+			if(!saveBitmap(bitmap, imageFileDestination))
 				continue;
-
-			String savedLocation = saveBitmap(bitmap,
-					"" + imageSource.hashCode());
-
-			tagParams[sourceIndex] = "src=\"file://" + savedLocation + "\"";
+			}
+			
+			tagParams[sourceIndex] = "src=\"file://" + imageFileDestination.getAbsolutePath() + "\"";
 
 			String newTag = recreateTag(tagParams);
 
@@ -654,35 +659,34 @@ public class ListArticles extends SherlockActivity {
 			return myBitmap;
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("here");
 			return null;
 		}
 	}
 
-	public String saveBitmap(Bitmap bitmap, String fileName) {
+	public boolean saveBitmap(Bitmap bitmap, File saveLocation) {
 
-		File saveFolder = new File(Environment.getExternalStorageDirectory()
-				+ "/Android/data/" + getApplicationContext().getPackageName()
-				+ "/files");
-
-		if (!saveFolder.exists())
-			saveFolder.mkdirs();
-
-		File saveLocation = new File(saveFolder, fileName);
-
-		if (!saveLocation.exists()) {
 			FileOutputStream outputStream;
+			
 			try {
 				outputStream = new FileOutputStream(saveLocation);
 				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
 				outputStream.close();
+				return true;
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
+				return false;
 			} catch (IOException e) {
 				e.printStackTrace();
+				return false;
 			}
-		}
-		return saveLocation.getAbsolutePath();
+	}
+	
+	public File getImageFileDestination(String imageUrl){
+		File saveFolder = Utils.getSaveDir(this);
+		if (!saveFolder.exists())
+			saveFolder.mkdirs();
+		
+		return new File(saveFolder, imageUrl);
 	}
 
 	private String makeDescription(String html) {

@@ -6,12 +6,9 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.widget.ListView;
 import fr.gaulupeau.apps.wallabag.R;
 import fr.gaulupeau.apps.wallabag.Utils;
 
@@ -19,7 +16,6 @@ public abstract class SettingsBase extends SherlockActivity{
 	protected SharedPreferences settings;
 	protected ActionBar actionBar;
 	
-	protected ListView list;
 	protected int themeId;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +30,6 @@ public abstract class SettingsBase extends SherlockActivity{
 		actionBar.setDisplayHomeAsUpEnabled(true);
 	    
 	    Utils.setActionBarIcon(actionBar, themeId);
-
-	    setContentView(R.layout.settings);
-	    
-	    list = (ListView) findViewById(R.id.settingsList);
-	    
-	    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		GeneralPurposeListViewAdapter adapter = new GeneralPurposeListViewAdapter();
-
-		createUI(list, adapter, inflater);
 	}
 	
 	@Override
@@ -54,18 +41,10 @@ public abstract class SettingsBase extends SherlockActivity{
 	protected void getSettings(){
 		themeId = settings.getInt(SettingsLookAndFeel.DARK_THEME, R.style.AppThemeWhite);
 	}
+	
 	abstract protected void saveSettings();
 
-	abstract protected void createUI(ListView list, GeneralPurposeListViewAdapter adapter, LayoutInflater inflater);
-	
-//	protected View inflateIfNotNull(View convertView, int layoutId){
-//		LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//		if (convertView == null) {	
-//			convertView = inflater.inflate(layoutId, null);
-//		}
-//		
-//		return convertView;
-//	}
+	abstract protected void createUI();
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

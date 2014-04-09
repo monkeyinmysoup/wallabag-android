@@ -1,11 +1,15 @@
 package fr.gaulupeau.apps.wallabag;
 
+import java.io.File;
+
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 
 public class Utils {
@@ -40,5 +44,11 @@ public class Utils {
 			}
 		}, 1);
 		
+	}
+	
+	public static File getSaveDir(SherlockActivity activity){
+		return new File(Environment.getExternalStorageDirectory()
+				+ "/Android/data/" + activity.getApplicationContext().getPackageName()
+				+ "/files");
 	}
 }

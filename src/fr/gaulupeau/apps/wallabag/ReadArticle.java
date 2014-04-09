@@ -11,6 +11,8 @@ import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -43,7 +45,7 @@ import com.actionbarsherlock.view.Window;
 import fr.gaulupeau.apps.settings.SettingsLookAndFeel;
 
 public class ReadArticle extends SherlockActivity {
-	private TextView txtTitre;
+	private TextView txtTitle;
 	private TextView txtAuthor;
 	private SQLiteDatabase database;
 	private String id = "";
@@ -93,8 +95,8 @@ public class ReadArticle extends SherlockActivity {
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "="
 				+ id, null, null, null, null);
 		ac.moveToFirst();
-		txtTitre = (TextView) findViewById(R.id.txtTitre);
-		txtTitre.setText(ac.getString(2));
+		txtTitle = (TextView) findViewById(R.id.txtTitre);
+		txtTitle.setText(ac.getString(2));
 
 		contentWebView = (WebView) findViewById(R.id.webContent);
 		
@@ -125,8 +127,15 @@ public class ReadArticle extends SherlockActivity {
 		articleContent = ac.getString(3);
 
 		txtAuthor = (TextView) findViewById(R.id.txtAuthor);
-		txtAuthor.setText(ac.getString(0));
+		
 		articleUrl = ac.getString(0);
+		String articleUrlHostName = "";
+		try {
+			URL url = new URL(articleUrl);
+			articleUrlHostName = url.getHost();
+		} catch (MalformedURLException e) {}
+		
+		txtAuthor.setText(articleUrlHostName);
 
 		findOutIfIsRead(ac.getInt(4));
 		findOutIfIsFav(ac.getInt(6));
