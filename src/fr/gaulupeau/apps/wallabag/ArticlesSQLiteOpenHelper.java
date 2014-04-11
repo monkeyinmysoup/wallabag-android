@@ -12,19 +12,19 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public static final int VERSION = 2;
     public static final String DB_NAME = "article_db.sqlite";
-    public static String MY_ID = "my_id";
-    public static String ARTICLE_TABLE = "article";
-    public static String ARTICLE_DATE = "update_date";
-    public static String ARTICLE_ID = "article_id";
-    public static String ARTICLE_AUTHOR = "author";
-    public static String ARTICLE_CONTENT = "content";
-    public static String ARTICLE_TITLE = "title";
-    public static String ARTICLE_URL = "url";
-    public static String ARCHIVE = "archive";
-    public static String ARTICLE_SYNC = "sync";
-    public static String ARTICLE_READAT = "read_at";
-    public static String FAV = "favorite";
-    public static String ARTICLE_SUMMARY = "summary";
+    public static final String MY_ID = "my_id";
+    public static final String ARTICLE_TABLE = "article";
+    public static final String ARTICLE_DATE = "update_date";
+    public static final String ARTICLE_ID = "article_id";
+    public static final String ARTICLE_AUTHOR = "author";
+    public static final String ARTICLE_CONTENT = "content";
+    public static final String ARTICLE_TITLE = "title";
+    public static final String ARTICLE_URL = "url";
+    public static final String ARCHIVE = "archive";
+    public static final String ARTICLE_SYNC = "sync";
+    public static final String ARTICLE_READAT = "read_at";
+    public static final String FAV = "favorite";
+    public static final String ARTICLE_SUMMARY = "summary";
     Context c;
     
     public ArticlesSQLiteOpenHelper(Context context) {

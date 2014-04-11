@@ -3,10 +3,10 @@ package fr.gaulupeau.apps.wallabag;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_ID;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_READAT;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
@@ -28,6 +28,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.text.BidiFormatter;
 import android.text.Html;
 import android.util.TypedValue;
@@ -69,6 +70,7 @@ public class ReadArticle extends SherlockActivity {
 	private boolean keepScreenOn;
 	private int themeId;
 	private int fontSize;
+	private int yPositionReadAt;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -90,7 +92,7 @@ public class ReadArticle extends SherlockActivity {
 				getApplicationContext());
 		database = helper.getWritableDatabase();
 		String[] getStrColumns = new String[] { ARTICLE_URL, MY_ID,
-				ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR, FAV };
+				ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR, FAV, ARTICLE_READAT};
 		Bundle data = getIntent().getExtras();
 		if (data != null) {
 			id = data.getString("id");
@@ -98,6 +100,7 @@ public class ReadArticle extends SherlockActivity {
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "="
 				+ id, null, null, null, null);
 		ac.moveToFirst();
+		
 		txtTitle = (TextView) findViewById(R.id.txtTitre);
 		txtTitle.setText(ac.getString(2));
 		view = (MyScrollView) findViewById(R.id.scroll);
@@ -123,13 +126,31 @@ public class ReadArticle extends SherlockActivity {
 	        	startActivity(chooser);
 	        	return true;
 	       }
-		};
+	      
+	        @Override
+	        public void onPageFinished(WebView view, String url) {	
+	        	super.onPageFinished(view, url);
+	        	
+	        	System.out.println("finished");
+	        	
+	        	Handler handler = new Handler();
+	    		handler.postDelayed(new Runnable() {
 
+	    			@Override
+	    			public void run() {
+	    				ReadArticle.this.view.scrollTo(0, yPositionReadAt);
+	    			}
+	    		}, 500);
+	        }
+		};
+		
 		contentWebView.setWebViewClient(mWebClient);
 		
 		articleContent = ac.getString(3);
 		isRtl = BidiFormatter.getInstance().isRtl(Html.fromHtml(articleContent).toString());
 
+		yPositionReadAt = ac.getInt(7);
+		
 		txtAuthor = (TextView) findViewById(R.id.txtAuthor);
 		
 		articleUrl = ac.getString(0);
@@ -166,7 +187,6 @@ public class ReadArticle extends SherlockActivity {
 					goingUp += oldy - y;
 					goingDown = 0;
 				}
-
 			}
 		});
 	}
@@ -178,6 +198,26 @@ public class ReadArticle extends SherlockActivity {
 		goImmersive();
 		loadDataToWebView();
 		contentWebView.setKeepScreenOn(keepScreenOn);
+	}
+	
+	@Override
+	protected void onPause() {
+		yPositionReadAt = view.getScrollY();
+		super.onPause();
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState){
+		outState.putInt(ARTICLE_READAT, view.getScrollY());
+		super.onSaveInstanceState(outState);
+	}
+	
+	@Override
+	protected void onRestoreInstanceState (Bundle savedInstanceState){
+		if(savedInstanceState != null && savedInstanceState.containsKey(ARTICLE_READAT))
+			yPositionReadAt = savedInstanceState.getInt(ARTICLE_READAT);
+		
+		super.onRestoreInstanceState(savedInstanceState);
 	}
 
 	private void loadDataToWebView() {
@@ -211,14 +251,6 @@ public class ReadArticle extends SherlockActivity {
 			}
 			else
 				getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-	}
-
-	@Override
-	protected void onStop() {
-		ContentValues values = new ContentValues();
-		values.put("read_at", view.getScrollY());
-		database.update(ARTICLE_TABLE, values, ARTICLE_ID + "=" + id, null);
-		super.onStop();
 	}
 
 	@Override
@@ -328,6 +360,7 @@ public class ReadArticle extends SherlockActivity {
 	
 	@Override
 	public void finish (){
+		yPositionReadAt = view.getScrollY();
 		setResult(currentResult);
 		ContentValues values = new ContentValues();
 		
@@ -340,6 +373,8 @@ public class ReadArticle extends SherlockActivity {
 			int value = isRead ? 1 : 0;
 			values.put(ARCHIVE, value);			
 		}
+		
+		values.put(ARTICLE_READAT, yPositionReadAt);
 		
 		if(values.size() != 0)
 			database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
