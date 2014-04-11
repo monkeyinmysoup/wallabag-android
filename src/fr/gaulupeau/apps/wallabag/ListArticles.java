@@ -25,6 +25,7 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -86,9 +87,9 @@ public class ListArticles extends SherlockActivity {
 
 	private static int maxChars = 250;
 
-	private ArrayList<Article> readArticlesInfo;
 	private ListView readList;
 	private SQLiteDatabase database;
+	private ReadingListAdapter adapter;
 
 	private SharedPreferences settings;
 	private String pocheUrl;
@@ -128,7 +129,15 @@ public class ListArticles extends SherlockActivity {
 					}
 				}).setup(pullToRefreshLayout);
 
+		//Database
 		setupDB();
+		
+		
+		//Listview
+		readList = (ListView) findViewById(R.id.liste_articles);
+		adapter = new ReadingListAdapter(getBaseContext());
+		readList.setAdapter(adapter);
+		
 		setupList();
 
 		
@@ -177,7 +186,7 @@ public class ListArticles extends SherlockActivity {
 	public void onResume() {
 		super.onResume();
 		getSettings();
-		setupList();
+		//updateList();
 	}
 
 	public void onDestroy() {
@@ -190,6 +199,13 @@ public class ListArticles extends SherlockActivity {
 		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.option_list, menu);
 		return true;
+
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		if(requestCode == Constants.REQUEST_READ_ARTICLE)
+			updateList(resultCode);
 	}
 
 	@Override
@@ -259,6 +275,7 @@ public class ListArticles extends SherlockActivity {
 				protected void onPostExecute(Void result) {
 					super.onPostExecute(result);
 					pullToRefreshLayout.setRefreshComplete();
+					updateList();
 				}
 			}.execute();
 		} else {
@@ -470,10 +487,7 @@ public class ListArticles extends SherlockActivity {
 
 	private void updateUnread() {
 		runOnUiThread(new Runnable() {
-			public void run() {
-				ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(
-						getApplicationContext());
-				database = helper.getReadableDatabase();
+			public void run() {				
 				int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0",
 						null, null, null, null).getCount();
 				if (news == 0)
@@ -483,91 +497,81 @@ public class ListArticles extends SherlockActivity {
 				else
 					Utils.showToast(ListArticles.this, String.format(
 							getString(R.string.many_unread_articles), news));
-				setupList();
 			}
 		});
 	}
 
-	public void setupList() {
-		TextView tvNoArticles = (TextView) findViewById(R.id.no_articles_text);
-		readList = (ListView) findViewById(R.id.liste_articles);
-		readArticlesInfo = new ArrayList<Article>();
-		String filter;
+	public void setupList() {		
+		List<Article> articlesList = getArticlesList();
 		
-		switch (listFilterOption) {
-		case Constants.ALL:
-			filter = null;
-			break;
-		case Constants.UNREAD:
-			filter = ARCHIVE + " = 0";
-			break;
-		case Constants.READ:
-			filter = ARCHIVE + " = 1";
-			break;
-		case Constants.FAVS:
-			filter = FAV + " = 1";
-			break;
-		default:
-			filter = null;
-			break;
-		}
-
-		ReadingListAdapter ad = getAdapterQuery(filter, readArticlesInfo);
-		readList.setAdapter(ad);
-
-		if (readArticlesInfo.size() == 0)
-			tvNoArticles.setVisibility(View.VISIBLE);
-		else
-			tvNoArticles.setVisibility(View.GONE);
+		adapter.setListArticles(articlesList);
 
 		readList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Intent i = new Intent(getBaseContext(), ReadArticle.class);
-				i.putExtra("id", (String) readArticlesInfo.get(position).id);
-				startActivity(i);
+				i.putExtra("id", ((Article)adapter.getItem(position)).id);
+				startActivityForResult(i, Constants.REQUEST_READ_ARTICLE);
 			}
-
 		});
+		
+		checkIfHasNoArticles();
+	}
+	
+	private void checkIfHasNoArticles() {
+		TextView tvNoArticles = (TextView) findViewById(R.id.no_articles_text);	
+		if (adapter.getCount() == 0)
+			tvNoArticles.setVisibility(View.VISIBLE);
+		else
+			tvNoArticles.setVisibility(View.GONE);
 	}
 
-	public ReadingListAdapter getAdapterQuery(String filter,
-			ArrayList<Article> articleInfo) {
-
-		String orderBy = MY_ID;
-
-		switch (sortType) {
-		case SettingsGeneral.NEWER:
-			orderBy = MY_ID + " DESC";
-			break;
-		case SettingsGeneral.OLDER:
-			orderBy = MY_ID;
-			break;
-		case SettingsGeneral.ALPHA:
-			orderBy = ARTICLE_TITLE + " COLLATE NOCASE";
-			break;
-		default:
-			System.out.println(sortType);
-			orderBy = "";
-			break;
-		}
+	public void updateList(){
+		List<Article> articlesList = getArticlesList();
+		adapter.setListArticles(articlesList);
+		checkIfHasNoArticles();
+	}
+	
+	public void updateList(int result){
+		System.out.println(result);
+		if(Utils.hasToggledRead(result))
+			if(listFilterOption == Constants.READ || listFilterOption == Constants.UNREAD){
+				updateList();
+				return;
+			}
+				
+		if(Utils.hasToggledFavorite(result))
+			if(listFilterOption == Constants.FAVS){
+				updateList();
+				return;
+			}
+		
+	}
+	
+	private List<Article> getArticlesList(){		
+		String orderBy = Utils.getOrderBy(sortType);
+		String filter = Utils.getFilter(listFilterOption);
+		
+		List<Article> articlesList = new ArrayList<Article>();
 
 		String[] getStrColumns = new String[] { ARTICLE_URL, MY_ID,
-				ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_SUMMARY };
+				ARTICLE_TITLE, ARCHIVE, FAV, ARTICLE_SUMMARY };
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, filter, null,
 				null, null, orderBy);
+		
 		ac.moveToFirst();
 		if (!ac.isAfterLast()) {
 			do {
 				Article tempArticle = new Article(ac.getString(0),
-						ac.getString(1), ac.getString(2), ac.getString(3),
-						ac.getString(4), ac.getString(5));
-				articleInfo.add(tempArticle);
+						ac.getString(1), ac.getString(2),
+						ac.getString(3), ac.getString(4), ac.getString(5));
+				articlesList.add(tempArticle);
 			} while (ac.moveToNext());
 		}
 		ac.close();
-		return new ReadingListAdapter(getBaseContext(), articleInfo);
+		
+		return articlesList;
 	}
 
 	private String changeImagesUrl(String html) {

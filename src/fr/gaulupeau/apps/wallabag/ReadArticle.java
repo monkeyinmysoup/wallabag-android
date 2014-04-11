@@ -33,7 +33,6 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -53,6 +52,8 @@ public class ReadArticle extends SherlockActivity {
 	private WebView contentWebView;
 	private SharedPreferences preferences;
 
+	private int currentResult;
+	
 	private String articleUrl;
 	private Menu menu;
 	private ActionBar actionBar;
@@ -114,11 +115,8 @@ public class ReadArticle extends SherlockActivity {
 	        	bagItIntent.setType("text/plain");
 	        	bagItIntent.putExtra(Intent.EXTRA_TEXT, url);
 	        	
-	        	Intent chooser = Intent.createChooser(intent, getString(R.string.share_title));
+	        	Intent chooser = Intent.createChooser(intent, url);
 	        	chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {bagItIntent});
-	        	try {
-					Utils.showToast(ReadArticle.this, new URL(url).getHost(), Toast.LENGTH_LONG);
-				} catch (MalformedURLException e) {}
 	        	
 	        	startActivity(chooser);
 	        	return true;
@@ -213,8 +211,6 @@ public class ReadArticle extends SherlockActivity {
 
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
-
 		ContentValues values = new ContentValues();
 		values.put("read_at", view.getScrollY());
 		database.update(ARTICLE_TABLE, values, ARTICLE_ID + "=" + id, null);
@@ -325,6 +321,27 @@ public class ReadArticle extends SherlockActivity {
 		super.onDestroy();
 		database.close();
 	}
+	
+	@Override
+	public void finish (){
+		setResult(currentResult);
+		ContentValues values = new ContentValues();
+		
+		if(Utils.hasToggledFavorite(currentResult)){
+			int value = isFav ? 1 : 0;
+			values.put(FAV, value);
+		}
+		
+		if(Utils.hasToggledRead(currentResult)){
+			int value = isRead ? 1 : 0;
+			values.put(ARCHIVE, value);			
+		}
+		
+		if(values.size() != 0)
+			database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
+	
+		super.finish();
+	}
 
 	private void setReadStateIcon() {
 		MenuItem item = menu.findItem(R.id.read);
@@ -380,29 +397,23 @@ public class ReadArticle extends SherlockActivity {
 	}
 
 	private void toggleMarkAsRead() {
-		int value = isRead ? 0 : 1;
-
-		ContentValues values = new ContentValues();
-		values.put(ARCHIVE, value);
-		database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
-
+		currentResult ^= Constants.RESULT_TOGGLE_READ;
+		
 		if (isRead) {
 			Utils.showToast(this, getString(R.string.marked_as_unread));
 			isRead = false;
 		} else {
 			Utils.showToast(this, getString(R.string.marked_as_read));
+			isRead = true;
 			finish();
 		}
 		setReadStateIcon();
 	}
 
 	private void toggleFav() {
-		int value = isFav ? 0 : 1;
 
-		ContentValues values = new ContentValues();
-		values.put(FAV, value);
-		database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
-
+		currentResult ^= Constants.RESULT_TOGGLE_FAVORITE;
+		
 		if (isFav) {
 			Utils.showToast(this, getString(R.string.marked_as_not_fav));
 			isFav = false;

@@ -20,9 +20,21 @@ public class ReadingListAdapter extends BaseAdapter {
 		this.context = context;
 		this.listArticles = listArticles;
 	}
+	
+	public ReadingListAdapter(Context context) {
+		this.context = context;
+	}
+	
+	public void setListArticles(List<Article> articlesList){
+		this.listArticles = articlesList;
+		notifyDataSetChanged();
+	}
 
 	public int getCount() {
-		return listArticles.size();
+		if(listArticles != null)
+			return listArticles.size();
+		else
+			return 0;
 	}
 
 	public Object getItem(int position) {

@@ -1,11 +1,18 @@
 package fr.gaulupeau.apps.wallabag;
 
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
+
 import java.io.File;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 
-import android.annotation.SuppressLint;
+import fr.gaulupeau.apps.settings.SettingsGeneral;
+
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
@@ -28,7 +35,8 @@ public class Utils {
 			actionBar.setLogo(R.drawable.actionbar);
 	}
 
-	@SuppressLint("NewApi")
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public static final void restartActivity(final Activity activity) {
 		Handler handler = new Handler();
 		handler.postDelayed(new Runnable() {
@@ -59,5 +67,49 @@ public class Utils {
 	
 	public static final void showToast(Activity activity, final String msg, int length) {
 		Toast.makeText(activity, msg, length).show();
+	}
+	
+	public static final String getFilter(int filterOption){
+		switch (filterOption) {
+		case Constants.ALL:
+			return null;
+			
+		case Constants.UNREAD:
+			return ARCHIVE + " = 0";
+			
+		case Constants.READ:
+			return ARCHIVE + " = 1";
+			
+		case Constants.FAVS:
+			return FAV + " = 1";
+			
+		default:
+			return null;
+		}
+	}
+	
+	public static final String getOrderBy(int sortType){
+		switch (sortType) {
+		case SettingsGeneral.NEWER:
+			return MY_ID + " DESC";
+
+		case SettingsGeneral.OLDER:
+			return MY_ID;
+
+		case SettingsGeneral.ALPHA:
+			return ARTICLE_TITLE + " COLLATE NOCASE";
+
+		default:
+			System.out.println(sortType);
+			return "";
+		}
+	}
+
+	public static boolean hasToggledFavorite(int result) {
+		return (result & Constants.RESULT_TOGGLE_FAVORITE) == Constants.RESULT_TOGGLE_FAVORITE;
+	}
+
+	public static boolean hasToggledRead(int result) {
+		return (result & Constants.RESULT_TOGGLE_READ) == Constants.RESULT_TOGGLE_READ;
 	}
 }
