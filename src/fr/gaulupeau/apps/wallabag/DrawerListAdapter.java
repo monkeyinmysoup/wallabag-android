@@ -61,10 +61,12 @@ public class DrawerListAdapter extends BaseAdapter {
 			
 			@Override
 			public void onClick(View v) {
-				choosen = position;
-				notifyDataSetChanged();
-				listArticles.setListFilterOption(position);
-				listArticles.setupList();
+				if(choosen != position){
+					choosen = position;
+					notifyDataSetChanged();
+					listArticles.setListFilterOption(position);
+					listArticles.setupList();
+				}
 				listArticles.closeDrawer();
 			}
 		});

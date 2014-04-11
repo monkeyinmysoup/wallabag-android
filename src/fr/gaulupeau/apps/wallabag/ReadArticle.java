@@ -28,6 +28,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.text.BidiFormatter;
+import android.text.Html;
 import android.util.TypedValue;
 import android.view.View;
 import android.webkit.WebView;
@@ -53,6 +55,7 @@ public class ReadArticle extends SherlockActivity {
 	private SharedPreferences preferences;
 
 	private int currentResult;
+	private boolean isRtl;
 	
 	private String articleUrl;
 	private Menu menu;
@@ -82,8 +85,7 @@ public class ReadArticle extends SherlockActivity {
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		Utils.setActionBarIcon(actionBar, themeId);
-
-		view = (MyScrollView) findViewById(R.id.scroll);
+		
 		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(
 				getApplicationContext());
 		database = helper.getWritableDatabase();
@@ -98,7 +100,7 @@ public class ReadArticle extends SherlockActivity {
 		ac.moveToFirst();
 		txtTitle = (TextView) findViewById(R.id.txtTitre);
 		txtTitle.setText(ac.getString(2));
-
+		view = (MyScrollView) findViewById(R.id.scroll);
 		contentWebView = (WebView) findViewById(R.id.webContent);
 		
 		WebViewClient mWebClient = new WebViewClient(){
@@ -115,7 +117,7 @@ public class ReadArticle extends SherlockActivity {
 	        	bagItIntent.setType("text/plain");
 	        	bagItIntent.putExtra(Intent.EXTRA_TEXT, url);
 	        	
-	        	Intent chooser = Intent.createChooser(intent, url);
+	        	Intent chooser = Intent.createChooser(intent, url.replace("http://", ""));
 	        	chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {bagItIntent});
 	        	
 	        	startActivity(chooser);
@@ -126,6 +128,7 @@ public class ReadArticle extends SherlockActivity {
 		contentWebView.setWebViewClient(mWebClient);
 		
 		articleContent = ac.getString(3);
+		isRtl = BidiFormatter.getInstance().isRtl(Html.fromHtml(articleContent).toString());
 
 		txtAuthor = (TextView) findViewById(R.id.txtAuthor);
 		
@@ -178,7 +181,8 @@ public class ReadArticle extends SherlockActivity {
 	}
 
 	private void loadDataToWebView() {
-		contentWebView.loadDataWithBaseURL(null, Style.getHead(fontStyle, textAlign, fontSize, Utils.isDarkTheme(themeId))
+		
+		contentWebView.loadDataWithBaseURL(null, Style.getHead(fontStyle, textAlign, fontSize, Utils.isDarkTheme(themeId), isRtl)
 				+ articleContent + Style.endTag, "text/html", "utf-8", null);
 
 		TypedValue a = new TypedValue();

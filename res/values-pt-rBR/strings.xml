@@ -60,9 +60,8 @@
     <string name="landscape">Paisagem</string>
     <string name="portrait">Retrato</string>
     <string name="text_align">Alinhamento do texto</string>
-    <string name="left">Esquerda</string>
+    <string name="auto">Automático</string>
     <string name="center">Centro</string>
-    <string name="right">Direita</string>
     <string name="justified">Justificado</string>
     <string name="keep_screen_on">Manter a tela sempre ligada</string>
     <string name="sort">Ordenar</string>

@@ -22,7 +22,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 	
 	private static final int[] fontStyleOptions = new int[] {R.string.sans_serif, R.string.serif};
 	private static final int[] orientationOptions = new int[] {R.string.dynamic, R.string.landscape, R.string.portrait};
-	private static final int[] alignOptions = new int[] {R.string.left, R.string.center, R.string.right, R.string.justified};
+	private static final int[] alignOptions = new int[] {R.string.auto, R.string.center, R.string.justified};
 	public static final String DARK_THEME = "IsDarkTheme";
 	public static final String FONT_SIZE = "FontSize";
 	public static final String FONT_STYLE = "FontStyle";
@@ -155,7 +155,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 			@Override
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(SettingsLookAndFeel.this);
-				String[] choices = new String[] {getStringAlign(0), getStringAlign(1), getStringAlign(2), getStringAlign(3)};
+				String[] choices = new String[] {getStringAlign(0), getStringAlign(1), getStringAlign(2)};
 				builder.setSingleChoiceItems(choices, textAlign, new DialogInterface.OnClickListener() {				
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
