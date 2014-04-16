@@ -78,6 +78,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import fr.gaulupeau.apps.settings.Settings;
+import fr.gaulupeau.apps.settings.SettingsAccount;
 import fr.gaulupeau.apps.settings.SettingsGeneral;
 import fr.gaulupeau.apps.settings.SettingsLookAndFeel;
 
@@ -211,7 +212,7 @@ public class ListArticles extends SherlockActivity {
 			updateList(resultCode);
 		
 		if(requestCode == Constants.REQUEST_SETTINGS)
-			if(resultCode == Constants.RESULT_CHANGED_SORT)
+			if(resultCode == Constants.RESULT_LIST_SHOULD_CHANGE)
 				setupList();
 	}
 
@@ -244,9 +245,9 @@ public class ListArticles extends SherlockActivity {
 
 	private void getSettings() {
 		settings = getSharedPreferences(PREFS_NAME, 0);
-		wallabagUrl = settings.getString("pocheUrl", "https://");
-		apiUsername = settings.getString("APIUsername", "");
-		apiToken = settings.getString("APIToken", "");
+		wallabagUrl = settings.getString(SettingsAccount.SERVER_URL, "https://");
+		apiUsername = settings.getString(SettingsAccount.USER_ID, "");
+		apiToken = settings.getString(SettingsAccount.TOKEN, "");
 
 		int newThemeId = settings.getInt(SettingsLookAndFeel.DARK_THEME,
 				R.style.AppThemeWhite);

@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -34,17 +33,6 @@ public class SettingsGeneral extends SettingsBase {
 	
 	private int sortType;
 	private boolean willAlsoDeleteUserAccount;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		
-		super.onCreate(savedInstanceState);
-	}
-	
-	@Override
-	protected void onDestroy(){
-		super.onDestroy();
-	}
 
 	protected void saveSettings() {
 		Editor editor = settings.edit();
@@ -79,7 +67,7 @@ public class SettingsGeneral extends SettingsBase {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						if(sortType != which)
-							setResult(Constants.RESULT_CHANGED_SORT);
+							setResult(Constants.RESULT_LIST_SHOULD_CHANGE);
 						
 						sortType = which;
 						sortTypeView.setText(getStringSortType(which));
@@ -144,6 +132,8 @@ public class SettingsGeneral extends SettingsBase {
 							cleanUserInfo();
 						
 						database.close();
+						
+						setResult(Constants.RESULT_LIST_SHOULD_CHANGE);
 						
 						dialog.dismiss();
 					}

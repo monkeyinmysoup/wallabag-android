@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="hello">wallabag!</string>
     <string name="app_name">wallabag</string>
     <string name="bag_it">Adicionar ao wallabag</string>
@@ -46,8 +47,6 @@
     <string name="look_and_feel">Aparência</string>
     <string name="account">Conta</string>
     <string name="about">Sobre</string>
-    <string name="delete_account_info">Also delete account info</string>
-    <string name="delete_account_info">Deletar também as informações de conta</string>
     <string name="first_page">Selecionar página inicial</string>
     <string name="dark_theme">Usar tema escuro</string>
     <string name="font_size">Tamanho da fonte</string>
@@ -76,5 +75,11 @@
     <string name="read_text">Lidos</string>
     <string name="favorites_text">Favoritos</string>
     <string name="welcome">Bem-vindo</string>
-</resources>
+    <string name="choose_installation">Qual tipo de intalação você usa</string>
+    <string name="framabag">Framabag</string>
+    <string name="another_sever">Outro servidor</string>
+    <string name="user_name">Nome de usuário</string>
+    <string name="token">Token</string>
+    <string name="server_url">URL do servidor</string>
 
+</resources>

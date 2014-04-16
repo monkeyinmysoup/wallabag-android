@@ -1,78 +1,119 @@
 package fr.gaulupeau.apps.settings;
 
-import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Bundle;
+import android.content.SharedPreferences.Editor;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
-
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.MenuItem;
-
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import fr.gaulupeau.apps.wallabag.R;
 
-public class SettingsAccount extends SherlockActivity {
-//	Button btnDone;
-	EditText editPocheUrl;
-	EditText editAPIUsername;
-	EditText editAPIToken;
-	EditText editGlobalToken;
+public class SettingsAccount extends SettingsBase {
 
-	SharedPreferences settings;
-	SharedPreferences.Editor editor;
+	public static final String SERVER_URL = "pocheUrl";
+	public static final String USER_ID = "APIUsername";
+	public static final String USERNAME = "UserName";
+	public static final String TOKEN = "APIToken";
+	
+	private static final String SERVER_OPTION = "ServerOption";
+	private static final int SERVER_OPTION_FRAMABAG = R.id.radioFramabag;
+	private static final int SERVER_OPTION_ANOTHER_SERVER = R.id.radioAnotherServer;
+	
+	private int selectedSeverOption;
+	
+	private View serverUrlLayout;
+	private View usernameLayout;
+	private EditText editTextUrl; 
+	private EditText editTextUsername;
+	private EditText editTextToken;
+	
+	private String serverUrl;
+	private String username;
+	private String token;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		getSupportActionBar().setHomeButtonEnabled(true);
-	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-	    
-	    settings = getSharedPreferences(PREFS_NAME, 0);
-	    editor = settings.edit();
-	        
-		setContentView(R.layout.settings_account);
-        //SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        String pocheUrl = settings.getString("pocheUrl", "https://");
-        String apiUsername = settings.getString("APIUsername", "");
-        String apiToken = settings.getString("APIToken", "");
-    	editPocheUrl = (EditText)findViewById(R.id.pocheUrl);
-    	editPocheUrl.setText(pocheUrl);
-    	editAPIUsername = (EditText)findViewById(R.id.APIUsername);
-    	editAPIUsername.setText(apiUsername);
-    	editAPIToken = (EditText)findViewById(R.id.APIToken);
-    	editAPIToken.setText(apiToken);
-
-    	PackageInfo packageInfo;
-		try {
-			packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-			TextView version = (TextView) findViewById(R.id.version);	    	
-	    	version.setText(packageInfo.versionName);
-		} catch (NameNotFoundException e) {}
-    	
-    	
+	protected int getContentView() {
+		return R.layout.account_settings;
 	}
-	
+
 	@Override
-	protected void onPause() {
-		super.onPause();		
-    	editor.putString("pocheUrl", editPocheUrl.getText().toString());
-    	editor.putString("APIUsername", editAPIUsername.getText().toString());
-    	editor.putString("APIToken", editAPIToken.getText().toString());
+	protected void saveSettings() {
+		Editor editor = settings.edit();
+		editor.putInt(SERVER_OPTION, selectedSeverOption);
+		editor.putString(USER_ID, "1");
+		editor.putString(TOKEN, editTextToken.getText().toString());
+		
+		switch (selectedSeverOption) {
+		case SERVER_OPTION_FRAMABAG:
+			editor.putString(SERVER_URL, getFramabagUrl());
+			editor.putString(USERNAME, editTextUsername.getText().toString());
+			break;
+		case SERVER_OPTION_ANOTHER_SERVER:
+			editor.putString(SERVER_URL, editTextUrl.getText().toString().trim());
+			break;
+		default:
+			break;
+		}
+		
 		editor.commit();
-		
-    }
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	      case android.R.id.home:
-	        finish();
-	    
-	      default:
-	        return super.onOptionsItemSelected(item);
-	    }
 	}
+	
+	private String getFramabagUrl() {
+		return "https://framabag.org/u/" + editTextUsername.getText().toString().trim();
+	}
+
+	@Override
+	protected void getSettings(){
+		super.getSettings();
+		
+		selectedSeverOption = settings.getInt(SERVER_OPTION, SERVER_OPTION_FRAMABAG);
+		
+		serverUrl = settings.getString(SERVER_URL, "https://");
+		token = settings.getString(TOKEN, "");
+		username = settings.getString(USERNAME, "");
+	}
+
+	@Override
+	protected void createUI() {
+		RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroupServerType);
+		serverUrlLayout = findViewById(R.id.server_url_layout);
+		usernameLayout = findViewById(R.id.user_name_layout);
+		
+		editTextUrl = (EditText) findViewById(R.id.editTextServerUrl);
+		editTextUsername = (EditText) findViewById(R.id.editTextUsername);
+		editTextToken = (EditText) findViewById(R.id.editTextToken);
+
+		editTextToken.setText(token);
+		editTextUrl.setText(serverUrl);
+		editTextUsername.setText(username);		
+		
+		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
+
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				if(selectedSeverOption != checkedId){
+					selectedSeverOption = checkedId;
+					hideUnnecessaryLayout();
+				}
+			}
+		});
+		
+		radioGroup.check(selectedSeverOption);
+		hideUnnecessaryLayout();
+	}
+	
+	private void hideUnnecessaryLayout(){
+		switch (selectedSeverOption) {
+		case SERVER_OPTION_FRAMABAG:
+			serverUrlLayout.setVisibility(View.GONE);
+			usernameLayout.setVisibility(View.VISIBLE);
+			break;
+		case SERVER_OPTION_ANOTHER_SERVER:
+			serverUrlLayout.setVisibility(View.VISIBLE);
+			usernameLayout.setVisibility(View.GONE);
+			break;
+		default:
+			break;
+		}
+	}
+
 }

@@ -46,7 +46,6 @@
     <string name="look_and_feel">Look and feel</string>
     <string name="account">Account</string>
     <string name="about">About</string>
-    <string name="delete_account_info">Also delete account info</string>
     <string name="first_page">Set First Page</string>
     <string name="dark_theme">Use dark theme</string>
     <string name="font_size">Font size</string>
@@ -75,5 +74,11 @@
     <string name="read_text">Read</string>
     <string name="favorites_text">Favorites</string>
     <string name="welcome">Welcome</string>
+    <string name="choose_installation">What kind of installation do you use</string>
+    <string name="framabag">Framabag</string>
+    <string name="another_sever">Another sever</string>
+    <string name="user_name">User name</string>
+    <string name="token">Token</string>
+    <string name="server_url">Server URL</string>
 </resources>
 
