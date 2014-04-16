@@ -82,10 +82,11 @@ public class ReadArticle extends SherlockActivity {
 		setTheme(themeId);
 		
 		setContentView(R.layout.article);
-
-		actionBar = getSupportActionBar();
+		
+		actionBar = getSupportActionBar();		
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		
 		Utils.setActionBarIcon(actionBar, themeId);
 		
 		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(
@@ -97,11 +98,12 @@ public class ReadArticle extends SherlockActivity {
 		if (data != null) {
 			id = data.getString("id");
 		}
+		
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "="
 				+ id, null, null, null, null);
 		ac.moveToFirst();
 		
-		txtTitle = (TextView) findViewById(R.id.txtTitre);
+		txtTitle = (TextView) findViewById(R.id.article_title_text);
 		txtTitle.setText(ac.getString(2));
 		view = (MyScrollView) findViewById(R.id.scroll);
 		contentWebView = (WebView) findViewById(R.id.webContent);
@@ -151,7 +153,7 @@ public class ReadArticle extends SherlockActivity {
 
 		yPositionReadAt = ac.getInt(7);
 		
-		txtAuthor = (TextView) findViewById(R.id.txtAuthor);
+		txtAuthor = (TextView) findViewById(R.id.article_url_text);
 		
 		articleUrl = ac.getString(0);
 		String articleUrlHostName = "";

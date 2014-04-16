@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper;
+import fr.gaulupeau.apps.wallabag.Constants;
 import fr.gaulupeau.apps.wallabag.R;
 import fr.gaulupeau.apps.wallabag.Utils;
 
@@ -77,6 +78,9 @@ public class SettingsGeneral extends SettingsBase {
 				builder.setSingleChoiceItems(choices, sortType, new DialogInterface.OnClickListener() {				
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						if(sortType != which)
+							setResult(Constants.RESULT_CHANGED_SORT);
+						
 						sortType = which;
 						sortTypeView.setText(getStringSortType(which));
 						dialog.dismiss();

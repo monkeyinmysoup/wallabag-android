@@ -75,5 +75,6 @@
     <string name="unread_text">Não lidos</string>
     <string name="read_text">Lidos</string>
     <string name="favorites_text">Favoritos</string>
+    <string name="welcome">Bem-vindo</string>
 </resources>
 

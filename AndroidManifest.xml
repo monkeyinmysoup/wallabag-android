@@ -18,15 +18,22 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:logo="@drawable/actionbar" >
+        
+        <activity
+            android:name="fr.gaulupeau.apps.wallabag.Welcome"
+            android:label=""
+            android:theme="@style/Theme.Sherlock.Light.NoActionBar" >
+        </activity>
+        
         <activity
             android:name="fr.gaulupeau.apps.wallabag.ReadArticle"
             android:label=""
-            android:theme="@style/AppThemeWhite" >
+            android:theme="@style/Theme.Sherlock.Light.NoActionBar" >
         </activity>
         <activity
             android:name="fr.gaulupeau.apps.wallabag.ListArticles"
             android:label="@string/app_name"
-            android:theme="@style/AppThemeWhite" >
+            android:theme="@style/Theme.Sherlock.Light.NoActionBar" >
             <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,7 +43,7 @@
         <activity
             android:name="fr.gaulupeau.apps.wallabag.SendHandler"
             android:label="@string/bag_it"
-            android:theme="@style/AppThemeWhite" >
+            android:theme="@style/Theme.Sherlock.Light.NoActionBar" >
             
             <intent-filter android:label="@string/bag_it" >
                 <action android:name="android.intent.action.SEND" />
@@ -50,7 +57,7 @@
         <activity
             android:name="fr.gaulupeau.apps.settings.Settings"
             android:label="@string/menuSettings"
-            android:theme="@style/AppThemeWhite" >
+            android:theme="@style/Theme.Sherlock.Light.NoActionBar" >
         </activity>
         <activity
             android:name="fr.gaulupeau.apps.settings.SettingsAccount"
@@ -60,13 +67,13 @@
         <activity
             android:name="fr.gaulupeau.apps.settings.SettingsLookAndFeel"
             android:label="@string/look_and_feel"
-            android:theme="@style/AppThemeWhite" >
+            android:theme="@style/Theme.Sherlock.Light.NoActionBar" >
         </activity>
         
         <activity
             android:name="fr.gaulupeau.apps.settings.SettingsGeneral"
             android:label="@string/general"
-            android:theme="@style/AppThemeWhite" >
+            android:theme="@style/Theme.Sherlock.Light.NoActionBar" >
         </activity>
     </application>
 

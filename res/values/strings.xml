@@ -74,5 +74,6 @@
     <string name="unread_text">Unread</string>
     <string name="read_text">Read</string>
     <string name="favorites_text">Favorites</string>
+    <string name="welcome">Welcome</string>
 </resources>
 

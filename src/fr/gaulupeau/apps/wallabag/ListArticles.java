@@ -83,16 +83,16 @@ import fr.gaulupeau.apps.settings.SettingsLookAndFeel;
 
 public class ListArticles extends SherlockActivity {
 	private ActionBar actionBar;
-	private PullToRefreshLayout pullToRefreshLayout;
+	private static PullToRefreshLayout pullToRefreshLayout;
 
 	private static int maxChars = 250;
 
 	private ListView readList;
-	private SQLiteDatabase database;
+	private static SQLiteDatabase database;
 	private ReadingListAdapter adapter;
 
 	private SharedPreferences settings;
-	private String pocheUrl;
+	private String wallabagUrl;
 	private String apiUsername;
 	private String apiToken;
 
@@ -108,15 +108,19 @@ public class ListArticles extends SherlockActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		getSettings();
+		
+		getSettings();		
 		setTheme(themeId);
-
+		
 		actionBar = getSupportActionBar();
+		
 		Utils.setActionBarIcon(actionBar, themeId);
 
 		setContentView(R.layout.list);
-
+		
+//		if(wallabagUrl.contains("pireddss")){
+//			startActivity(new Intent(getBaseContext(), Welcome.class));
+//		}
 		
 		//Pull to refresh
 		pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
@@ -186,7 +190,6 @@ public class ListArticles extends SherlockActivity {
 	public void onResume() {
 		super.onResume();
 		getSettings();
-		//updateList();
 	}
 
 	public void onDestroy() {
@@ -206,6 +209,10 @@ public class ListArticles extends SherlockActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		if(requestCode == Constants.REQUEST_READ_ARTICLE)
 			updateList(resultCode);
+		
+		if(requestCode == Constants.REQUEST_SETTINGS)
+			if(resultCode == Constants.RESULT_CHANGED_SORT)
+				setupList();
 	}
 
 	@Override
@@ -224,7 +231,7 @@ public class ListArticles extends SherlockActivity {
 		case R.id.settings:
 			startActivityForResult(
 					new Intent(getBaseContext(), Settings.class),
-					this.hashCode());
+					Constants.REQUEST_SETTINGS);
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -237,7 +244,7 @@ public class ListArticles extends SherlockActivity {
 
 	private void getSettings() {
 		settings = getSharedPreferences(PREFS_NAME, 0);
-		pocheUrl = settings.getString("pocheUrl", "https://");
+		wallabagUrl = settings.getString("pocheUrl", "https://");
 		apiUsername = settings.getString("APIUsername", "");
 		apiToken = settings.getString("APIToken", "");
 
@@ -259,9 +266,9 @@ public class ListArticles extends SherlockActivity {
 		// VÃ©rification de la connectivitÃ© Internet
 		final ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-		if (pocheUrl.equals("https://")) {
+		if (wallabagUrl.equals("https://")) {
 			Utils.showToast(this, getString(R.string.txtConfigNotSet));
-			pullToRefreshLayout.setRefreshComplete();
+			finishedRefreshing();
 		} else if (activeNetwork != null && activeNetwork.isConnected()) {
 			// ExÃ©cution de la synchro en arriÃ¨re-plan
 			new AsyncTask<Void, Void, Void>() {
@@ -273,16 +280,21 @@ public class ListArticles extends SherlockActivity {
 
 				@Override
 				protected void onPostExecute(Void result) {
-					super.onPostExecute(result);
-					pullToRefreshLayout.setRefreshComplete();
+//					super.onPostExecute(result);
+					finishedRefreshing();
 					updateList();
 				}
 			}.execute();
 		} else {
 			// Afficher alerte connectivitÃ©
 			Utils.showToast(this, getString(R.string.txtNetOffline));
-			pullToRefreshLayout.setRefreshComplete();
+			finishedRefreshing();
 		}
+	}
+
+	private void finishedRefreshing() {
+		if(pullToRefreshLayout != null)
+			pullToRefreshLayout.setRefreshComplete();
 	}
 
 	public void parseRSS() {
@@ -290,13 +302,13 @@ public class ListArticles extends SherlockActivity {
 		URL url;
 		try {
 			// Set the url (you will need to change this to your RSS URL
-			url = new URL(pocheUrl + "/?feed&type=home&user_id=" + apiUsername
+			url = new URL(wallabagUrl + "/?feed&type=home&user_id=" + apiUsername
 					+ "&token=" + apiToken);
 			System.out.println(url);
 			// Setup the connection
 			HttpsURLConnection conn_s = null;
 			HttpURLConnection conn = null;
-			if (pocheUrl.startsWith("https")) {
+			if (wallabagUrl.startsWith("https")) {
 				trustEveryone();
 				conn_s = (HttpsURLConnection) url.openConnection();
 			} else {
@@ -428,23 +440,23 @@ public class ListArticles extends SherlockActivity {
 			}
 			updateUnread();
 		} catch (MalformedURLException e) {
-			Utils.showToast(this, getString(R.string.fail_to_update));
 			e.printStackTrace();
+			Utils.showToast(this, getString(R.string.fail_to_update));
 		} catch (DOMException e) {
-			Utils.showToast(this, getString(R.string.fail_to_update));
 			e.printStackTrace();
+			Utils.showToast(this, getString(R.string.fail_to_update));
 		} catch (IOException e) {
-			Utils.showToast(this, getString(R.string.fail_to_update));
 			e.printStackTrace();
+			Utils.showToast(this, getString(R.string.fail_to_update));
 		} catch (ParserConfigurationException e) {
-			Utils.showToast(this, getString(R.string.fail_to_update));
 			e.printStackTrace();
+			Utils.showToast(this, getString(R.string.fail_to_update));
 		} catch (SAXException e) {
-			Utils.showToast(this, getString(R.string.fail_to_update));
 			e.printStackTrace();
+			Utils.showToast(this, getString(R.string.fail_to_update));
 		} catch (Exception e) {
-			Utils.showToast(this, getString(R.string.fail_to_update));
 			e.printStackTrace();
+			Utils.showToast(this, getString(R.string.fail_to_update));
 		}
 
 	}
@@ -501,7 +513,7 @@ public class ListArticles extends SherlockActivity {
 		});
 	}
 
-	public void setupList() {		
+	public void setupList() {
 		List<Article> articlesList = getArticlesList();
 		
 		adapter.setListArticles(articlesList);
@@ -549,7 +561,8 @@ public class ListArticles extends SherlockActivity {
 		
 	}
 	
-	private List<Article> getArticlesList(){		
+	private List<Article> getArticlesList(){
+		getSettings();
 		String orderBy = Utils.getOrderBy(sortType);
 		String filter = Utils.getFilter(listFilterOption);
 		

@@ -11,7 +11,7 @@
 
         <TextView
             android:id="@+id/general_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/defaultSidePadding"
             android:paddingLeft="@dimen/defaultSidePadding"
@@ -29,7 +29,7 @@
 
         <TextView
             android:id="@+id/look_and_feel_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/defaultSidePadding"
             android:paddingLeft="@dimen/defaultSidePadding"
@@ -47,7 +47,7 @@
 
         <TextView
             android:id="@+id/account_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/defaultSidePadding"
             android:paddingLeft="@dimen/defaultSidePadding"
@@ -65,7 +65,7 @@
 
         <TextView
             android:id="@+id/about_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/defaultSidePadding"
             android:paddingLeft="@dimen/defaultSidePadding"

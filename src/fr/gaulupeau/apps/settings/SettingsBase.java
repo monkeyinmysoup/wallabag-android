@@ -9,6 +9,7 @@ import com.actionbarsherlock.view.MenuItem;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import fr.gaulupeau.apps.wallabag.Constants;
 import fr.gaulupeau.apps.wallabag.R;
 import fr.gaulupeau.apps.wallabag.Utils;
 
@@ -70,5 +71,7 @@ public abstract class SettingsBase extends SherlockActivity{
 	        	getSettings();
 	            Utils.restartActivity(this);
 	        }
+		if(requestCode == Constants.REQUEST_SETTINGS)
+			setResult(resultCode);
 	}
 }

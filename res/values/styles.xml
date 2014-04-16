@@ -19,8 +19,6 @@
         <item name="android:windowBackground">@color/white_opaque</item>
 
     </style>
-
-    
     
     <style name="AppThemeBlack" parent="@style/Theme.Sherlock">
        	<item name="android:windowBackground">@color/background_black</item>

@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.settings;
 
+import fr.gaulupeau.apps.wallabag.Constants;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
@@ -18,7 +19,7 @@ public class SettingsOnClickListener implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		activity.startActivityForResult(intent, activity.hashCode());
+		activity.startActivityForResult(intent, Constants.REQUEST_SETTINGS);
 	}
 
 }
