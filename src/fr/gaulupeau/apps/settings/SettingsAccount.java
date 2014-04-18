@@ -22,13 +22,16 @@ public class SettingsAccount extends SettingsBase {
 	
 	private View serverUrlLayout;
 	private View usernameLayout;
+	private View userIDLayout;
 	private EditText editTextUrl; 
 	private EditText editTextUsername;
+	private EditText editUserID;
 	private EditText editTextToken;
 	
 	private String serverUrl;
 	private String username;
 	private String token;
+	private String userID;
 	
 	@Override
 	protected int getContentView() {
@@ -39,16 +42,18 @@ public class SettingsAccount extends SettingsBase {
 	protected void saveSettings() {
 		Editor editor = settings.edit();
 		editor.putInt(SERVER_OPTION, selectedSeverOption);
-		editor.putString(USER_ID, "1");
+		
 		editor.putString(TOKEN, editTextToken.getText().toString());
 		
 		switch (selectedSeverOption) {
 		case SERVER_OPTION_FRAMABAG:
 			editor.putString(SERVER_URL, getFramabagUrl());
 			editor.putString(USERNAME, editTextUsername.getText().toString());
+			editor.putString(USER_ID, "1");
 			break;
 		case SERVER_OPTION_ANOTHER_SERVER:
 			editor.putString(SERVER_URL, editTextUrl.getText().toString().trim());
+			editor.putString(USER_ID, editUserID.getText().toString());
 			break;
 		default:
 			break;
@@ -70,6 +75,7 @@ public class SettingsAccount extends SettingsBase {
 		serverUrl = settings.getString(SERVER_URL, "https://");
 		token = settings.getString(TOKEN, "");
 		username = settings.getString(USERNAME, "");
+		userID = settings.getString(USER_ID, "1");
 	}
 
 	@Override
@@ -77,14 +83,17 @@ public class SettingsAccount extends SettingsBase {
 		RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroupServerType);
 		serverUrlLayout = findViewById(R.id.server_url_layout);
 		usernameLayout = findViewById(R.id.user_name_layout);
+		userIDLayout = findViewById(R.id.user_id_layout);
 		
 		editTextUrl = (EditText) findViewById(R.id.editTextServerUrl);
 		editTextUsername = (EditText) findViewById(R.id.editTextUsername);
 		editTextToken = (EditText) findViewById(R.id.editTextToken);
+		editUserID = (EditText) findViewById(R.id.editTextUserID);
 
 		editTextToken.setText(token);
 		editTextUrl.setText(serverUrl);
-		editTextUsername.setText(username);		
+		editTextUsername.setText(username);
+		editUserID.setText(userID);
 		
 		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
 
@@ -106,10 +115,12 @@ public class SettingsAccount extends SettingsBase {
 		case SERVER_OPTION_FRAMABAG:
 			serverUrlLayout.setVisibility(View.GONE);
 			usernameLayout.setVisibility(View.VISIBLE);
+			userIDLayout.setVisibility(View.GONE);
 			break;
 		case SERVER_OPTION_ANOTHER_SERVER:
 			serverUrlLayout.setVisibility(View.VISIBLE);
 			usernameLayout.setVisibility(View.GONE);
+			userIDLayout.setVisibility(View.VISIBLE);
 			break;
 		default:
 			break;

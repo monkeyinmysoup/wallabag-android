@@ -75,10 +75,11 @@
     <string name="read_text">Lidos</string>
     <string name="favorites_text">Favoritos</string>
     <string name="welcome">Bem-vindo</string>
-    <string name="choose_installation">Qual tipo de intalação você usa</string>
+    <string name="choose_installation">Qual tipo de instalação você usa</string>
     <string name="framabag">Framabag</string>
     <string name="another_sever">Outro servidor</string>
     <string name="user_name">Nome de usuário</string>
+    <string name="user_id">ID de usuário</string>
     <string name="token">Token</string>
     <string name="server_url">URL do servidor</string>
 
