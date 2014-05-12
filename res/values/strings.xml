@@ -63,8 +63,8 @@
     <string name="justified">Justified</string>
     <string name="keep_screen_on">Keep screen always on</string>
     <string name="sort">Sort</string>
-    <string name="newer">Newers first</string>
-    <string name="older">Olders first</string>
+    <string name="newer">Newest first</string>
+    <string name="older">Oldest first</string>
     <string name="alphabetical">Alphabetical order</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity" >
 
-    <uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout
+    <FrameLayout
         android:id="@+id/ptr_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -28,7 +28,7 @@
             android:text="@string/no_articles"
             android:textColor="#757575"
             android:visibility="gone" />
-    </uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout>
+    </FrameLayout>
     
      <FrameLayout
             android:id="@+id/content_frame"
