@@ -18,8 +18,6 @@ import android.widget.Toast;
 
 import com.pixplicity.wallabag.activities.GeneralSettingsActivity;
 
-import fr.gaulupeau.apps.wallabag.R;
-
 public class Utils {
 
 	public static final int RESULT_CHANGE_THEME = 42;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:android1="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scroll"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" >
@@ -9,142 +9,131 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10sp" 
         android:focusable="true"
-        android:focusableInTouchMode="true" >
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:padding="10sp" >
 
         <TextView
-            android1:layout_width="wrap_content"
-            android1:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:paddingBottom="@dimen/defaultTopPadding"
             android:paddingLeft="@dimen/defaultSidePadding"
             android:paddingTop="@dimen/defaultTopPadding"
-            android1:text="@string/choose_installation"
-            android1:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="@string/choose_installation"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <LinearLayout
-            android1:layout_width="match_parent"
-            android1:layout_height="wrap_content"
-            android1:orientation="vertical" >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
             <RadioGroup
-                android1:id="@+id/radioGroupServerType"
-                android1:layout_width="wrap_content"
-                android1:layout_height="wrap_content" >
+                android:id="@+id/radioGroupServerType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
 
                 <RadioButton
-                    android1:id="@+id/radioFramabag"
-                    android1:layout_width="wrap_content"
-                    android1:layout_height="wrap_content"
-                    android1:checked="true"
-                    android1:paddingLeft="@dimen/defaultSidePadding"
-                    android1:text="@string/framabag" />
+                    android:id="@+id/radioFramabag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:paddingLeft="@dimen/defaultSidePadding"
+                    android:text="@string/framabag" />
 
                 <RadioButton
-                    android1:id="@+id/radioAnotherServer"
-                    android1:layout_width="wrap_content"
-                    android1:layout_height="wrap_content"
-                    android1:paddingLeft="@dimen/defaultSidePadding"
-                    android1:text="@string/another_sever" />
+                    android:id="@+id/radioAnotherServer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/defaultSidePadding"
+                    android:text="@string/another_sever" />
             </RadioGroup>
         </LinearLayout>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/card_outer_padding_bottom"
             android:src="@drawable/divider" />
 
         <LinearLayout
-            android1:layout_width="match_parent"
-            android1:layout_height="wrap_content"
-            android1:orientation="vertical" >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-            <LinearLayout
-                android1:id="@+id/server_url_layout"
-                android1:layout_width="match_parent"
-                android1:layout_height="wrap_content"
-                android1:orientation="vertical" >
-
-                <TextView
-                    android1:layout_width="wrap_content"
-                    android1:layout_height="wrap_content"
-                    android:paddingTop="@dimen/defaultTopPadding"
-                    android1:text="@string/server_url"
-                    android1:textAppearance="?android:attr/textAppearanceMedium" />
+            <com.pixplicity.wallabag.ui.FloatLabelLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:floatLabelTextAppearance="@style/TextAppearance.Wallabag.FloatLabel" >
 
                 <EditText
-                    android1:id="@+id/editTextServerUrl"
-                    android1:layout_width="match_parent"
-                    android1:layout_height="wrap_content"
-                    android1:ems="10"
-                    android1:inputType="textUri" >
-                </EditText>
-            </LinearLayout>
+                    android:id="@+id/editTextServerUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:imeOptions="actionNext"
+                    android:inputType="textUri"
+                    android:nextFocusDown="@+id/editTextUsername"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </com.pixplicity.wallabag.ui.FloatLabelLayout>
 
-            <LinearLayout
-                android1:id="@+id/user_name_layout"
-                android1:layout_width="match_parent"
-                android1:layout_height="wrap_content"
-                android1:orientation="vertical" >
-
-                <TextView
-                    android1:layout_width="wrap_content"
-                    android1:layout_height="wrap_content"
-                    android:paddingTop="@dimen/defaultTopPadding"
-                    android1:text="@string/user_name"
-                    android1:textAppearance="?android:attr/textAppearanceMedium" />
+            <com.pixplicity.wallabag.ui.FloatLabelLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:floatLabelTextAppearance="@style/TextAppearance.Wallabag.FloatLabel" >
 
                 <EditText
-                    android1:id="@+id/editTextUsername"
-                    android1:layout_width="match_parent"
-                    android1:layout_height="wrap_content"
-                    android1:ems="10"
-                    android1:inputType="text" >
-                </EditText>
-            </LinearLayout>
-
-            <LinearLayout
-                android1:id="@+id/user_id_layout"
-                android1:layout_width="match_parent"
-                android1:layout_height="wrap_content"
-                android1:orientation="vertical" >
-
-                <TextView
-                    android1:layout_width="wrap_content"
-                    android1:layout_height="wrap_content"
-                    android:paddingTop="@dimen/defaultTopPadding"
-                    android1:text="@string/user_id"
-                    android1:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <EditText
-                    android1:id="@+id/editTextUserID"
-                    android1:layout_width="match_parent"
-                    android1:layout_height="wrap_content"
-                    android1:ems="10"
-                    android1:inputType="text" />
-            </LinearLayout>
-
-            <LinearLayout
-                android1:layout_width="match_parent"
-                android1:layout_height="wrap_content"
-                android1:orientation="vertical" >
-
-                <TextView
-                    android1:layout_width="wrap_content"
-                    android1:layout_height="wrap_content"
-                    android:paddingTop="@dimen/defaultTopPadding"
-                    android1:text="@string/token"
-                    android1:textAppearance="?android:attr/textAppearanceMedium" />
-
-                <EditText
-                    android1:id="@+id/editTextToken"
-                    android1:layout_width="match_parent"
-                    android1:layout_height="wrap_content"
-                    android1:ems="10"
-                    android1:inputType="text" />
-            </LinearLayout>
+                    android:id="@+id/editTextUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/user_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="text|textPersonName"
+                    android:nextFocusDown="@+id/editTextUserID"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </com.pixplicity.wallabag.ui.FloatLabelLayout>
         </LinearLayout>
+
+        <com.pixplicity.wallabag.ui.FloatLabelLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:floatLabelTextAppearance="@style/TextAppearance.Wallabag.FloatLabel" >
+
+            <EditText
+                android:id="@+id/editTextUserID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/user_id"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:nextFocusDown="@+id/editTextToken"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </com.pixplicity.wallabag.ui.FloatLabelLayout>
     </LinearLayout>
+
+    <com.pixplicity.wallabag.ui.FloatLabelLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:floatLabelTextAppearance="@style/TextAppearance.Wallabag.FloatLabel" >
+
+        <EditText
+            android:id="@+id/editTextToken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/token"
+            android:inputType="textNoSuggestions"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </com.pixplicity.wallabag.ui.FloatLabelLayout>
 
 </ScrollView>

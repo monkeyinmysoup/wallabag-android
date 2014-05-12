@@ -1,14 +1,14 @@
 package com.pixplicity.wallabag.activities;
 
 
-import com.pixplicity.wallabag.Utils;
-import com.pixplicity.wallabag.ui.SettingsOnClickListener;
-
-import fr.gaulupeau.apps.wallabag.R;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+
+import com.pixplicity.wallabag.R;
+import com.pixplicity.wallabag.Utils;
+import com.pixplicity.wallabag.ui.SettingsOnClickListener;
 
 public class SettingsActivity extends AbstractSettingsActivity {
 

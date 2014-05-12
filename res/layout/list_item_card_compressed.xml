@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidLintUselessParent -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" style="@style/card_outer">
+
+    <RelativeLayout android:id="@+id/inner_frame" style="@style/card_inner_compressed">
+
+        <TextView android:id="@android:id/title" style="@style/card_title"/>
+
+        <com.afollestad.silk.views.text.SilkTextView android:id="@android:id/content"
+                                                     style="@style/card_content"
+                                                     android:layout_alignParentRight="true"
+                                                     android:maxLines="1"/>
+
+    </RelativeLayout>
+
+    <!--suppress AndroidLintContentDescription -->
+    <ImageView style="@style/card_shadow"/>
+
+</LinearLayout>

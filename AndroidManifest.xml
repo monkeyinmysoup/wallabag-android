@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.gaulupeau.apps.wallabag"
+    package="com.pixplicity.wallabag"
     android:versionCode="1"
     android:versionName="0.0.1" >
 
@@ -17,20 +17,17 @@
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:logo="@drawable/actionbar" >
-        
+        android:logo="@drawable/actionbar"
+        android:theme="@style/AppThemeWhite" >
         <activity
             android:name="com.pixplicity.wallabag.activities.WelcomeActivity"
-            android:label="@string/app_name">
-        </activity>
-        
+            android:label="@string/app_name" />
         <activity
             android:name="com.pixplicity.wallabag.activities.ReadArticleActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name" />
         <activity
             android:name="com.pixplicity.wallabag.activities.ListArticlesActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,8 +36,7 @@
         </activity>
         <activity
             android:name="com.pixplicity.wallabag.activities.SendHandlerActivity"
-            android:label="@string/bag_it">
-            
+            android:label="@string/bag_it" >
             <intent-filter android:label="@string/bag_it" >
                 <action android:name="android.intent.action.SEND" />
 
@@ -48,26 +44,20 @@
 
                 <data android:mimeType="text/plain" />
             </intent-filter>
-            
         </activity>
         <activity
             android:name="com.pixplicity.wallabag.activities.SettingsActivity"
-            android:label="@string/menuSettings">
-        </activity>
+            android:label="@string/menuSettings" />
         <activity
             android:name="com.pixplicity.wallabag.activities.AccountSettingsActivity"
             android:label="@string/account"
-            android:theme="@style/AppThemeWhite" >
-        </activity>
+            android:theme="@style/AppThemeWhite" />
         <activity
             android:name="com.pixplicity.wallabag.activities.LookAndFeelSettingsActivity"
-            android:label="@string/look_and_feel">
-        </activity>
-        
+            android:label="@string/look_and_feel" />
         <activity
             android:name="com.pixplicity.wallabag.activities.GeneralSettingsActivity"
-            android:label="@string/general">
-        </activity>
+            android:label="@string/general" />
     </application>
 
 </manifest>

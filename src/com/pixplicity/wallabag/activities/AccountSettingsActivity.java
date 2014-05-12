@@ -6,7 +6,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import fr.gaulupeau.apps.wallabag.R;
+
+import com.pixplicity.wallabag.R;
+
 
 public class AccountSettingsActivity extends AbstractSettingsActivity {
 
@@ -24,7 +26,7 @@ public class AccountSettingsActivity extends AbstractSettingsActivity {
 	private View serverUrlLayout;
 	private View usernameLayout;
 	private View userIDLayout;
-	private EditText editTextUrl; 
+	private EditText editTextUrl;
 	private EditText editTextUsername;
 	private EditText editUserID;
 	private EditText editTextToken;
@@ -82,9 +84,9 @@ public class AccountSettingsActivity extends AbstractSettingsActivity {
 	@Override
 	protected void createUI() {
 		RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroupServerType);
-		serverUrlLayout = findViewById(R.id.server_url_layout);
-		usernameLayout = findViewById(R.id.user_name_layout);
-		userIDLayout = findViewById(R.id.user_id_layout);
+		//		serverUrlLayout = findViewById(R.id.server_url_layout);
+		//		usernameLayout = findViewById(R.id.user_name_layout);
+		//		userIDLayout = findViewById(R.id.user_id_layout);
 		
 		editTextUrl = (EditText) findViewById(R.id.editTextServerUrl);
 		editTextUsername = (EditText) findViewById(R.id.editTextUsername);
@@ -96,7 +98,7 @@ public class AccountSettingsActivity extends AbstractSettingsActivity {
 		editTextUsername.setText(username);
 		editUserID.setText(userID);
 		
-		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
+		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {

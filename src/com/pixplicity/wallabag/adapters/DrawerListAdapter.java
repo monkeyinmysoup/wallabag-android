@@ -1,9 +1,5 @@
 package com.pixplicity.wallabag.adapters;
 
-import com.pixplicity.wallabag.Constants;
-import com.pixplicity.wallabag.activities.ListArticlesActivity;
-
-import fr.gaulupeau.apps.wallabag.R;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -14,9 +10,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pixplicity.wallabag.Constants;
+import com.pixplicity.wallabag.R;
+import com.pixplicity.wallabag.activities.ListArticlesActivity;
+
 public class DrawerListAdapter extends BaseAdapter {
 	
-	private ListArticlesActivity listArticles;
+	private final ListArticlesActivity listArticles;
 	private int choosen;
 
 	public DrawerListAdapter(ListArticlesActivity listArticles, int choosen){
@@ -56,10 +56,11 @@ public class DrawerListAdapter extends BaseAdapter {
 			break;
 		}
 		
-		if(choosen == position)
+		if(choosen == position) {
 			text.setTypeface(null, Typeface.BOLD);
-		else
+		} else {
 			text.setTypeface(null, Typeface.NORMAL);
+		}
 		
 		convertView.setOnClickListener(new OnClickListener() {
 			

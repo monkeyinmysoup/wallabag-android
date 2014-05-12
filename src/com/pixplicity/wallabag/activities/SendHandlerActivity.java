@@ -4,8 +4,6 @@ import static com.pixplicity.wallabag.Helpers.PREFS_NAME;
 
 import java.io.UnsupportedEncodingException;
 
-import fr.gaulupeau.apps.wallabag.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,10 +16,13 @@ import android.provider.Browser;
 import android.util.Base64;
 import android.widget.Toast;
 
+import com.pixplicity.wallabag.R;
+
 public class SendHandlerActivity extends Activity {
 	SharedPreferences settings;
 	static String pocheUrl;
 	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 

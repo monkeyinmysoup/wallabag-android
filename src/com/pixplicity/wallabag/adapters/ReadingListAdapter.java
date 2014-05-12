@@ -2,10 +2,6 @@ package com.pixplicity.wallabag.adapters;
 
 import java.util.List;
 
-import com.pixplicity.wallabag.models.Article;
-
-import fr.gaulupeau.apps.wallabag.R;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +9,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.pixplicity.wallabag.R;
+import com.pixplicity.wallabag.models.Article;
+
 
 public class ReadingListAdapter extends BaseAdapter {
-	private Context context;
+	private final Context context;
 	private List<Article> listArticles;
 
 	public ReadingListAdapter(Context context, List<Article> listArticles) {
@@ -32,21 +31,26 @@ public class ReadingListAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
+	@Override
 	public int getCount() {
-		if(listArticles != null)
+		if(listArticles != null) {
 			return listArticles.size();
-		else
+		} else {
 			return 0;
+		}
 	}
 
+	@Override
 	public Object getItem(int position) {
 		return listArticles.get(position);
 	}
 
+	@Override
 	public long getItemId(int position) {
 		return position;
 	}
 
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context

@@ -44,13 +44,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.pixplicity.wallabag.Constants;
-import com.pixplicity.wallabag.Utils;
-import com.pixplicity.wallabag.adapters.DrawerListAdapter;
-import com.pixplicity.wallabag.adapters.ReadingListAdapter;
-import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
-import com.pixplicity.wallabag.models.Article;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentValues;
@@ -80,9 +73,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import fr.gaulupeau.apps.wallabag.R;
 
+import com.pixplicity.wallabag.Constants;
+import com.pixplicity.wallabag.R;
+import com.pixplicity.wallabag.Utils;
+import com.pixplicity.wallabag.adapters.DrawerListAdapter;
+import com.pixplicity.wallabag.adapters.ReadingListAdapter;
+import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
+import com.pixplicity.wallabag.models.Article;
+
+/**
+ * Main Activity of the app.
+ * Shows the list of articles and the navigation drawer.
+ * 
+ * 
+ */
 public class ListArticlesActivity extends Activity {
+
 	private ActionBar actionBar;
 
 	private static int maxChars = 250;
@@ -99,7 +106,7 @@ public class ListArticlesActivity extends Activity {
 	private int themeId;
 
 	private int sortType;
-	
+
 	private int listFilterOption;
 
 	private DrawerLayout drawerLayout;
@@ -109,20 +116,20 @@ public class ListArticlesActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		getSettings();
 		setTheme(themeId);
-		
+
 		actionBar = getActionBar();
-		
+
 		Utils.setActionBarIcon(actionBar, themeId);
 
 		setContentView(R.layout.list);
-		
-//		if(wallabagUrl.contains("pireddss")){
-//			startActivity(new Intent(getBaseContext(), WelcomeActivity.class));
-//		}
-		
+
+		//		if(wallabagUrl.contains("pireddss")){
+		//			startActivity(new Intent(getBaseContext(), WelcomeActivity.class));
+		//		}
+
 		//Pull to refresh
 		//		pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
 		//
@@ -136,16 +143,14 @@ public class ListArticlesActivity extends Activity {
 
 		//Database
 		setupDB();
-		
-		
+
 		//Listview
 		readList = (ListView) findViewById(R.id.liste_articles);
 		adapter = new ReadingListAdapter(getBaseContext());
 		readList.setAdapter(adapter);
-		
+
 		setupList();
 
-		
 		//Drawer
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerList = (ListView) findViewById(R.id.left_drawer);
@@ -158,33 +163,37 @@ public class ListArticlesActivity extends Activity {
 		R.drawable.ic_drawer, /* nav drawer icon */
 		R.string.drawer_open, /* "open drawer" description */
 		R.string.drawer_close /* "close drawer" description */
-		) {
+				) {
 
-			/** Called when a drawer has settled in a completely closed state. */
-			@Override
-			public void onDrawerClosed(View view) {
-			}
+					/**
+					 * Called when a drawer has settled in a completely closed
+					 * state.
+					 */
+					@Override
+					public void onDrawerClosed(View view) {}
 
-			/** Called when a drawer has settled in a completely open state. */
-			@Override
-			public void onDrawerOpened(View drawerView) {
-			}
-		};
+					/**
+					 * Called when a drawer has settled in a completely open
+					 * state.
+					 */
+					@Override
+					public void onDrawerOpened(View drawerView) {}
+				};
 
 		// Set the drawer toggle as the DrawerListener
 		drawerLayout.setDrawerListener(drawerToggle);
 		drawerLayout.setScrimColor(Color.parseColor("#77000000"));
-		
+
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 	}
-	
+
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		drawerToggle.syncState();
 	}
-	
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
@@ -210,15 +219,15 @@ public class ListArticlesActivity extends Activity {
 		return true;
 
 	}
-	
+
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		if(requestCode == Constants.REQUEST_READ_ARTICLE) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == Constants.REQUEST_READ_ARTICLE) {
 			updateList(resultCode);
 		}
-		
-		if(requestCode == Constants.REQUEST_SETTINGS) {
-			if(resultCode == Constants.RESULT_LIST_SHOULD_CHANGE) {
+
+		if (requestCode == Constants.REQUEST_SETTINGS) {
+			if (resultCode == Constants.RESULT_LIST_SHOULD_CHANGE) {
 				setupList();
 			}
 		}
@@ -228,7 +237,7 @@ public class ListArticlesActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			if(drawerLayout.isDrawerOpen(drawerList)) {
+			if (drawerLayout.isDrawerOpen(drawerList)) {
 				drawerLayout.closeDrawer(drawerList);
 			} else {
 				drawerLayout.openDrawer(drawerList);
@@ -268,7 +277,7 @@ public class ListArticlesActivity extends Activity {
 
 		sortType = settings.getInt(GeneralSettingsActivity.SORT_TYPE,
 				GeneralSettingsActivity.NEWER);
-		
+
 		listFilterOption = settings.getInt(Constants.LIST_FILTER_OPTION, Constants.ALL);
 	}
 
@@ -282,6 +291,7 @@ public class ListArticlesActivity extends Activity {
 		} else if (activeNetwork != null && activeNetwork.isConnected()) {
 			// ExÃ©cution de la synchro en arriÃ¨re-plan
 			new AsyncTask<Void, Void, Void>() {
+
 				@Override
 				protected Void doInBackground(Void... params) {
 					parseRSS();
@@ -290,7 +300,7 @@ public class ListArticlesActivity extends Activity {
 
 				@Override
 				protected void onPostExecute(Void result) {
-//					super.onPostExecute(result);
+					//					super.onPostExecute(result);
 					finishedRefreshing();
 					updateList();
 				}
@@ -350,7 +360,9 @@ public class ListArticlesActivity extends Activity {
 				// arrays.PodcastDate = new String[itemLst.getLength()];
 
 				ArrayList<String> urlsInBD = new ArrayList<String>();
-				String[] getStrColumns = new String[] { ARTICLE_URL };
+				String[] getStrColumns = new String[] {
+						ARTICLE_URL
+				};
 				Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, null,
 						null, null, null, null);
 				ac.moveToFirst();
@@ -483,6 +495,7 @@ public class ListArticlesActivity extends Activity {
 		try {
 			HttpsURLConnection
 					.setDefaultHostnameVerifier(new HostnameVerifier() {
+
 						@Override
 						public boolean verify(String hostname,
 								SSLSession session) {
@@ -490,22 +503,23 @@ public class ListArticlesActivity extends Activity {
 						}
 					});
 			SSLContext context = SSLContext.getInstance("TLS");
-			context.init(null, new X509TrustManager[] { new X509TrustManager() {
-				@Override
-				public void checkClientTrusted(X509Certificate[] chain,
-						String authType) throws CertificateException {
-				}
+			context.init(null, new X509TrustManager[] {
+					new X509TrustManager() {
 
-				@Override
-				public void checkServerTrusted(X509Certificate[] chain,
-						String authType) throws CertificateException {
-				}
+						@Override
+						public void checkClientTrusted(X509Certificate[] chain,
+								String authType) throws CertificateException {}
 
-				@Override
-				public X509Certificate[] getAcceptedIssuers() {
-					return new X509Certificate[0];
+						@Override
+						public void checkServerTrusted(X509Certificate[] chain,
+								String authType) throws CertificateException {}
+
+						@Override
+						public X509Certificate[] getAcceptedIssuers() {
+							return new X509Certificate[0];
+						}
 				}
-			} }, new SecureRandom());
+			}, new SecureRandom());
 			HttpsURLConnection.setDefaultSSLSocketFactory(context
 					.getSocketFactory());
 		} catch (Exception e) { // should never happen
@@ -515,14 +529,17 @@ public class ListArticlesActivity extends Activity {
 
 	private void updateUnread() {
 		runOnUiThread(new Runnable() {
+
 			@Override
 			public void run() {
 				int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0",
 						null, null, null, null).getCount();
 				if (news == 0) {
-					Utils.showToast(ListArticlesActivity.this, getString(R.string.no_unread_articles));
+					Utils.showToast(ListArticlesActivity.this,
+							getString(R.string.no_unread_articles));
 				} else if (news == 1) {
-					Utils.showToast(ListArticlesActivity.this, getString(R.string.one_unread_article));
+					Utils.showToast(ListArticlesActivity.this,
+							getString(R.string.one_unread_article));
 				} else {
 					Utils.showToast(ListArticlesActivity.this, String.format(
 							getString(R.string.many_unread_articles), news));
@@ -533,7 +550,7 @@ public class ListArticlesActivity extends Activity {
 
 	public void setupList() {
 		List<Article> articlesList = getArticlesList();
-		
+
 		adapter.setListArticles(articlesList);
 
 		readList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -542,14 +559,14 @@ public class ListArticlesActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Intent i = new Intent(getBaseContext(), ReadArticleActivity.class);
-				i.putExtra("id", ((Article)adapter.getItem(position)).id);
+				i.putExtra("id", ((Article) adapter.getItem(position)).id);
 				startActivityForResult(i, Constants.REQUEST_READ_ARTICLE);
 			}
 		});
-		
+
 		checkIfHasNoArticles();
 	}
-	
+
 	private void checkIfHasNoArticles() {
 		TextView tvNoArticles = (TextView) findViewById(R.id.no_articles_text);
 		if (adapter.getCount() == 0) {
@@ -559,42 +576,44 @@ public class ListArticlesActivity extends Activity {
 		}
 	}
 
-	public void updateList(){
+	public void updateList() {
 		List<Article> articlesList = getArticlesList();
 		adapter.setListArticles(articlesList);
 		checkIfHasNoArticles();
 	}
-	
-	public void updateList(int result){
+
+	public void updateList(int result) {
 		System.out.println(result);
-		if(Utils.hasToggledRead(result)) {
-			if(listFilterOption == Constants.READ || listFilterOption == Constants.UNREAD){
+		if (Utils.hasToggledRead(result)) {
+			if (listFilterOption == Constants.READ || listFilterOption == Constants.UNREAD) {
 				updateList();
 				return;
 			}
 		}
-				
-		if(Utils.hasToggledFavorite(result)) {
-			if(listFilterOption == Constants.FAVS){
+
+		if (Utils.hasToggledFavorite(result)) {
+			if (listFilterOption == Constants.FAVS) {
 				updateList();
 				return;
 			}
 		}
-		
+
 	}
-	
-	private List<Article> getArticlesList(){
+
+	private List<Article> getArticlesList() {
 		getSettings();
 		String orderBy = Utils.getOrderBy(sortType);
 		String filter = Utils.getFilter(listFilterOption);
-		
+
 		List<Article> articlesList = new ArrayList<Article>();
 
-		String[] getStrColumns = new String[] { ARTICLE_URL, MY_ID,
-				ARTICLE_TITLE, ARCHIVE, FAV, ARTICLE_SUMMARY };
+		String[] getStrColumns = new String[] {
+				ARTICLE_URL, MY_ID,
+				ARTICLE_TITLE, ARCHIVE, FAV, ARTICLE_SUMMARY
+		};
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, filter, null,
 				null, null, orderBy);
-		
+
 		ac.moveToFirst();
 		if (!ac.isAfterLast()) {
 			do {
@@ -605,7 +624,7 @@ public class ListArticlesActivity extends Activity {
 			} while (ac.moveToNext());
 		}
 		ac.close();
-		
+
 		return articlesList;
 	}
 
@@ -646,22 +665,22 @@ public class ListArticlesActivity extends Activity {
 			imageSource = imageSource.trim();
 
 			File imageFileDestination = getImageFileDestination("" + imageSource.hashCode());
-			
-			if(!imageFileDestination.exists()){
-				
-			
+
+			if (!imageFileDestination.exists()) {
+
 				Bitmap bitmap = getBitmapFromURL(imageSource);
 
 				if (bitmap == null) {
 					continue;
 				}
-			
-			if(!saveBitmap(bitmap, imageFileDestination)) {
-				continue;
+
+				if (!saveBitmap(bitmap, imageFileDestination)) {
+					continue;
+				}
 			}
-			}
-			
-			tagParams[sourceIndex] = "src=\"file://" + imageFileDestination.getAbsolutePath() + "\"";
+
+			tagParams[sourceIndex] = "src=\"file://" + imageFileDestination.getAbsolutePath()
+					+ "\"";
 
 			String newTag = recreateTag(tagParams);
 
@@ -699,28 +718,28 @@ public class ListArticlesActivity extends Activity {
 
 	public boolean saveBitmap(Bitmap bitmap, File saveLocation) {
 
-			FileOutputStream outputStream;
-			
-			try {
-				outputStream = new FileOutputStream(saveLocation);
-				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-				outputStream.close();
-				return true;
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-				return false;
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
+		FileOutputStream outputStream;
+
+		try {
+			outputStream = new FileOutputStream(saveLocation);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+			outputStream.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	
-	public File getImageFileDestination(String imageUrl){
+
+	public File getImageFileDestination(String imageUrl) {
 		File saveFolder = Utils.getSaveDir(this);
 		if (!saveFolder.exists()) {
 			saveFolder.mkdirs();
 		}
-		
+
 		return new File(saveFolder, imageUrl);
 	}
 
@@ -771,7 +790,7 @@ public class ListArticlesActivity extends Activity {
 	public void setListFilterOption(int option) {
 		listFilterOption = option;
 		Editor editor = settings.edit();
-		
+
 		editor.putInt(Constants.LIST_FILTER_OPTION, option);
 		editor.commit();
 	}

@@ -1,7 +1,5 @@
 package com.pixplicity.wallabag.activities;
 
-import com.pixplicity.wallabag.Utils;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences.Editor;
@@ -14,7 +12,9 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import fr.gaulupeau.apps.wallabag.R;
+
+import com.pixplicity.wallabag.R;
+import com.pixplicity.wallabag.Utils;
 
 public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
 	public static final int DYMAMIC = 0;
@@ -58,13 +58,14 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
 	
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState){
-		changed = savedInstanceState.getBoolean("Changed"); 
+		changed = savedInstanceState.getBoolean("Changed");
 	}
 	
 	@Override
 	public void finish() {
-	   if(changed)
-		   setResult(Utils.RESULT_CHANGE_THEME);
+	   if(changed) {
+		setResult(Utils.RESULT_CHANGE_THEME);
+	}
 	    super.finish();
 	}
 	
@@ -87,28 +88,29 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
 			}
 		});
 		
-		darkThemeCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {			
+		darkThemeCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if(isChecked)
+				if(isChecked) {
 					themeId = R.style.AppThemeBlack;
-				else
+				} else {
 					themeId = R.style.AppThemeWhite;
+				}
 				
 				changed = !changed;
 				Utils.restartActivity(LookAndFeelSettingsActivity.this);
 			}
 		});
 
-		//Font size		
+		//Font size
 //		View fontSizeLayout = findViewById(R.id.font_size_layout);
 		SeekBar fontBar = (SeekBar) findViewById(R.id.font_bar);
 		final TextView fontSizeText = (TextView) findViewById(R.id.font_size_text);
 		fontSizeText.setText(fontSize + "pt");
 		fontBar.setProgress(progressFromSize());
-		fontBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {						
+		fontBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {}						
+			public void onStopTrackingTouch(SeekBar seekBar) {}
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {}
 			
@@ -116,7 +118,7 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				fontSize = fontSizeFromProgress(progress);
-				fontSizeText.setText(fontSize + "pt");							
+				fontSizeText.setText(fontSize + "pt");
 			}
 		});
 
@@ -132,7 +134,7 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(LookAndFeelSettingsActivity.this);
 				String[] choices = new String[] {getString(fontStyleOptions[0]), getString(fontStyleOptions[1])};
-				builder.setSingleChoiceItems(choices, fontStyle, new DialogInterface.OnClickListener() {				
+				builder.setSingleChoiceItems(choices, fontStyle, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						fontStyle = which;
@@ -157,7 +159,7 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(LookAndFeelSettingsActivity.this);
 				String[] choices = new String[] {getStringAlign(0), getStringAlign(1), getStringAlign(2)};
-				builder.setSingleChoiceItems(choices, textAlign, new DialogInterface.OnClickListener() {				
+				builder.setSingleChoiceItems(choices, textAlign, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						textAlign = which;
@@ -182,7 +184,7 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(LookAndFeelSettingsActivity.this);
 				String[] choices = new String[] {getStringOrientation(0), getStringOrientation(1), getStringOrientation(2)};
-				builder.setSingleChoiceItems(choices, orientation, new DialogInterface.OnClickListener() {				
+				builder.setSingleChoiceItems(choices, orientation, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						orientation = which;

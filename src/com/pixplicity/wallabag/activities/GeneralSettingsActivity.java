@@ -4,10 +4,6 @@ import static com.pixplicity.wallabag.Helpers.PREFS_NAME;
 
 import java.io.File;
 
-import com.pixplicity.wallabag.Constants;
-import com.pixplicity.wallabag.Utils;
-import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -17,9 +13,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import fr.gaulupeau.apps.wallabag.R;
+import android.widget.TextView;
+
+import com.pixplicity.wallabag.Constants;
+import com.pixplicity.wallabag.R;
+import com.pixplicity.wallabag.Utils;
+import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
 
 public class GeneralSettingsActivity extends AbstractSettingsActivity {
 
@@ -35,6 +35,7 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
 	private int sortType;
 	private boolean willAlsoDeleteUserAccount;
 
+	@Override
 	protected void saveSettings() {
 		Editor editor = settings.edit();
 		
@@ -64,11 +65,12 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
 			public void onClick(View v) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(GeneralSettingsActivity.this);
 				String[] choices = new String[] {getStringSortType(0), getStringSortType(1), getStringSortType(2)};
-				builder.setSingleChoiceItems(choices, sortType, new DialogInterface.OnClickListener() {				
+				builder.setSingleChoiceItems(choices, sortType, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						if(sortType != which)
+						if(sortType != which) {
 							setResult(Constants.RESULT_LIST_SHOULD_CHANGE);
+						}
 						
 						sortType = which;
 						sortTypeView.setText(getStringSortType(which));
@@ -89,7 +91,7 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
 			
 			@Override
 			public void onClick(View v) {
-				wipeDB();				
+				wipeDB();
 			}
 		});
 	}
@@ -129,8 +131,9 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
 						
 						deleteFiles();
 						
-						if (willAlsoDeleteUserAccount)
+						if (willAlsoDeleteUserAccount) {
 							cleanUserInfo();
+						}
 						
 						database.close();
 						
@@ -169,8 +172,9 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
 	protected void deleteFiles() {
 		File filesDir = Utils.getSaveDir(this);
 
-		for (File file : filesDir.listFiles())
+		for (File file : filesDir.listFiles()) {
 			file.delete();
+		}
 	}
 	
 	private String getStringSortType(int which) {
