@@ -1,8 +1,12 @@
-package fr.gaulupeau.apps.settings;
+package com.pixplicity.wallabag.settings;
 
-import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.wallabag.Helpers.PREFS_NAME;
 
 import java.io.File;
+
+import com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper;
+import com.pixplicity.wallabag.wallabag.Constants;
+import com.pixplicity.wallabag.wallabag.Utils;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,10 +19,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper;
-import fr.gaulupeau.apps.wallabag.Constants;
 import fr.gaulupeau.apps.wallabag.R;
-import fr.gaulupeau.apps.wallabag.Utils;
 
 public class SettingsGeneral extends SettingsBase {
 

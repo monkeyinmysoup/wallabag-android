@@ -1,15 +1,17 @@
-package fr.gaulupeau.apps.settings;
+package com.pixplicity.wallabag.settings;
 
-import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.wallabag.Helpers.PREFS_NAME;
+
+import com.pixplicity.wallabag.wallabag.Constants;
+import com.pixplicity.wallabag.wallabag.Utils;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
-import fr.gaulupeau.apps.wallabag.Constants;
 import fr.gaulupeau.apps.wallabag.R;
-import fr.gaulupeau.apps.wallabag.Utils;
 
 public abstract class SettingsBase extends Activity {
 	protected SharedPreferences settings;

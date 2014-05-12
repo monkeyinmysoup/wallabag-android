@@ -1,4 +1,6 @@
-package fr.gaulupeau.apps.settings;
+package com.pixplicity.wallabag.settings;
+
+import com.pixplicity.wallabag.wallabag.Utils;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,7 +15,6 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import fr.gaulupeau.apps.wallabag.R;
-import fr.gaulupeau.apps.wallabag.Utils;
 
 public class SettingsLookAndFeel extends SettingsBase {
 	public static final int DYMAMIC = 0;

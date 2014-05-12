@@ -1,16 +1,16 @@
-package fr.gaulupeau.apps.wallabag;
+package com.pixplicity.wallabag.wallabag;
 
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_SUMMARY;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
-import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_SUMMARY;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.FAV;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
+import static com.pixplicity.wallabag.wallabag.Helpers.PREFS_NAME;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,6 +44,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.pixplicity.wallabag.settings.Settings;
+import com.pixplicity.wallabag.settings.SettingsAccount;
+import com.pixplicity.wallabag.settings.SettingsGeneral;
+import com.pixplicity.wallabag.settings.SettingsLookAndFeel;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentValues;
@@ -73,10 +78,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import fr.gaulupeau.apps.settings.Settings;
-import fr.gaulupeau.apps.settings.SettingsAccount;
-import fr.gaulupeau.apps.settings.SettingsGeneral;
-import fr.gaulupeau.apps.settings.SettingsLookAndFeel;
+import fr.gaulupeau.apps.wallabag.R;
 
 public class ListArticles extends Activity {
 	private ActionBar actionBar;

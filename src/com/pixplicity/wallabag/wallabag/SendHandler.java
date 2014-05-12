@@ -1,8 +1,10 @@
-package fr.gaulupeau.apps.wallabag;
+package com.pixplicity.wallabag.wallabag;
 
-import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.wallabag.Helpers.PREFS_NAME;
 
 import java.io.UnsupportedEncodingException;
+
+import fr.gaulupeau.apps.wallabag.R;
 
 import android.app.Activity;
 import android.content.Context;

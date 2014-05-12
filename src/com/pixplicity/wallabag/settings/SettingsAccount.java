@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.settings;
+package com.pixplicity.wallabag.settings;
 
 import android.content.SharedPreferences.Editor;
 import android.view.View;

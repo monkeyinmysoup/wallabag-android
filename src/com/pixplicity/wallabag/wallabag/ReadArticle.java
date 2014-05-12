@@ -1,19 +1,21 @@
-package fr.gaulupeau.apps.wallabag;
+package com.pixplicity.wallabag.wallabag;
 
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_READAT;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
-import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_READAT;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.FAV;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
+import static com.pixplicity.wallabag.wallabag.Helpers.PREFS_NAME;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
+import com.pixplicity.wallabag.settings.SettingsLookAndFeel;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -42,7 +44,7 @@ import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
-import fr.gaulupeau.apps.settings.SettingsLookAndFeel;
+import fr.gaulupeau.apps.wallabag.R;
 
 public class ReadArticle extends Activity {
 	private TextView txtTitle;

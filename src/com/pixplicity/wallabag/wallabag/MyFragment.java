@@ -1,5 +1,6 @@
-package fr.gaulupeau.apps.wallabag;
+package com.pixplicity.wallabag.wallabag;
 
+import fr.gaulupeau.apps.wallabag.R;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

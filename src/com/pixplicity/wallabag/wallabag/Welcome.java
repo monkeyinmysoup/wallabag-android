@@ -1,5 +1,6 @@
-package fr.gaulupeau.apps.wallabag;
+package com.pixplicity.wallabag.wallabag;
 
+import fr.gaulupeau.apps.wallabag.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;

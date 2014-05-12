@@ -1,6 +1,7 @@
-package fr.gaulupeau.apps.settings;
+package com.pixplicity.wallabag.settings;
 
-import fr.gaulupeau.apps.wallabag.Constants;
+import com.pixplicity.wallabag.wallabag.Constants;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;

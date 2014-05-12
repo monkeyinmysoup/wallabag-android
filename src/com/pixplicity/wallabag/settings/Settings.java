@@ -1,7 +1,8 @@
-package fr.gaulupeau.apps.settings;
+package com.pixplicity.wallabag.settings;
+
+import com.pixplicity.wallabag.wallabag.Utils;
 
 import fr.gaulupeau.apps.wallabag.R;
-import fr.gaulupeau.apps.wallabag.Utils;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.View.OnClickListener;

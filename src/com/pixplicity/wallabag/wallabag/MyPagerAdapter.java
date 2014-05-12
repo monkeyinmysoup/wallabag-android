@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.wallabag;
+package com.pixplicity.wallabag.wallabag;
 
 import android.app.Fragment;
 import android.app.FragmentManager;

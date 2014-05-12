@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.wallabag;
+package com.pixplicity.wallabag.wallabag;
 
 /*
  * Copyright (C) 2011 The Android Open Source Project

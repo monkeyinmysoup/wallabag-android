@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.settings;
+package com.pixplicity.wallabag.settings;
 
 import java.util.ArrayList;
 import java.util.List;

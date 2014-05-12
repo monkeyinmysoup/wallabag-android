@@ -1,11 +1,13 @@
-package fr.gaulupeau.apps.wallabag;
+package com.pixplicity.wallabag.wallabag;
 
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.FAV;
+import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
 
 import java.io.File;
+
+import com.pixplicity.wallabag.settings.SettingsGeneral;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -15,7 +17,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.widget.Toast;
-import fr.gaulupeau.apps.settings.SettingsGeneral;
+import fr.gaulupeau.apps.wallabag.R;
 
 public class Utils {
 
