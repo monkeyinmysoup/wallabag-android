@@ -2,6 +2,7 @@
 .classpath
 .project
 bin/
+bin/*
 gen/
 *.dex
 *.ap_
