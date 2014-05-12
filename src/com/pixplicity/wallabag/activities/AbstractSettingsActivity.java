@@ -1,9 +1,9 @@
-package com.pixplicity.wallabag.settings;
+package com.pixplicity.wallabag.activities;
 
-import static com.pixplicity.wallabag.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.Helpers.PREFS_NAME;
 
-import com.pixplicity.wallabag.wallabag.Constants;
-import com.pixplicity.wallabag.wallabag.Utils;
+import com.pixplicity.wallabag.Constants;
+import com.pixplicity.wallabag.Utils;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import fr.gaulupeau.apps.wallabag.R;
 
-public abstract class SettingsBase extends Activity {
+public abstract class AbstractSettingsActivity extends Activity {
 	protected SharedPreferences settings;
 	protected ActionBar actionBar;
 	
@@ -46,7 +46,7 @@ public abstract class SettingsBase extends Activity {
 	}
 	
 	protected void getSettings(){
-		themeId = settings.getInt(SettingsLookAndFeel.DARK_THEME, R.style.AppThemeWhite);
+		themeId = settings.getInt(LookAndFeelSettingsActivity.DARK_THEME, R.style.AppThemeWhite);
 	}
 	
 	abstract protected void saveSettings();

@@ -1,11 +1,11 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag.db;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import static com.pixplicity.wallabag.wallabag.Helpers.PREFS_NAME;
-import static com.pixplicity.wallabag.wallabag.Helpers.zeroUpdate;
+import static com.pixplicity.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.Helpers.zeroUpdate;
 
 
 public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {

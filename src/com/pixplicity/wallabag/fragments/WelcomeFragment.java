@@ -1,4 +1,4 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag.fragments;
 
 import fr.gaulupeau.apps.wallabag.R;
 import android.app.Fragment;
@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MyFragment extends Fragment{
+public class WelcomeFragment extends Fragment{
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

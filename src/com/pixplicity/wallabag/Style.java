@@ -1,4 +1,4 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag;
 
 public abstract class Style {
 	public static final int SANS = 0;

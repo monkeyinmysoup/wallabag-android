@@ -1,4 +1,4 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag.ui;
 
 public interface OnViewScrollListener {
 	

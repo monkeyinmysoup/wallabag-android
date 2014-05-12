@@ -1,21 +1,27 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag.activities;
 
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_READAT;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.FAV;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
-import static com.pixplicity.wallabag.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_READAT;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_URL;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import com.pixplicity.wallabag.settings.SettingsLookAndFeel;
+
+import com.pixplicity.wallabag.Constants;
+import com.pixplicity.wallabag.Style;
+import com.pixplicity.wallabag.Utils;
+import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
+import com.pixplicity.wallabag.ui.OnViewScrollListener;
+import com.pixplicity.wallabag.ui.ResponsiveScrollView;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -46,12 +52,12 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import fr.gaulupeau.apps.wallabag.R;
 
-public class ReadArticle extends Activity {
+public class ReadArticleActivity extends Activity {
 	private TextView txtTitle;
 	private TextView txtAuthor;
 	private SQLiteDatabase database;
 	private String id = "";
-	private MyScrollView view;
+	private ResponsiveScrollView view;
 	private WebView contentWebView;
 	private SharedPreferences preferences;
 
@@ -106,7 +112,7 @@ public class ReadArticle extends Activity {
 		
 		txtTitle = (TextView) findViewById(R.id.article_title_text);
 		txtTitle.setText(ac.getString(2));
-		view = (MyScrollView) findViewById(R.id.scroll);
+		view = (ResponsiveScrollView) findViewById(R.id.scroll);
 		contentWebView = (WebView) findViewById(R.id.webContent);
 		
 		WebViewClient mWebClient = new WebViewClient(){
@@ -117,7 +123,7 @@ public class ReadArticle extends Activity {
 	        	intent.setData(Uri.parse(url));
 	        	
 	        	
-	        	Intent bagItIntent = new Intent(ReadArticle.this, SendHandler.class);
+	        	Intent bagItIntent = new Intent(ReadArticleActivity.this, SendHandlerActivity.class);
 	        	
 	        	bagItIntent.setAction(Intent.ACTION_SEND);
 	        	bagItIntent.setType("text/plain");
@@ -141,7 +147,7 @@ public class ReadArticle extends Activity {
 
 	    			@Override
 	    			public void run() {
-	    				ReadArticle.this.view.scrollTo(0, yPositionReadAt);
+	    				ReadArticleActivity.this.view.scrollTo(0, yPositionReadAt);
 	    			}
 	    		}, 500);
 	        }
@@ -285,7 +291,7 @@ public class ReadArticle extends Activity {
 			return true;
 		case R.id.settings:
 			startActivityForResult(new Intent(getBaseContext(),
-					SettingsLookAndFeel.class), this.hashCode());
+					LookAndFeelSettingsActivity.class), this.hashCode());
 			return true;
 		case R.id.share:
 			shareUrl();
@@ -297,21 +303,21 @@ public class ReadArticle extends Activity {
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	private void getSettings() {
-		fontSize = preferences.getInt(SettingsLookAndFeel.FONT_SIZE, 16);
+		fontSize = preferences.getInt(LookAndFeelSettingsActivity.FONT_SIZE, 16);
 
-		canGoImmersive = preferences.getBoolean(SettingsLookAndFeel.IMMERSIVE, true);
+		canGoImmersive = preferences.getBoolean(LookAndFeelSettingsActivity.IMMERSIVE, true);
 		
-		keepScreenOn = preferences.getBoolean(SettingsLookAndFeel.KEEP_SCREEN_ON, false);
+		keepScreenOn = preferences.getBoolean(LookAndFeelSettingsActivity.KEEP_SCREEN_ON, false);
 		
-		fontStyle = preferences.getInt(SettingsLookAndFeel.FONT_STYLE, 0);
+		fontStyle = preferences.getInt(LookAndFeelSettingsActivity.FONT_STYLE, 0);
 
-		textAlign = preferences.getInt(SettingsLookAndFeel.ALIGN, 0);
+		textAlign = preferences.getInt(LookAndFeelSettingsActivity.ALIGN, 0);
 		
 		int screenOrientation = preferences.getInt(
-				SettingsLookAndFeel.ORIENTATION, 0);
+				LookAndFeelSettingsActivity.ORIENTATION, 0);
 
 		switch (screenOrientation) {
-		case SettingsLookAndFeel.PORTRAIT:
+		case LookAndFeelSettingsActivity.PORTRAIT:
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
 			} else {
@@ -319,7 +325,7 @@ public class ReadArticle extends Activity {
 			}
 			
 			break;
-		case SettingsLookAndFeel.LANDSCAPE:
+		case LookAndFeelSettingsActivity.LANDSCAPE:
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 			} else {
@@ -327,7 +333,7 @@ public class ReadArticle extends Activity {
 			}
 			
 			break;
-		case SettingsLookAndFeel.DYMAMIC:
+		case LookAndFeelSettingsActivity.DYMAMIC:
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
 			
 			break;
@@ -335,7 +341,7 @@ public class ReadArticle extends Activity {
 			break;
 		}
 		
-		themeId = preferences.getInt(SettingsLookAndFeel.DARK_THEME, R.style.AppThemeWhite);
+		themeId = preferences.getInt(LookAndFeelSettingsActivity.DARK_THEME, R.style.AppThemeWhite);
 	}
 
 	private void shareUrl() {

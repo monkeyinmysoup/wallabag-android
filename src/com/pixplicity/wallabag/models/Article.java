@@ -1,4 +1,4 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag.models;
 
 public class Article {
     public String url;

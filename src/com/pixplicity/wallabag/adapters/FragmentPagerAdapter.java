@@ -1,4 +1,4 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag.adapters;
 
 /*
  * Copyright (C) 2011 The Android Open Source Project

@@ -1,4 +1,4 @@
-package com.pixplicity.wallabag.settings;
+package com.pixplicity.wallabag.adapters;
 
 import java.util.ArrayList;
 import java.util.List;

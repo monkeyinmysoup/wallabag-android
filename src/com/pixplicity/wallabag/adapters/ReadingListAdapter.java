@@ -1,6 +1,8 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag.adapters;
 
 import java.util.List;
+
+import com.pixplicity.wallabag.models.Article;
 
 import fr.gaulupeau.apps.wallabag.R;
 

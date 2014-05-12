@@ -1,16 +1,16 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag.activities;
 
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_SUMMARY;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.FAV;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
-import static com.pixplicity.wallabag.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_SUMMARY;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_URL;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,10 +44,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.pixplicity.wallabag.settings.Settings;
-import com.pixplicity.wallabag.settings.SettingsAccount;
-import com.pixplicity.wallabag.settings.SettingsGeneral;
-import com.pixplicity.wallabag.settings.SettingsLookAndFeel;
+import com.pixplicity.wallabag.Constants;
+import com.pixplicity.wallabag.Utils;
+import com.pixplicity.wallabag.adapters.DrawerListAdapter;
+import com.pixplicity.wallabag.adapters.ReadingListAdapter;
+import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
+import com.pixplicity.wallabag.models.Article;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -80,7 +82,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import fr.gaulupeau.apps.wallabag.R;
 
-public class ListArticles extends Activity {
+public class ListArticlesActivity extends Activity {
 	private ActionBar actionBar;
 
 	private static int maxChars = 250;
@@ -118,7 +120,7 @@ public class ListArticles extends Activity {
 		setContentView(R.layout.list);
 		
 //		if(wallabagUrl.contains("pireddss")){
-//			startActivity(new Intent(getBaseContext(), Welcome.class));
+//			startActivity(new Intent(getBaseContext(), WelcomeActivity.class));
 //		}
 		
 		//Pull to refresh
@@ -237,7 +239,7 @@ public class ListArticles extends Activity {
 			return true;
 		case R.id.settings:
 			startActivityForResult(
-					new Intent(getBaseContext(), Settings.class),
+					new Intent(getBaseContext(), SettingsActivity.class),
 					Constants.REQUEST_SETTINGS);
 		default:
 			return super.onOptionsItemSelected(item);
@@ -251,11 +253,11 @@ public class ListArticles extends Activity {
 
 	private void getSettings() {
 		settings = getSharedPreferences(PREFS_NAME, 0);
-		wallabagUrl = settings.getString(SettingsAccount.SERVER_URL, "https://");
-		apiUsername = settings.getString(SettingsAccount.USER_ID, "");
-		apiToken = settings.getString(SettingsAccount.TOKEN, "");
+		wallabagUrl = settings.getString(AccountSettingsActivity.SERVER_URL, "https://");
+		apiUsername = settings.getString(AccountSettingsActivity.USER_ID, "");
+		apiToken = settings.getString(AccountSettingsActivity.TOKEN, "");
 
-		int newThemeId = settings.getInt(SettingsLookAndFeel.DARK_THEME,
+		int newThemeId = settings.getInt(LookAndFeelSettingsActivity.DARK_THEME,
 				R.style.AppThemeWhite);
 		if (themeId != 0 && newThemeId != themeId) {
 			themeId = newThemeId;
@@ -264,8 +266,8 @@ public class ListArticles extends Activity {
 			themeId = newThemeId;
 		}
 
-		sortType = settings.getInt(SettingsGeneral.SORT_TYPE,
-				SettingsGeneral.NEWER);
+		sortType = settings.getInt(GeneralSettingsActivity.SORT_TYPE,
+				GeneralSettingsActivity.NEWER);
 		
 		listFilterOption = settings.getInt(Constants.LIST_FILTER_OPTION, Constants.ALL);
 	}
@@ -518,11 +520,11 @@ public class ListArticles extends Activity {
 				int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0",
 						null, null, null, null).getCount();
 				if (news == 0) {
-					Utils.showToast(ListArticles.this, getString(R.string.no_unread_articles));
+					Utils.showToast(ListArticlesActivity.this, getString(R.string.no_unread_articles));
 				} else if (news == 1) {
-					Utils.showToast(ListArticles.this, getString(R.string.one_unread_article));
+					Utils.showToast(ListArticlesActivity.this, getString(R.string.one_unread_article));
 				} else {
-					Utils.showToast(ListArticles.this, String.format(
+					Utils.showToast(ListArticlesActivity.this, String.format(
 							getString(R.string.many_unread_articles), news));
 				}
 			}
@@ -539,7 +541,7 @@ public class ListArticles extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Intent i = new Intent(getBaseContext(), ReadArticle.class);
+				Intent i = new Intent(getBaseContext(), ReadArticleActivity.class);
 				i.putExtra("id", ((Article)adapter.getItem(position)).id);
 				startActivityForResult(i, Constants.REQUEST_READ_ARTICLE);
 			}

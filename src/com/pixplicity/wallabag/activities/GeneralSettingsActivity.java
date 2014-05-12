@@ -1,12 +1,12 @@
-package com.pixplicity.wallabag.settings;
+package com.pixplicity.wallabag.activities;
 
-import static com.pixplicity.wallabag.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.Helpers.PREFS_NAME;
 
 import java.io.File;
 
-import com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper;
-import com.pixplicity.wallabag.wallabag.Constants;
-import com.pixplicity.wallabag.wallabag.Utils;
+import com.pixplicity.wallabag.Constants;
+import com.pixplicity.wallabag.Utils;
+import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import fr.gaulupeau.apps.wallabag.R;
 
-public class SettingsGeneral extends SettingsBase {
+public class GeneralSettingsActivity extends AbstractSettingsActivity {
 
 	private static final int[] sortTypeOptions = new int[] {R.string.newer, R.string.older, R.string.alphabetical};
 	
@@ -62,7 +62,7 @@ public class SettingsGeneral extends SettingsBase {
 			
 			@Override
 			public void onClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(SettingsGeneral.this);
+				AlertDialog.Builder builder = new AlertDialog.Builder(GeneralSettingsActivity.this);
 				String[] choices = new String[] {getStringSortType(0), getStringSortType(1), getStringSortType(2)};
 				builder.setSingleChoiceItems(choices, sortType, new DialogInterface.OnClickListener() {				
 					@Override
@@ -122,7 +122,7 @@ public class SettingsGeneral extends SettingsBase {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(
-								SettingsGeneral.this);
+								GeneralSettingsActivity.this);
 						SQLiteDatabase database = helper.getWritableDatabase();
 						
 						helper.truncateTables(database);

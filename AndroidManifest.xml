@@ -20,16 +20,16 @@
         android:logo="@drawable/actionbar" >
         
         <activity
-            android:name="com.pixplicity.wallabag.wallabag.Welcome"
+            android:name="com.pixplicity.wallabag.activities.WelcomeActivity"
             android:label="@string/app_name">
         </activity>
         
         <activity
-            android:name="com.pixplicity.wallabag.wallabag.ReadArticle"
+            android:name="com.pixplicity.wallabag.activities.ReadArticleActivity"
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name="com.pixplicity.wallabag.wallabag.ListArticles"
+            android:name="com.pixplicity.wallabag.activities.ListArticlesActivity"
             android:label="@string/app_name">
             <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.pixplicity.wallabag.wallabag.SendHandler"
+            android:name="com.pixplicity.wallabag.activities.SendHandlerActivity"
             android:label="@string/bag_it">
             
             <intent-filter android:label="@string/bag_it" >
@@ -51,21 +51,21 @@
             
         </activity>
         <activity
-            android:name="com.pixplicity.wallabag.settings.Settings"
+            android:name="com.pixplicity.wallabag.activities.SettingsActivity"
             android:label="@string/menuSettings">
         </activity>
         <activity
-            android:name="com.pixplicity.wallabag.settings.SettingsAccount"
+            android:name="com.pixplicity.wallabag.activities.AccountSettingsActivity"
             android:label="@string/account"
             android:theme="@style/AppThemeWhite" >
         </activity>
         <activity
-            android:name="com.pixplicity.wallabag.settings.SettingsLookAndFeel"
+            android:name="com.pixplicity.wallabag.activities.LookAndFeelSettingsActivity"
             android:label="@string/look_and_feel">
         </activity>
         
         <activity
-            android:name="com.pixplicity.wallabag.settings.SettingsGeneral"
+            android:name="com.pixplicity.wallabag.activities.GeneralSettingsActivity"
             android:label="@string/general">
         </activity>
     </application>

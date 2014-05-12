@@ -1,6 +1,6 @@
-package com.pixplicity.wallabag.settings;
+package com.pixplicity.wallabag.activities;
 
-import com.pixplicity.wallabag.wallabag.Utils;
+import com.pixplicity.wallabag.Utils;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,7 +16,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import fr.gaulupeau.apps.wallabag.R;
 
-public class SettingsLookAndFeel extends SettingsBase {
+public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
 	public static final int DYMAMIC = 0;
 	public static final int LANDSCAPE = 1;
 	public static final int PORTRAIT = 2;
@@ -96,7 +96,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 					themeId = R.style.AppThemeWhite;
 				
 				changed = !changed;
-				Utils.restartActivity(SettingsLookAndFeel.this);
+				Utils.restartActivity(LookAndFeelSettingsActivity.this);
 			}
 		});
 
@@ -130,7 +130,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 			
 			@Override
 			public void onClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(SettingsLookAndFeel.this);
+				AlertDialog.Builder builder = new AlertDialog.Builder(LookAndFeelSettingsActivity.this);
 				String[] choices = new String[] {getString(fontStyleOptions[0]), getString(fontStyleOptions[1])};
 				builder.setSingleChoiceItems(choices, fontStyle, new DialogInterface.OnClickListener() {				
 					@Override
@@ -155,7 +155,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 		textAlignLayout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(SettingsLookAndFeel.this);
+				AlertDialog.Builder builder = new AlertDialog.Builder(LookAndFeelSettingsActivity.this);
 				String[] choices = new String[] {getStringAlign(0), getStringAlign(1), getStringAlign(2)};
 				builder.setSingleChoiceItems(choices, textAlign, new DialogInterface.OnClickListener() {				
 					@Override
@@ -180,7 +180,7 @@ public class SettingsLookAndFeel extends SettingsBase {
 			
 			@Override
 			public void onClick(View v) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(SettingsLookAndFeel.this);
+				AlertDialog.Builder builder = new AlertDialog.Builder(LookAndFeelSettingsActivity.this);
 				String[] choices = new String[] {getStringOrientation(0), getStringOrientation(1), getStringOrientation(2)};
 				builder.setSingleChoiceItems(choices, orientation, new DialogInterface.OnClickListener() {				
 					@Override

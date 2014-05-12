@@ -1,6 +1,6 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag.activities;
 
-import static com.pixplicity.wallabag.wallabag.Helpers.PREFS_NAME;
+import static com.pixplicity.wallabag.Helpers.PREFS_NAME;
 
 import java.io.UnsupportedEncodingException;
 
@@ -18,7 +18,7 @@ import android.provider.Browser;
 import android.util.Base64;
 import android.widget.Toast;
 
-public class SendHandler extends Activity {
+public class SendHandlerActivity extends Activity {
 	SharedPreferences settings;
 	static String pocheUrl;
 	
@@ -80,7 +80,7 @@ public class SendHandler extends Activity {
 	    		@Override
 				public void run()
 	    		{
-	    			Toast.makeText(SendHandler.this, toast, Toast.LENGTH_SHORT).show();
+	    			Toast.makeText(SendHandlerActivity.this, toast, Toast.LENGTH_SHORT).show();
 	    		}
 	    	});
 	    }

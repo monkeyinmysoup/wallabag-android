@@ -1,11 +1,13 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag.activities;
+
+import com.pixplicity.wallabag.adapters.FragmentAdapter;
 
 import fr.gaulupeau.apps.wallabag.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
-public class Welcome extends Activity {
+public class WelcomeActivity extends Activity {
 
 	
 	@Override
@@ -15,7 +17,7 @@ public class Welcome extends Activity {
 		
 		ViewPager pager = (ViewPager) findViewById(R.id.view_pager);
 		
-		MyPagerAdapter adapter = new MyPagerAdapter(getFragmentManager());
+		FragmentAdapter adapter = new FragmentAdapter(getFragmentManager());
 		
 		pager.setAdapter(adapter);
 		

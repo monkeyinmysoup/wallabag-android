@@ -1,6 +1,8 @@
-package com.pixplicity.wallabag.settings;
+package com.pixplicity.wallabag.activities;
 
-import com.pixplicity.wallabag.wallabag.Utils;
+
+import com.pixplicity.wallabag.Utils;
+import com.pixplicity.wallabag.ui.SettingsOnClickListener;
 
 import fr.gaulupeau.apps.wallabag.R;
 import android.content.Intent;
@@ -8,7 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-public class Settings extends SettingsBase {
+public class SettingsActivity extends AbstractSettingsActivity {
 
 	private static final int[] images = new int[] {
 			R.drawable.ic_action_settings,
@@ -30,8 +32,8 @@ public class Settings extends SettingsBase {
 	
 
 	private static final Class<?>[] activities = new Class[] {
-			SettingsGeneral.class, SettingsLookAndFeel.class,
-			SettingsAccount.class, SettingsAccount.class };
+			GeneralSettingsActivity.class, LookAndFeelSettingsActivity.class,
+			AccountSettingsActivity.class, AccountSettingsActivity.class };
 
 	@Override
 	protected void createUI() {

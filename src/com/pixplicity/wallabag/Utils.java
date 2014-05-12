@@ -1,13 +1,11 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag;
 
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.FAV;
-import static com.pixplicity.wallabag.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
 
 import java.io.File;
-
-import com.pixplicity.wallabag.settings.SettingsGeneral;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -17,6 +15,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.widget.Toast;
+
+import com.pixplicity.wallabag.activities.GeneralSettingsActivity;
+
 import fr.gaulupeau.apps.wallabag.R;
 
 public class Utils {
@@ -67,7 +68,9 @@ public class Utils {
 	}
 	
 	public static final void showToast(Activity activity, final String msg, int length) {
-		Toast.makeText(activity, msg, length).show();
+		if (!activity.isFinishing()) {
+			Toast.makeText(activity, msg, length).show();
+		}
 	}
 	
 	public static final String getFilter(int filterOption){
@@ -91,13 +94,13 @@ public class Utils {
 	
 	public static final String getOrderBy(int sortType){
 		switch (sortType) {
-		case SettingsGeneral.NEWER:
+		case GeneralSettingsActivity.NEWER:
 			return MY_ID + " DESC";
 
-		case SettingsGeneral.OLDER:
+		case GeneralSettingsActivity.OLDER:
 			return MY_ID;
 
-		case SettingsGeneral.ALPHA:
+		case GeneralSettingsActivity.ALPHA:
 			return ARTICLE_TITLE + " COLLATE NOCASE";
 
 		default:

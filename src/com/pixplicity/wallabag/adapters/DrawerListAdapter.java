@@ -1,4 +1,7 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag.adapters;
+
+import com.pixplicity.wallabag.Constants;
+import com.pixplicity.wallabag.activities.ListArticlesActivity;
 
 import fr.gaulupeau.apps.wallabag.R;
 import android.content.Context;
@@ -13,10 +16,10 @@ import android.widget.TextView;
 
 public class DrawerListAdapter extends BaseAdapter {
 	
-	private ListArticles listArticles;
+	private ListArticlesActivity listArticles;
 	private int choosen;
 
-	public DrawerListAdapter(ListArticles listArticles, int choosen){
+	public DrawerListAdapter(ListArticlesActivity listArticles, int choosen){
 		this.listArticles = listArticles;
 		this.choosen = choosen;
 	}

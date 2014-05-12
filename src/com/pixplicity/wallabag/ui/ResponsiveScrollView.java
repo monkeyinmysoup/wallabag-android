@@ -1,22 +1,23 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag.ui;
+
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ScrollView;
 
-public class MyScrollView extends ScrollView {
+public class ResponsiveScrollView extends ScrollView {
 
 	private OnViewScrollListener onScrollViewListener;
 
-	public MyScrollView(Context context) {
+	public ResponsiveScrollView(Context context) {
 		super(context);
 	}
 	
-	public MyScrollView(Context context, AttributeSet attrs, int defStyle) {
+	public ResponsiveScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 	
-	public MyScrollView(Context context, AttributeSet attrs) {
+	public ResponsiveScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 	

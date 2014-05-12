@@ -1,4 +1,4 @@
-package com.pixplicity.wallabag.wallabag;
+package com.pixplicity.wallabag;
 
 import java.io.BufferedReader;
 import java.io.IOException;

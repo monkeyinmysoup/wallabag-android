@@ -1,6 +1,6 @@
-package com.pixplicity.wallabag.settings;
+package com.pixplicity.wallabag.ui;
 
-import com.pixplicity.wallabag.wallabag.Constants;
+import com.pixplicity.wallabag.Constants;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -1,4 +1,5 @@
-package com.pixplicity.wallabag.settings;
+package com.pixplicity.wallabag.activities;
+
 
 import android.content.SharedPreferences.Editor;
 import android.view.View;
@@ -7,7 +8,7 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import fr.gaulupeau.apps.wallabag.R;
 
-public class SettingsAccount extends SettingsBase {
+public class AccountSettingsActivity extends AbstractSettingsActivity {
 
 	public static final String SERVER_URL = "pocheUrl";
 	public static final String USER_ID = "APIUsername";
