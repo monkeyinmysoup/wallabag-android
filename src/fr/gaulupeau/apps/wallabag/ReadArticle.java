@@ -3,10 +3,10 @@ package fr.gaulupeau.apps.wallabag;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARCHIVE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
+import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_READAT;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.ARTICLE_READAT;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.FAV;
 import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
@@ -16,6 +16,8 @@ import java.net.URL;
 import java.util.List;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -32,21 +34,17 @@ import android.os.Handler;
 import android.support.v4.text.BidiFormatter;
 import android.text.Html;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
-
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.Window;
-
 import fr.gaulupeau.apps.settings.SettingsLookAndFeel;
 
-public class ReadArticle extends SherlockActivity {
+public class ReadArticle extends Activity {
 	private TextView txtTitle;
 	private TextView txtAuthor;
 	private SQLiteDatabase database;
@@ -72,6 +70,7 @@ public class ReadArticle extends SherlockActivity {
 	private int fontSize;
 	private int yPositionReadAt;
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
@@ -83,7 +82,7 @@ public class ReadArticle extends SherlockActivity {
 		
 		setContentView(R.layout.article);
 		
-		actionBar = getSupportActionBar();		
+		actionBar = getActionBar();
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
@@ -130,7 +129,7 @@ public class ReadArticle extends SherlockActivity {
 	       }
 	      
 	        @Override
-	        public void onPageFinished(WebView view, String url) {	
+	        public void onPageFinished(WebView view, String url) {
 	        	super.onPageFinished(view, url);
 	        	
 	        	System.out.println("finished");
@@ -174,11 +173,13 @@ public class ReadArticle extends SherlockActivity {
 			@Override
 			public void onScrollChanged(int x, int y, int oldx, int oldy) {
 
-				if (actionBar.isShowing() && goingDown > 100)
+				if (actionBar.isShowing() && goingDown > 100) {
 					actionBar.hide();
+				}
 
-				if (!actionBar.isShowing() && goingUp > 100)
+				if (!actionBar.isShowing() && goingUp > 100) {
 					actionBar.show();
+				}
 
 				if (y > oldy) {
 					goingDown += y - oldy;
@@ -216,8 +217,9 @@ public class ReadArticle extends SherlockActivity {
 	
 	@Override
 	protected void onRestoreInstanceState (Bundle savedInstanceState){
-		if(savedInstanceState != null && savedInstanceState.containsKey(ARTICLE_READAT))
+		if(savedInstanceState != null && savedInstanceState.containsKey(ARTICLE_READAT)) {
 			yPositionReadAt = savedInstanceState.getInt(ARTICLE_READAT);
+		}
 		
 		super.onRestoreInstanceState(savedInstanceState);
 	}
@@ -246,18 +248,19 @@ public class ReadArticle extends SherlockActivity {
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	private void goImmersive() {
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			if (canGoImmersive) {
 				getWindow().getDecorView().setSystemUiVisibility(
 						View.SYSTEM_UI_FLAG_LOW_PROFILE);
-			}
-			else
+			} else {
 				getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+			}
+		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.option_read, menu);
 		this.menu = menu;
 		setReadStateIcon();
@@ -307,17 +310,19 @@ public class ReadArticle extends SherlockActivity {
 
 		switch (screenOrientation) {
 		case SettingsLookAndFeel.PORTRAIT:
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
-			else
+			} else {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			}
 			
 			break;
 		case SettingsLookAndFeel.LANDSCAPE:
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-			else
+			} else {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			}
 			
 			break;
 		case SettingsLookAndFeel.DYMAMIC:
@@ -373,13 +378,14 @@ public class ReadArticle extends SherlockActivity {
 		
 		if(Utils.hasToggledRead(currentResult)){
 			int value = isRead ? 1 : 0;
-			values.put(ARCHIVE, value);			
+			values.put(ARCHIVE, value);
 		}
 		
 		values.put(ARTICLE_READAT, yPositionReadAt);
 		
-		if(values.size() != 0)
+		if(values.size() != 0) {
 			database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
+		}
 	
 		super.finish();
 	}
@@ -388,17 +394,19 @@ public class ReadArticle extends SherlockActivity {
 		MenuItem item = menu.findItem(R.id.read);
 
 		if (isRead) {
-			if(Utils.isDarkTheme(themeId))
+			if(Utils.isDarkTheme(themeId)) {
 				item.setIcon(R.drawable.ic_action_undo_dark);
-			else
+			} else {
 				item.setIcon(R.drawable.ic_action_undo);
+			}
 			
 			item.setTitle(getString(R.string.unread_title));
 		} else {
-			if(Utils.isDarkTheme(themeId))
+			if(Utils.isDarkTheme(themeId)) {
 				item.setIcon(R.drawable.ic_action_accept_dark);
-			else
+			} else {
 				item.setIcon(R.drawable.ic_action_accept);
+			}
 			item.setTitle(getString(R.string.read_title));
 		}
 	}
@@ -406,25 +414,28 @@ public class ReadArticle extends SherlockActivity {
 	private void setFavStateIcon() {
 		MenuItem item = menu.findItem(R.id.fav);
 
-		if (isFav)
-			if(Utils.isDarkTheme(themeId))
+		if (isFav) {
+			if(Utils.isDarkTheme(themeId)) {
 				item.setIcon(R.drawable.ic_action_important_dark);
-			else
+			} else {
 				item.setIcon(R.drawable.ic_action_important);
-		else
-			if(Utils.isDarkTheme(themeId))
+			}
+		} else
+			if(Utils.isDarkTheme(themeId)) {
 				item.setIcon(R.drawable.ic_action_not_important_dark);
-			else
+			} else {
 				item.setIcon(R.drawable.ic_action_not_important);
+			}
 	}
 
 	private void setShareIcon(){
 		MenuItem item = menu.findItem(R.id.share);
 		
-		if(Utils.isDarkTheme(themeId))
+		if(Utils.isDarkTheme(themeId)) {
 			item.setIcon(R.drawable.ic_action_share_dark);
-		else
+		} else {
 			item.setIcon(R.drawable.ic_action_share);
+		}
 	}
 	
 	private void findOutIfIsRead(int read) {

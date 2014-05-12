@@ -8,33 +8,27 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="Theme.Sherlock.Light"></style>
+    <style name="AppBaseTheme" parent="@android:style/Theme.Holo"></style>
 
-    <style name="MyActionBarBlackStyle" parent="@style/Widget.Sherlock.ActionBar.Solid">
+    <style name="MyActionBarBlackStyle" parent="@android:style/Widget.ActionBar">
         <item name="android:background">@color/action_bar_black</item>
-        <item name="background">@color/action_bar_black</item>
     </style>
 
    
     
     <style name="AppThemeWhite" parent="AppBaseTheme">
-        <item name="android:windowBackground">@color/white_opaque</item>
-		<!-- <item name="android:actionBarStyle" tools:targetApi="11">@style/MyActionBarStyle</item>
-        <item name="actionBarStyle">@style/MyActionBarStyle</item>  -->
-        
+        <item name="android:windowBackground">@color/white_opaque</item>        
     </style>
     
-    <style name="AppThemeBlack" parent="@style/Theme.Sherlock">
+    <style name="AppThemeBlack" parent="@android:style/Theme.Holo">
        	<item name="android:windowBackground">@color/background_black</item>
         <item name="android:actionBarStyle" tools:targetApi="11">@style/MyActionBarBlackStyle</item>
-        <item name="actionBarStyle">@style/MyActionBarBlackStyle</item>
 
     </style>
     
     
-    <style name="MyActionBarStyle" parent="@style/Widget.Sherlock.ActionBar.Solid">
+    <style name="MyActionBarStyle" parent="@android:style/Widget.ActionBar">
         <item name="android:background">@color/action_bar</item>
-        <item name="background">@color/action_bar</item>
     </style>
 
 </resources>

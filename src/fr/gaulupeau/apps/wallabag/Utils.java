@@ -7,18 +7,15 @@ import static fr.gaulupeau.apps.wallabag.ArticlesSQLiteOpenHelper.MY_ID;
 
 import java.io.File;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-
-import fr.gaulupeau.apps.settings.SettingsGeneral;
-
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.widget.Toast;
+import fr.gaulupeau.apps.settings.SettingsGeneral;
 
 public class Utils {
 
@@ -28,11 +25,13 @@ public class Utils {
 		return themeId == R.style.AppThemeBlack;
 	}
 
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	public static final void setActionBarIcon(ActionBar actionBar, int themeId) {
-		if (isDarkTheme(themeId))
+		if (isDarkTheme(themeId)) {
 			actionBar.setLogo(R.drawable.actionbar_dark);
-		else
+		} else {
 			actionBar.setLogo(R.drawable.actionbar);
+		}
 	}
 
 
@@ -43,9 +42,9 @@ public class Utils {
 
 			@Override
 			public void run() {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 					activity.recreate();
-				else {
+				} else {
 					Intent intent = activity.getIntent();
 					activity.finish();
 					activity.startActivity(intent);
@@ -55,7 +54,7 @@ public class Utils {
 
 	}
 
-	public static final File getSaveDir(SherlockActivity activity) {
+	public static final File getSaveDir(Activity activity) {
 		return new File(Environment.getExternalStorageDirectory()
 				+ "/Android/data/"
 				+ activity.getApplicationContext().getPackageName() + "/files");

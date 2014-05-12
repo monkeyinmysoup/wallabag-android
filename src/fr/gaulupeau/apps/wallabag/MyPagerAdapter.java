@@ -1,8 +1,7 @@
 package fr.gaulupeau.apps.wallabag;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.app.Fragment;
+import android.app.FragmentManager;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
 
@@ -18,6 +17,6 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
 	@Override
 	public int getCount() {
 		return 4;
-	}	
+	}
 	
 }

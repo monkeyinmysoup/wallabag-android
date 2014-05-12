@@ -4,6 +4,7 @@ import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
 
 import java.io.UnsupportedEncodingException;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,9 +16,7 @@ import android.provider.Browser;
 import android.util.Base64;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
-
-public class SendHandler extends SherlockActivity {
+public class SendHandler extends Activity {
 	SharedPreferences settings;
 	static String pocheUrl;
 	
@@ -76,7 +75,8 @@ public class SendHandler extends SherlockActivity {
 	 public void showToast(final String toast)
 	    {
 	    	runOnUiThread(new Runnable() {
-	    		public void run()
+	    		@Override
+				public void run()
 	    		{
 	    			Toast.makeText(SendHandler.this, toast, Toast.LENGTH_SHORT).show();
 	    		}

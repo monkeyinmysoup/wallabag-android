@@ -1,11 +1,10 @@
 package fr.gaulupeau.apps.wallabag;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-
-public class Welcome extends SherlockFragmentActivity {
+public class Welcome extends Activity {
 
 	
 	@Override
@@ -15,7 +14,7 @@ public class Welcome extends SherlockFragmentActivity {
 		
 		ViewPager pager = (ViewPager) findViewById(R.id.view_pager);
 		
-		MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
+		MyPagerAdapter adapter = new MyPagerAdapter(getFragmentManager());
 		
 		pager.setAdapter(adapter);
 		

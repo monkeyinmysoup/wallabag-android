@@ -1,19 +1,17 @@
 package fr.gaulupeau.apps.settings;
 
 import static fr.gaulupeau.apps.wallabag.Helpers.PREFS_NAME;
-
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.MenuItem;
-
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import fr.gaulupeau.apps.wallabag.Constants;
 import fr.gaulupeau.apps.wallabag.R;
 import fr.gaulupeau.apps.wallabag.Utils;
 
-public abstract class SettingsBase extends SherlockActivity{
+public abstract class SettingsBase extends Activity {
 	protected SharedPreferences settings;
 	protected ActionBar actionBar;
 	
@@ -26,7 +24,7 @@ public abstract class SettingsBase extends SherlockActivity{
 		 
 		setTheme(themeId);
 		
-		actionBar = getSupportActionBar();
+		actionBar = getActionBar();
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 	    
@@ -66,12 +64,13 @@ public abstract class SettingsBase extends SherlockActivity{
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    System.out.println("Result: " + resultCode);    
+	    System.out.println("Result: " + resultCode);
 		if (resultCode == Utils.RESULT_CHANGE_THEME) {
 	        	getSettings();
 	            Utils.restartActivity(this);
 	        }
-		if(requestCode == Constants.REQUEST_SETTINGS)
+		if(requestCode == Constants.REQUEST_SETTINGS) {
 			setResult(resultCode);
+		}
 	}
 }

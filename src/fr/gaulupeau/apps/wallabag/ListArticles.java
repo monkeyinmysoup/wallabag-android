@@ -44,9 +44,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -67,25 +66,20 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
 import fr.gaulupeau.apps.settings.Settings;
 import fr.gaulupeau.apps.settings.SettingsAccount;
 import fr.gaulupeau.apps.settings.SettingsGeneral;
 import fr.gaulupeau.apps.settings.SettingsLookAndFeel;
 
-public class ListArticles extends SherlockActivity {
+public class ListArticles extends Activity {
 	private ActionBar actionBar;
-	private static PullToRefreshLayout pullToRefreshLayout;
 
 	private static int maxChars = 250;
 
@@ -108,13 +102,14 @@ public class ListArticles extends SherlockActivity {
 	private ListView drawerList;
 	private ActionBarDrawerToggle drawerToggle;
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		getSettings();		
+		getSettings();
 		setTheme(themeId);
 		
-		actionBar = getSupportActionBar();
+		actionBar = getActionBar();
 		
 		Utils.setActionBarIcon(actionBar, themeId);
 
@@ -125,15 +120,15 @@ public class ListArticles extends SherlockActivity {
 //		}
 		
 		//Pull to refresh
-		pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
-
-		ActionBarPullToRefresh.from(this).allChildrenArePullable()
-				.listener(new OnRefreshListener() {
-					@Override
-					public void onRefreshStarted(View view) {
-						refresh();
-					}
-				}).setup(pullToRefreshLayout);
+		//		pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
+		//
+		//		ActionBarPullToRefresh.from(this).allChildrenArePullable()
+		//				.listener(new OnRefreshListener() {
+		//					@Override
+		//					public void onRefreshStarted(View view) {
+		//						refresh();
+		//					}
+		//				}).setup(pullToRefreshLayout);
 
 		//Database
 		setupDB();
@@ -162,10 +157,12 @@ public class ListArticles extends SherlockActivity {
 		) {
 
 			/** Called when a drawer has settled in a completely closed state. */
+			@Override
 			public void onDrawerClosed(View view) {
 			}
 
 			/** Called when a drawer has settled in a completely open state. */
+			@Override
 			public void onDrawerOpened(View drawerView) {
 			}
 		};
@@ -190,11 +187,13 @@ public class ListArticles extends SherlockActivity {
 		drawerToggle.onConfigurationChanged(newConfig);
 	}
 
+	@Override
 	public void onResume() {
 		super.onResume();
 		getSettings();
 	}
 
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		database.close();
@@ -202,7 +201,7 @@ public class ListArticles extends SherlockActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.option_list, menu);
 		return true;
 
@@ -210,25 +209,28 @@ public class ListArticles extends SherlockActivity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		if(requestCode == Constants.REQUEST_READ_ARTICLE)
+		if(requestCode == Constants.REQUEST_READ_ARTICLE) {
 			updateList(resultCode);
+		}
 		
-		if(requestCode == Constants.REQUEST_SETTINGS)
-			if(resultCode == Constants.RESULT_LIST_SHOULD_CHANGE)
+		if(requestCode == Constants.REQUEST_SETTINGS) {
+			if(resultCode == Constants.RESULT_LIST_SHOULD_CHANGE) {
 				setupList();
+			}
+		}
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			if(drawerLayout.isDrawerOpen(drawerList))
+			if(drawerLayout.isDrawerOpen(drawerList)) {
 				drawerLayout.closeDrawer(drawerList);
-			else
+			} else {
 				drawerLayout.openDrawer(drawerList);
+			}
 			return true;
 		case R.id.refresh:
-			pullToRefreshLayout.setRefreshing(true);
 			refresh();
 			return true;
 		case R.id.settings:
@@ -256,8 +258,9 @@ public class ListArticles extends SherlockActivity {
 		if (themeId != 0 && newThemeId != themeId) {
 			themeId = newThemeId;
 			Utils.restartActivity(this);
-		} else
+		} else {
 			themeId = newThemeId;
+		}
 
 		sortType = settings.getInt(SettingsGeneral.SORT_TYPE,
 				SettingsGeneral.NEWER);
@@ -296,8 +299,9 @@ public class ListArticles extends SherlockActivity {
 	}
 
 	private void finishedRefreshing() {
-		if(pullToRefreshLayout != null)
-			pullToRefreshLayout.setRefreshComplete();
+		//		if(pullToRefreshLayout != null) {
+		//			pullToRefreshLayout.setRefreshComplete();
+		//		}
 	}
 
 	public void parseRSS() {
@@ -465,15 +469,17 @@ public class ListArticles extends SherlockActivity {
 	}
 
 	private void removeDeletedArticlesFromDB(ArrayList<String> urlsInBD) {
-		for (String url : urlsInBD)
+		for (String url : urlsInBD) {
 			database.execSQL("DELETE FROM " + ARTICLE_TABLE + " WHERE "
 					+ ARTICLE_URL + "=" + "'" + url + "'" + ";");
+		}
 	}
 
 	private void trustEveryone() {
 		try {
 			HttpsURLConnection
 					.setDefaultHostnameVerifier(new HostnameVerifier() {
+						@Override
 						public boolean verify(String hostname,
 								SSLSession session) {
 							return true;
@@ -481,14 +487,17 @@ public class ListArticles extends SherlockActivity {
 					});
 			SSLContext context = SSLContext.getInstance("TLS");
 			context.init(null, new X509TrustManager[] { new X509TrustManager() {
+				@Override
 				public void checkClientTrusted(X509Certificate[] chain,
 						String authType) throws CertificateException {
 				}
 
+				@Override
 				public void checkServerTrusted(X509Certificate[] chain,
 						String authType) throws CertificateException {
 				}
 
+				@Override
 				public X509Certificate[] getAcceptedIssuers() {
 					return new X509Certificate[0];
 				}
@@ -502,16 +511,18 @@ public class ListArticles extends SherlockActivity {
 
 	private void updateUnread() {
 		runOnUiThread(new Runnable() {
-			public void run() {				
+			@Override
+			public void run() {
 				int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0",
 						null, null, null, null).getCount();
-				if (news == 0)
+				if (news == 0) {
 					Utils.showToast(ListArticles.this, getString(R.string.no_unread_articles));
-				else if (news == 1)
+				} else if (news == 1) {
 					Utils.showToast(ListArticles.this, getString(R.string.one_unread_article));
-				else
+				} else {
 					Utils.showToast(ListArticles.this, String.format(
 							getString(R.string.many_unread_articles), news));
+				}
 			}
 		});
 	}
@@ -523,6 +534,7 @@ public class ListArticles extends SherlockActivity {
 
 		readList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Intent i = new Intent(getBaseContext(), ReadArticle.class);
@@ -535,11 +547,12 @@ public class ListArticles extends SherlockActivity {
 	}
 	
 	private void checkIfHasNoArticles() {
-		TextView tvNoArticles = (TextView) findViewById(R.id.no_articles_text);	
-		if (adapter.getCount() == 0)
+		TextView tvNoArticles = (TextView) findViewById(R.id.no_articles_text);
+		if (adapter.getCount() == 0) {
 			tvNoArticles.setVisibility(View.VISIBLE);
-		else
+		} else {
 			tvNoArticles.setVisibility(View.GONE);
+		}
 	}
 
 	public void updateList(){
@@ -550,17 +563,19 @@ public class ListArticles extends SherlockActivity {
 	
 	public void updateList(int result){
 		System.out.println(result);
-		if(Utils.hasToggledRead(result))
+		if(Utils.hasToggledRead(result)) {
 			if(listFilterOption == Constants.READ || listFilterOption == Constants.UNREAD){
 				updateList();
 				return;
 			}
+		}
 				
-		if(Utils.hasToggledFavorite(result))
+		if(Utils.hasToggledFavorite(result)) {
 			if(listFilterOption == Constants.FAVS){
 				updateList();
 				return;
 			}
+		}
 		
 	}
 	
@@ -596,13 +611,15 @@ public class ListArticles extends SherlockActivity {
 		while (true) {
 			int openTagPosition = html.indexOf("<img", lastImageTag);
 
-			if (openTagPosition == -1)
+			if (openTagPosition == -1) {
 				break;
+			}
 
 			int closeTagPosition = html.indexOf('>', openTagPosition);
 
-			if (closeTagPosition == -1)
+			if (closeTagPosition == -1) {
 				throw new RuntimeException("Error while parsing html");
+			}
 
 			lastImageTag = closeTagPosition + 1;
 
@@ -631,11 +648,13 @@ public class ListArticles extends SherlockActivity {
 			
 				Bitmap bitmap = getBitmapFromURL(imageSource);
 
-				if (bitmap == null)
+				if (bitmap == null) {
 					continue;
+				}
 			
-			if(!saveBitmap(bitmap, imageFileDestination))
+			if(!saveBitmap(bitmap, imageFileDestination)) {
 				continue;
+			}
 			}
 			
 			tagParams[sourceIndex] = "src=\"file://" + imageFileDestination.getAbsolutePath() + "\"";
@@ -650,8 +669,9 @@ public class ListArticles extends SherlockActivity {
 
 	private String recreateTag(String[] tagParams) {
 		String tag = "";
-		for (String param : tagParams)
+		for (String param : tagParams) {
 			tag += param + " ";
+		}
 
 		tag = tag.trim();
 		return tag;
@@ -693,8 +713,9 @@ public class ListArticles extends SherlockActivity {
 	
 	public File getImageFileDestination(String imageUrl){
 		File saveFolder = Utils.getSaveDir(this);
-		if (!saveFolder.exists())
+		if (!saveFolder.exists()) {
 			saveFolder.mkdirs();
+		}
 		
 		return new File(saveFolder, imageUrl);
 	}
