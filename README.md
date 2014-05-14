@@ -1,12 +1,14 @@
-A Android client to [wallabag](http://wallabag.org) (formerly Poche).
+An Android client for [wallabag](http://wallabag.org) (formerly Poche).
+###
 
-This app is based on [Erik Pires' fork][0], which adds a lot of major improvements over the [original app][1], with the goal to:
+This app is based on [Erik Pires' fork][0], which adds a lot of major improvements over the [original app][1]. My current goal for improving this app further:
 
-- Add xxhdpi support
-- Improve the design a little bit
+- Add xxhdpi graphics
+- Improve the design
 - Improve the code
+- Submit articles to wallabag without being redirected to the website
 - Add support for tagging articles after 'wallabagging' them (much like Pocket does)
-
+- Transform it for use in Android Studio
 
 This application is released under GPL and uses the following libraries and projects:
 
