@@ -5,7 +5,9 @@
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
 
     -->
-    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light"></style>
+    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:textAppearance">@style/Font</item>
+    </style>
 
     <style name="MyActionBarBlackStyle" parent="@android:style/Widget.ActionBar">
         <item name="android:background">@color/action_bar_black</item>
@@ -25,7 +27,7 @@
     </style>
 
     
-    <style name="TextAppearance.Wallabag.FloatLabel" parent="android:TextAppearance.Small">
+    <style name="TextAppearance.Wallabag.FloatLabel" parent="Font">
         <item name="android:textColor">@color/primary_font</item>
         <item name="android:textSize">11sp</item>
         <item name="android:textStyle">bold</item>
@@ -36,5 +38,9 @@
         <item name="pix_fontBold">Tellural-Bold.ttf</item>
         <item name="pix_fontItalic">Tellural-Italic.ttf</item>
         <item name="pix_fontBoldItalic">Tellural-BoldItalic.ttf</item>
+    </style>
+
+    <style name="FontLarge" parent="Font">
+        <item name="android:textSize">18sp</item>
     </style>
 </resources>

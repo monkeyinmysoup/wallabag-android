@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clickable="true"
@@ -11,11 +12,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <TextView
+    <com.pixplicity.fonttextutils.FontTextView
         android:id="@+id/drawer_element_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        tools:text="drawer entry"
         android:layout_marginLeft="5dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#FFF" />

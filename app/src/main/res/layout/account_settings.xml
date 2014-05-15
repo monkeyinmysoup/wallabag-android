@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:padding="10sp" >
 
-        <TextView
+        <com.pixplicity.fonttextutils.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/defaultTopPadding"
@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
-                <RadioButton
+                <com.pixplicity.fonttextutils.FontRadioButton
                     android:id="@+id/radioFramabag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                     android:paddingLeft="@dimen/defaultSidePadding"
                     android:text="@string/framabag" />
 
-                <RadioButton
+                <com.pixplicity.fonttextutils.FontRadioButton
                     android:id="@+id/radioAnotherServer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:layout_marginTop="16dp"
                 app:floatLabelTextAppearance="@style/TextAppearance.Wallabag.FloatLabel" >
 
-                <EditText
+                <com.pixplicity.fonttextutils.FontEditText
                     android:id="@+id/editTextServerUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                 android:layout_marginTop="16dp"
                 app:floatLabelTextAppearance="@style/TextAppearance.Wallabag.FloatLabel" >
 
-                <EditText
+                <com.pixplicity.fonttextutils.FontEditText
                     android:id="@+id/editTextUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
             android:layout_marginTop="16dp"
             app:floatLabelTextAppearance="@style/TextAppearance.Wallabag.FloatLabel" >
 
-            <EditText
+            <com.pixplicity.fonttextutils.FontEditText
                 android:id="@+id/editTextUserID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
         android:layout_marginTop="16dp"
         app:floatLabelTextAppearance="@style/TextAppearance.Wallabag.FloatLabel" >
 
-        <EditText
+        <com.pixplicity.fonttextutils.FontEditText
             android:id="@+id/editTextToken"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

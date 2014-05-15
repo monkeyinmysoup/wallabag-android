@@ -17,14 +17,14 @@
             android:paddingBottom="@dimen/defaultTopPadding"
             android:paddingTop="@dimen/defaultTopPadding" >
 
-            <TextView
+            <com.pixplicity.fonttextutils.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/defaultSidePadding"
                 android:text="@string/sort"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
+            <com.pixplicity.fonttextutils.FontTextView
                 android:id="@+id/sort_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
             android:paddingBottom="@dimen/defaultTopPadding"
             android:paddingTop="@dimen/defaultTopPadding" >
 
-            <TextView
+            <com.pixplicity.fonttextutils.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/defaultSidePadding"

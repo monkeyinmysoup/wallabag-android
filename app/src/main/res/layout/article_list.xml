@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="10sp" >
 
-    <TextView
+    <com.pixplicity.fonttextutils.FontTextView
         android:id="@+id/listitem_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         tools:text="Title"
         android:typeface="sans" />
 
-    <TextView
+    <com.pixplicity.fonttextutils.FontTextView
         android:id="@+id/listitem_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

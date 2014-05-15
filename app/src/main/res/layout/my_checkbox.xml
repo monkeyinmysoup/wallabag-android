@@ -2,7 +2,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <CheckBox
+    <com.pixplicity.fonttextutils.FontCheckBox
         android:id="@+id/checkbox_delete_acoount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -1,5 +1,14 @@
+
 apply plugin: 'android'
 apply plugin: 'android-apt'
+
+def gitSha() {
+    return 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+}
+
+def buildTime() {
+    return new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
+}
 
 apt {
     arguments {
@@ -57,6 +66,12 @@ android {
             versionNameSuffix "-dev"
         }
     }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://oss.sonatype.org/content/groups/public/' }
+    maven { url 'http://pixplicity.com:8081/nexus/content/repositories/releases/' }
 }
 
 dependencies {
