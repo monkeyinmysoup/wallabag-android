@@ -65,4 +65,8 @@ dependencies {
     compile files('libs/json-smart-1.2.jar')
     compile files('libs/jsonrpc2-base-1.35.jar')
     compile files('libs/jsonrpc2-client-1.14.4.jar')
+    compile 'com.pixplicity.easyprefs:library:1.+'
+    compile 'com.pixplicity:font.text.utils.library:1.3'
+    compile 'nl.qbusict:cupboard:2.0.1'
+    compile 'com.squareup.picasso:picasso:2.2.0'
 }
