@@ -12,7 +12,7 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:logo="@drawable/actionbar"
-        android:theme="@style/AppBaseTheme" >
+        android:theme="@style/AppThemeWhite" >
         <activity
             android:name="com.pixplicity.wallabag.activities.WelcomeActivity"
             android:label="@string/app_name" />
