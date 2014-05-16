@@ -1,11 +1,6 @@
 package com.pixplicity.wallabag;
 
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
-
-import java.io.File;
+import com.pixplicity.wallabag.activities.GeneralSettingsActivity;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -16,102 +11,107 @@ import android.os.Environment;
 import android.os.Handler;
 import android.widget.Toast;
 
-import com.pixplicity.wallabag.activities.GeneralSettingsActivity;
+import java.io.File;
+
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
 
 public class Utils {
 
-	public static final int RESULT_CHANGE_THEME = 42;
+    public static final int RESULT_CHANGE_THEME = 42;
 
-	public static final boolean isDarkTheme(int themeId) {
-		return themeId == R.style.AppThemeBlack;
-	}
+    public static final boolean isDarkTheme(int themeId) {
+        return themeId == R.style.AppThemeBlack;
+    }
 
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-	public static final void setActionBarIcon(ActionBar actionBar, int themeId) {
-		if (isDarkTheme(themeId)) {
-			actionBar.setLogo(R.drawable.actionbar_dark);
-		} else {
-			actionBar.setLogo(R.drawable.actionbar);
-		}
-	}
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    public static final void setActionBarIcon(ActionBar actionBar, int themeId) {
+        if (isDarkTheme(themeId)) {
+            actionBar.setLogo(R.drawable.actionbar_dark);
+        } else {
+            //actionBar.setLogo(R.drawable.actionbar);
+            actionBar.setLogo(R.drawable.actionbar_dark);
+        }
+    }
 
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public static final void restartActivity(final Activity activity) {
-		Handler handler = new Handler();
-		handler.postDelayed(new Runnable() {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static final void restartActivity(final Activity activity) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
 
-			@Override
-			public void run() {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-					activity.recreate();
-				} else {
-					Intent intent = activity.getIntent();
-					activity.finish();
-					activity.startActivity(intent);
-				}
-			}
-		}, 1);
+            @Override
+            public void run() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    activity.recreate();
+                } else {
+                    Intent intent = activity.getIntent();
+                    activity.finish();
+                    activity.startActivity(intent);
+                }
+            }
+        }, 1);
+    }
 
-	}
+    public static final File getSaveDir(Activity activity) {
+        return new File(Environment.getExternalStorageDirectory()
+                + "/Android/data/"
+                + activity.getApplicationContext().getPackageName() + "/files");
+    }
 
-	public static final File getSaveDir(Activity activity) {
-		return new File(Environment.getExternalStorageDirectory()
-				+ "/Android/data/"
-				+ activity.getApplicationContext().getPackageName() + "/files");
-	}
+    public static final void showToast(Activity activity, final String msg) {
+        showToast(activity, msg, Toast.LENGTH_SHORT);
+    }
 
-	public static final void showToast(Activity activity, final String msg) {
-		showToast(activity, msg, Toast.LENGTH_SHORT);
-	}
-	
-	public static final void showToast(Activity activity, final String msg, int length) {
-		if (!activity.isFinishing()) {
-			Toast.makeText(activity, msg, length).show();
-		}
-	}
-	
-	public static final String getFilter(int filterOption){
-		switch (filterOption) {
-		case Constants.ALL:
-			return null;
-			
-		case Constants.UNREAD:
-			return ARCHIVE + " = 0";
-			
-		case Constants.READ:
-			return ARCHIVE + " = 1";
-			
-		case Constants.FAVS:
-			return FAV + " = 1";
-			
-		default:
-			return null;
-		}
-	}
-	
-	public static final String getOrderBy(int sortType){
-		switch (sortType) {
-		case GeneralSettingsActivity.NEWER:
-			return MY_ID + " DESC";
+    public static final void showToast(Activity activity, final String msg, int length) {
+        if (!activity.isFinishing()) {
+            Toast.makeText(activity, msg, length).show();
+        }
+    }
 
-		case GeneralSettingsActivity.OLDER:
-			return MY_ID;
+    public static final String getFilter(int filterOption) {
+        switch (filterOption) {
+            case Constants.ALL:
+                return null;
 
-		case GeneralSettingsActivity.ALPHA:
-			return ARTICLE_TITLE + " COLLATE NOCASE";
+            case Constants.UNREAD:
+                return ARCHIVE + " = 0";
 
-		default:
-			System.out.println(sortType);
-			return "";
-		}
-	}
+            case Constants.READ:
+                return ARCHIVE + " = 1";
 
-	public static boolean hasToggledFavorite(int result) {
-		return (result & Constants.RESULT_TOGGLE_FAVORITE) == Constants.RESULT_TOGGLE_FAVORITE;
-	}
+            case Constants.FAVS:
+                return FAV + " = 1";
 
-	public static boolean hasToggledRead(int result) {
-		return (result & Constants.RESULT_TOGGLE_READ) == Constants.RESULT_TOGGLE_READ;
-	}
+            default:
+                return null;
+        }
+    }
+
+    public static final String getOrderBy(int sortType) {
+        switch (sortType) {
+            case GeneralSettingsActivity.NEWER:
+                return MY_ID + " DESC";
+
+            case GeneralSettingsActivity.OLDER:
+                return MY_ID;
+
+            case GeneralSettingsActivity.ALPHA:
+                return ARTICLE_TITLE + " COLLATE NOCASE";
+
+            default:
+                System.out.println(sortType);
+                return "";
+        }
+    }
+
+    public static boolean hasToggledFavorite(int result) {
+        return (result & Constants.RESULT_TOGGLE_FAVORITE) == Constants.RESULT_TOGGLE_FAVORITE;
+    }
+
+    public static boolean hasToggledRead(int result) {
+        return (result & Constants.RESULT_TOGGLE_READ) == Constants.RESULT_TOGGLE_READ;
+    }
 }

@@ -77,7 +77,7 @@
     <string name="welcome">Bem-vindo</string>
     <string name="choose_installation">Qual tipo de instalação você usa</string>
     <string name="framabag">Framabag</string>
-    <string name="another_sever">Outro servidor</string>
+    <string name="another_server">Outro servidor</string>
     <string name="user_name">Nome de usuário</string>
     <string name="user_id">ID de usuário</string>
     <string name="token">Token</string>

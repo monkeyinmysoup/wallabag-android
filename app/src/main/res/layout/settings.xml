@@ -13,12 +13,12 @@
             android:id="@+id/general_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/defaultSidePadding"
-            android:paddingLeft="@dimen/defaultSidePadding"
-            android:paddingTop="@dimen/defaultTopPadding"
-            android:paddingBottom="@dimen/defaultTopPadding"
+            android:drawablePadding="@dimen/default_padding_horizontal"
+            android:paddingLeft="@dimen/default_padding_horizontal"
+            android:paddingTop="@dimen/default_padding_vertical"
+            android:paddingBottom="@dimen/default_padding_vertical"
             android:text="@string/general"
-            android:textAppearance="@style/FontLarge" />
+            android:textAppearance="@style/FontMedium" />
 
         <ImageView
             android:layout_width="match_parent"
@@ -30,12 +30,12 @@
             android:id="@+id/look_and_feel_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/defaultSidePadding"
-            android:paddingLeft="@dimen/defaultSidePadding"
-            android:paddingTop="@dimen/defaultTopPadding"
-            android:paddingBottom="@dimen/defaultTopPadding"
+            android:drawablePadding="@dimen/default_padding_horizontal"
+            android:paddingLeft="@dimen/default_padding_horizontal"
+            android:paddingTop="@dimen/default_padding_vertical"
+            android:paddingBottom="@dimen/default_padding_vertical"
             android:text="@string/look_and_feel"
-            android:textAppearance="@style/FontLarge" />
+            android:textAppearance="@style/FontMedium"/>
 
         <ImageView
             android:layout_width="match_parent"
@@ -47,12 +47,12 @@
             android:id="@+id/account_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/defaultSidePadding"
-            android:paddingLeft="@dimen/defaultSidePadding"
-            android:paddingTop="@dimen/defaultTopPadding"
-            android:paddingBottom="@dimen/defaultTopPadding"
+            android:drawablePadding="@dimen/default_padding_horizontal"
+            android:paddingLeft="@dimen/default_padding_horizontal"
+            android:paddingTop="@dimen/default_padding_vertical"
+            android:paddingBottom="@dimen/default_padding_vertical"
             android:text="@string/account"
-            android:textAppearance="@style/FontLarge" />
+            android:textAppearance="@style/FontMedium" />
 
         <ImageView
             android:layout_width="match_parent"
@@ -64,12 +64,12 @@
             android:id="@+id/about_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/defaultSidePadding"
-            android:paddingLeft="@dimen/defaultSidePadding"
-            android:paddingTop="@dimen/defaultTopPadding"
-            android:paddingBottom="@dimen/defaultTopPadding"
+            android:drawablePadding="@dimen/default_padding_horizontal"
+            android:paddingLeft="@dimen/default_padding_horizontal"
+            android:paddingTop="@dimen/default_padding_vertical"
+            android:paddingBottom="@dimen/default_padding_vertical"
             android:text="@string/about"
-            android:textAppearance="@style/FontLarge" />
+            android:textAppearance="@style/FontMedium" />
     </LinearLayout>
 
 </ScrollView>

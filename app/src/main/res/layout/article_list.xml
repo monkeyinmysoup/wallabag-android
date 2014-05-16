@@ -10,9 +10,8 @@
         android:id="@+id/listitem_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         tools:text="Title"
-        android:typeface="sans" />
+        android:textAppearance="@style/FontMedium" />
 
     <com.pixplicity.fonttextutils.FontTextView
         android:id="@+id/listitem_description"
@@ -20,8 +19,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textSize="12sp"
         tools:text="Subtitle"
-        android:typeface="sans" />
+        android:textAppearance="@style/FontSmall" />
 
 </LinearLayout>

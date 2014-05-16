@@ -12,21 +12,49 @@
         android:layout_height="match_parent">
 
         <ListView
-            android:id="@+id/liste_articles"
+            android:id="@+id/list_articles"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="#BCBCBC"
-            android:dividerHeight="1dp" />
+            android:layout_height="wrap_content" />
 
-        <com.pixplicity.fonttextutils.FontTextView
-            android:id="@+id/no_articles_text"
-            android:textAppearance="@style/Font"
+        <RelativeLayout
+            android:id="@+id/no_articles_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/no_articles"
-            android:textColor="#757575"
-            android:visibility="gone" />
+            android:background="@color/primary">
+
+            <com.pixplicity.fonttextutils.FontTextView
+                android:id="@+id/no_articles_text"
+                android:textAppearance="@style/FontTitle"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_centerVertical="true"
+                android:textColor="@color/font_light"
+                android:text="@string/no_articles" />
+
+
+            <com.pixplicity.fonttextutils.FontButton
+                android:id="@+id/bt_settings"
+                style="@style/TransparentButton"
+                android:paddingLeft="@dimen/default_padding_horizontal"
+                android:paddingRight="@dimen/default_padding_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/no_articles_text"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/font_light"
+                android:text="@string/bt_no_articles" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/wallaby_light"
+                android:layout_above="@id/no_articles_text"
+                android:layout_centerHorizontal="true"
+                android:contentDescription="@string/app_name"
+                android:visibility="gone"/>
+        </RelativeLayout>
     </FrameLayout>
 
     <FrameLayout
@@ -40,8 +68,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:background="#333" />
+        android:background="@color/drawer_background"
+        tools:listitem="@layout/drawer_list_item" />
 
 </android.support.v4.widget.DrawerLayout>

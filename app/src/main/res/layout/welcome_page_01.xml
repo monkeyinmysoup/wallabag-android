@@ -8,10 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/welcome"
-        android:paddingTop="@dimen/defaultTopPadding"
-        android:paddingBottom="@dimen/defaultTopPadding"
+        android:paddingTop="@dimen/default_padding_vertical"
+        android:paddingBottom="@dimen/default_padding_vertical"
         android:gravity="center_horizontal"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="@style/FontLarge" />
 
     <ImageView
         android:id="@+id/imageView1"

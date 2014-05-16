@@ -14,21 +14,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/defaultTopPadding"
-            android:paddingTop="@dimen/defaultTopPadding" >
+            android:paddingBottom="@dimen/default_padding_vertical"
+            android:paddingTop="@dimen/default_padding_vertical" >
 
             <com.pixplicity.fonttextutils.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/defaultSidePadding"
+                android:paddingLeft="@dimen/default_padding_horizontal"
                 android:text="@string/sort"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="@style/FontMedium" />
 
             <com.pixplicity.fonttextutils.FontTextView
                 android:id="@+id/sort_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="30dp" />
+                android:paddingLeft="@dimen/default_padding_horizontal" />
         </LinearLayout>
 
         <ImageView
@@ -43,15 +43,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/defaultTopPadding"
-            android:paddingTop="@dimen/defaultTopPadding" >
+            android:paddingBottom="@dimen/default_padding_vertical"
+            android:paddingTop="@dimen/default_padding_vertical" >
 
             <com.pixplicity.fonttextutils.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/defaultSidePadding"
+                android:paddingLeft="@dimen/default_padding_horizontal"
                 android:text="@string/menuWipeDb"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="@style/FontMedium" />
         </LinearLayout>
     </LinearLayout>
 

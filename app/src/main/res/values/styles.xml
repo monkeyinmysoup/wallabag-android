@@ -1,36 +1,45 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
 
     -->
-    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light">
+    <style name="AppBaseTheme" parent="@android:style/Theme.Holo">
         <item name="android:textAppearance">@style/Font</item>
-    </style>
-
-    <style name="MyActionBarBlackStyle" parent="@android:style/Widget.ActionBar">
-        <item name="android:background">@color/action_bar_black</item>
     </style>
 
     <style name="AppThemeWhite" parent="AppBaseTheme">
         <item name="android:windowBackground">@color/white_opaque</item>
+        <item name="android:actionBarStyle">@style/ActionBarLight</item>
+        <item name="android:textColor">@color/primary_font</item>
     </style>
 
     <style name="AppThemeBlack" parent="@android:style/Theme.Holo">
-        <item name="android:windowBackground">@color/background_black</item>
-        <item name="android:actionBarStyle" tools:targetApi="11">@style/MyActionBarBlackStyle</item>
+        <item name="android:windowBackground">@color/background_dark</item>
+        <item name="android:actionBarStyle">@style/ActionBarDark</item>
+        <item name="android:textColor">@color/font_light</item>
     </style>
 
-    <style name="MyActionBarStyle" parent="@android:style/Widget.ActionBar">
-        <item name="android:background">@color/action_bar</item>
+    <style name="ActionBarLight" parent="@android:style/Widget.ActionBar">
+        <item name="android:background">@color/action_bar_light</item>
+        <item name="android:textAppearance">@style/FontMedium</item>
+        <item name="android:textColor">@color/font_light</item>
     </style>
 
-    
+    <style name="ActionBarDark" parent="@android:style/Widget.ActionBar">
+        <item name="android:background">@color/action_bar_dark</item>
+        <item name="android:textAppearance">@style/FontMedium</item>
+        <item name="android:textColor">@color/font_light</item>
+    </style>
+
     <style name="TextAppearance.Wallabag.FloatLabel" parent="Font">
-        <item name="android:textColor">@color/primary_font</item>
         <item name="android:textSize">11sp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TransparentButton" parent="android:Widget.Button">
+        <item name="android:background">@drawable/invisible_button</item>
     </style>
 
     <style name="Font">
@@ -40,7 +49,23 @@
         <item name="pix_fontBoldItalic">Tellural-BoldItalic.ttf</item>
     </style>
 
+    <style name="FontSmall" parent="Font">
+        <item name="android:textSize">@dimen/font_size_small</item>
+    </style>
+
+    <style name="FontMedium" parent="Font">
+        <item name="android:textSize">@dimen/font_size_medium</item>
+    </style>
+
     <style name="FontLarge" parent="Font">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">@dimen/font_size_large</item>
+    </style>
+
+    <style name="FontTitle" parent="FontMedium">
+        <item name="android:textColor">@color/font_light</item>
+        <item name="android:shadowColor">#78ffffff</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">5</item>
+        <item name="android:shadowRadius">0</item>
     </style>
 </resources>

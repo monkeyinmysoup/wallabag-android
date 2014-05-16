@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">wallabag!</string>
-    <string name="app_name">wallabag</string>
+    <string name="hello">Wallabag!</string>
+    <string name="app_name">Wallabag</string>
     <string name="bag_it">Bag it!</string>
     <string name="author">GAULUPEAU Jonathan - 2013\nErick Pires - 2014\nMathijs Lagerberg - 2014</string>
     <string name="instructions">To save a web page to wallabag, open the page in a browser then tap <i>Share</i> and tap on <i>Bag it!</i>.\nYou could then see your wallabag login page.\nAnd it\'s done!\nMore infos about wallabag at wallabag.org.</string>
@@ -41,7 +41,8 @@
     <string name="fav_title">Toggle favorite</string>
     <string name="read_title">Mark as read</string>
     <string name="unread_title">Mark as unread</string>
-    <string name="no_articles">You have no articles</string>
+    <string name="no_articles">You have no articles yet</string>
+    <string name="bt_no_articles">Tap here to go to the settings</string>
     <string name="share_title">Share</string>
     <string name="general">General</string>
     <string name="look_and_feel">Look and feel</string>
@@ -77,7 +78,7 @@
     <string name="welcome">Welcome</string>
     <string name="choose_installation">What kind of installation do you use</string>
     <string name="framabag">Framabag</string>
-    <string name="another_sever">Another sever</string>
+    <string name="another_server">Another server</string>
     <string name="user_name">User name</string>
     <string name="user_id">User ID</string>
     <string name="token">Token</string>
