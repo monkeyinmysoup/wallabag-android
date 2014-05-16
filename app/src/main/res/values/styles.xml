@@ -14,12 +14,12 @@
         <item name="android:popupMenuStyle">@style/PopupMenuDark</item>
     </style>
 
-    <style name="ActionBarLight" parent="android:Widget.Holo.ActionBar">
+    <style name="ActionBarLight" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/action_bar_light</item>
         <item name="android:textAppearance">@style/FontMedium</item>
         <item name="android:textColor">@color/font_light</item>
     </style>
-    <style name="ActionBarDark" parent="android:Widget.Holo.ActionBar">
+    <style name="ActionBarDark" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/action_bar_dark</item>
         <item name="android:textAppearance">@style/FontMedium</item>
         <item name="android:textColor">@color/font_light</item>
