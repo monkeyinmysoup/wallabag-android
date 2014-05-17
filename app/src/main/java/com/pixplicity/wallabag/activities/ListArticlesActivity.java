@@ -269,7 +269,7 @@ public class ListArticlesActivity extends Activity {
         apiToken = settings.getString(AccountSettingsActivity.TOKEN, "");
 
         int newThemeId = settings.getInt(LookAndFeelSettingsActivity.DARK_THEME,
-                R.style.AppThemeWhite);
+                R.style.Theme_Wallabag);
         if (themeId != 0 && newThemeId != themeId) {
             themeId = newThemeId;
             Utils.restartActivity(this);

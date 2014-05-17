@@ -92,9 +92,9 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked) {
-					themeId = R.style.AppThemeBlack;
+					themeId = R.style.Theme_Wallabag_Dark;
 				} else {
-					themeId = R.style.AppThemeWhite;
+					themeId = R.style.Theme_Wallabag;
 				}
 				
 				changed = !changed;

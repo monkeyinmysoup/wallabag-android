@@ -277,7 +277,6 @@ public class ReadArticleActivity extends Activity {
 		this.menu = menu;
 		setReadStateIcon();
 		setFavStateIcon();
-		setShareIcon();
 		return true;
 	}
 
@@ -345,7 +344,7 @@ public class ReadArticleActivity extends Activity {
 			break;
 		}
 
-		themeId = preferences.getInt(LookAndFeelSettingsActivity.DARK_THEME, R.style.AppThemeWhite);
+		themeId = preferences.getInt(LookAndFeelSettingsActivity.DARK_THEME, R.style.Theme_Wallabag);
 	}
 
 	private void shareUrl() {
@@ -404,50 +403,23 @@ public class ReadArticleActivity extends Activity {
 
 	private void setReadStateIcon() {
 		MenuItem item = menu.findItem(R.id.read);
-
 		if (isRead) {
-			if (Utils.isDarkTheme(themeId)) {
-				item.setIcon(R.drawable.ic_action_undo_dark);
-			} else {
-				item.setIcon(R.drawable.ic_action_undo);
-			}
-
+			item.setIcon(R.drawable.ic_action_undo_dark);
 			item.setTitle(getString(R.string.unread_title));
 		} else {
-			if (Utils.isDarkTheme(themeId)) {
-				item.setIcon(R.drawable.ic_action_accept_dark);
-			} else {
-				item.setIcon(R.drawable.ic_action_accept);
-			}
+			item.setIcon(R.drawable.ic_action_accept_dark);
 			item.setTitle(getString(R.string.read_title));
 		}
 	}
 
 	private void setFavStateIcon() {
 		MenuItem item = menu.findItem(R.id.fav);
-
 		if (isFav) {
-			if (Utils.isDarkTheme(themeId)) {
-				item.setIcon(R.drawable.ic_action_important_dark);
-			} else {
-				item.setIcon(R.drawable.ic_action_important);
-			}
-		} else if (Utils.isDarkTheme(themeId)) {
+            item.setIcon(R.drawable.ic_action_important_dark);
+		} else {
 			item.setIcon(R.drawable.ic_action_not_important_dark);
-		} else {
-			item.setIcon(R.drawable.ic_action_not_important);
 		}
-	}
-
-	private void setShareIcon() {
-		MenuItem item = menu.findItem(R.id.share);
-
-		if (Utils.isDarkTheme(themeId)) {
-			item.setIcon(R.drawable.ic_action_share_dark);
-		} else {
-			item.setIcon(R.drawable.ic_action_share);
-		}
-	}
+    }
 
 	private void findOutIfIsRead(int read) {
 

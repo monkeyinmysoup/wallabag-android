@@ -23,7 +23,7 @@ public class Utils {
     public static final int RESULT_CHANGE_THEME = 42;
 
     public static final boolean isDarkTheme(int themeId) {
-        return themeId == R.style.AppThemeBlack;
+        return themeId == R.style.Theme_Wallabag_Dark;
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)

@@ -1,48 +1,26 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppThemeWhite" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:windowBackground">@color/white_opaque</item>
-        <item name="android:actionBarStyle">@style/ActionBarLight</item>
-        <item name="android:textColor">@color/primary_font</item>
-        <item name="android:popupMenuStyle">@style/PopupMenuLight</item>
-    </style>
-
-    <style name="AppThemeBlack" parent="android:Theme.Holo">
+    <!-- Additional Dark theme -->
+    <style name="Theme.Wallabag.Dark" parent="Theme.Wallabag">
         <item name="android:windowBackground">@color/background_dark</item>
-        <item name="android:actionBarStyle">@style/ActionBarDark</item>
-        <item name="android:textColor">@color/font_light</item>
-        <item name="android:popupMenuStyle">@style/PopupMenuDark</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Wallabag.Dark</item>
+        <item name="android:textColor">@color/font_light</item>0
     </style>
 
-    <style name="ActionBarLight" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/action_bar_light</item>
-        <item name="android:textAppearance">@style/FontMedium</item>
-        <item name="android:textColor">@color/font_light</item>
-    </style>
-    <style name="ActionBarDark" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    <!-- Custom ActionBar for the dark theme -->
+    <style name="ActionBar.Solid.Wallabag.Dark" parent="ActionBar.Solid.Wallabag">
         <item name="android:background">@color/action_bar_dark</item>
-        <item name="android:textAppearance">@style/FontMedium</item>
-        <item name="android:textColor">@color/font_light</item>
+        <item name="android:backgroundStacked">@color/action_bar_dark</item>
+        <item name="android:backgroundSplit">@color/action_bar_dark</item>
     </style>
 
-    <style name="PopupMenuLight" parent="@android:style/Widget.Holo.Light.ListPopupWindow">
-        <item name="android:popupBackground">@color/primary</item>
-        <item name="android:textColor">@color/font_light</item>
-    </style>
-    <style name="PopupMenuDark" parent="@android:style/Widget.Holo.ListPopupWindow">
-        <item name="android:popupBackground">@color/background_dark</item>
-        <item name="android:textColor">@color/font_light</item>
-    </style>
-
+    <!-- FloatLabel style -->
     <style name="TextAppearance.Wallabag.FloatLabel" parent="Font">
         <item name="android:textSize">11sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TransparentButton" parent="android:Widget.Button">
-        <item name="android:background">@drawable/invisible_button</item>
-    </style>
-
+    <!-- Font related styles -->
     <style name="Font">
         <item name="pix_font">Tellural.ttf</item>
         <item name="pix_fontBold">Tellural-Bold.ttf</item>
@@ -69,4 +47,10 @@
         <item name="android:shadowDy">5</item>
         <item name="android:shadowRadius">0</item>
     </style>
+
+    <!-- Other styles -->
+    <style name="TransparentButton" parent="android:Widget.Button">
+        <item name="android:background">@drawable/invisible_button</item>
+    </style>
+
 </resources>

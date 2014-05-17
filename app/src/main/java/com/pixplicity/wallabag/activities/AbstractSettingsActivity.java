@@ -48,7 +48,7 @@ public abstract class AbstractSettingsActivity extends Activity {
 	}
 
 	protected void getSettings() {
-		themeId = settings.getInt(LookAndFeelSettingsActivity.DARK_THEME, R.style.AppThemeWhite);
+		themeId = settings.getInt(LookAndFeelSettingsActivity.DARK_THEME, R.style.Theme_Wallabag);
 	}
 
 	abstract protected void saveSettings();
