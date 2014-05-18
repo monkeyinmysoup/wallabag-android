@@ -3,6 +3,9 @@
 
     <dimen name="default_padding_vertical">15dp</dimen>
     <dimen name="default_padding_horizontal">10dp</dimen>
+    <dimen name="small_padding_horizontal">8dp</dimen>
+    <dimen name="small_padding_vertical">6dp</dimen>
+    <dimen name="view_margin_small">2dp</dimen>
 
     <dimen name="font_size_small">18sp</dimen>
     <dimen name="font_size_medium">21sp</dimen>

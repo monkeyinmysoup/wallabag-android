@@ -84,5 +84,7 @@
     <string name="token">Token</string>
     <string name="server_url">Server URL</string>
     <string name="see_more">See more&#8230;</string>
+    <string name="version_display">v%s</string>
+    <string name="missing_content">[missing]</string>
 
 </resources>

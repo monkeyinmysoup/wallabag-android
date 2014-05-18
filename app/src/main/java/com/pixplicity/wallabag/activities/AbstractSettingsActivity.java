@@ -1,80 +1,81 @@
 package com.pixplicity.wallabag.activities;
 
-import static com.pixplicity.wallabag.Helpers.PREFS_NAME;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.pixplicity.wallabag.Constants;
 import com.pixplicity.wallabag.R;
 import com.pixplicity.wallabag.Utils;
 
-
+/**
+ * Parent class to all settings activities.
+ * Sets common UI features such as the ActionBar and provides callbacks to save and load settings.
+ */
 public abstract class AbstractSettingsActivity extends Activity {
 
-	protected SharedPreferences settings;
-	protected ActionBar actionBar;
+    protected ActionBar actionBar;
+    protected int themeId;
 
-	protected int themeId;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getSettings();
+        setTheme(themeId);
+        actionBar = getActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		settings = getSharedPreferences(PREFS_NAME, 0);
-		getSettings();
+        Utils.setActionBarIcon(actionBar, themeId);
+        setContentView(getContentView());
 
-		setTheme(themeId);
+        createUI();
+    }
 
-		actionBar = getActionBar();
-		actionBar.setHomeButtonEnabled(true);
-		actionBar.setDisplayHomeAsUpEnabled(true);
+    abstract protected int getContentView();
 
-		Utils.setActionBarIcon(actionBar, themeId);
+    @Override
+    protected void onPause() {
+        saveSettings();
+        super.onPause();
+    }
 
-		setContentView(getContentView());
+    /**
+     * Default implementation loads the theme from the settings.
+     */
+    protected void getSettings() {
+        themeId = Prefs.getInt(LookAndFeelSettingsActivity.DARK_THEME, R.style.Theme_Wallabag);
+    }
 
-		createUI();
-	}
+    /**
+     * Callback indicating changes made by the user should be saved.
+     */
+    abstract protected void saveSettings();
 
-	abstract protected int getContentView();
+    abstract protected void createUI();
 
-	@Override
-	protected void onPause() {
-		saveSettings();
-		super.onPause();
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
-	protected void getSettings() {
-		themeId = settings.getInt(LookAndFeelSettingsActivity.DARK_THEME, R.style.Theme_Wallabag);
-	}
-
-	abstract protected void saveSettings();
-
-	abstract protected void createUI();
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		System.out.println("Result: " + resultCode);
-		if (resultCode == Utils.RESULT_CHANGE_THEME) {
-			getSettings();
-			Utils.restartActivity(this);
-		}
-		if (requestCode == Constants.REQUEST_SETTINGS) {
-			setResult(resultCode);
-		}
-	}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Utils.RESULT_CHANGE_THEME) {
+            getSettings();
+            Utils.restartActivity(this);
+        }
+        if (requestCode == Constants.REQUEST_SETTINGS) {
+            setResult(resultCode);
+        }
+    }
 }

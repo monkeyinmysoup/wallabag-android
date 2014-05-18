@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="broadcast">com.pixplicity.wallabag.broadcast_refreshed</string>
+    <string name="broadcast_articles_loaded">com.pixplicity.wallabag.broadcast_refreshed</string>
+    <string name="broadcast_unread_changed">com.pixplicity.wallabag.broadcast_unread</string>
+    <string name="broadcast_favorites_changed">com.pixplicity.wallabag.broadcast_favorites</string>
+
+    <item name="setting_general" type="id" />
+    <item name="setting_look_and_feel" type="id" />
+    <item name="setting_account" type="id" />
+    <item name="setting_about" type="id" />
 
 </resources>

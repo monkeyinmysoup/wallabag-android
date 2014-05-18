@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/small_padding_horizontal"
+    android:paddingRight="@dimen/small_padding_horizontal"
+    android:paddingTop="@dimen/small_padding_vertical"
+    android:paddingBottom="@dimen/small_padding_vertical">
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        tools:src="@drawable/ic_action_settings"
+        android:layout_margin="@dimen/view_margin_small"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
+
+        <com.pixplicity.fonttextutils.FontTextView
+            android:id="@+id/tv_title"
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Title"
+            android:lines="1"
+            android:ellipsize="end"
+            android:layout_margin="@dimen/view_margin_small"
+            android:textAppearance="@style/FontMedium" />
+
+        <com.pixplicity.fonttextutils.FontTextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Subtitle"
+            android:layout_margin="@dimen/view_margin_small"
+            android:textAppearance="@style/FontSmall" />
+    </LinearLayout>
+
+</LinearLayout>

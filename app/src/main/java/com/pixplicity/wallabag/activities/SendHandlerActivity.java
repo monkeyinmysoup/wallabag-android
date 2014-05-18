@@ -1,88 +1,68 @@
 package com.pixplicity.wallabag.activities;
 
-import static com.pixplicity.wallabag.Helpers.PREFS_NAME;
-
-import java.io.UnsupportedEncodingException;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.util.Base64;
-import android.widget.Toast;
+import android.util.Log;
 
+import com.pixplicity.easyprefs.library.Prefs;
+import com.pixplicity.wallabag.Constants;
 import com.pixplicity.wallabag.R;
 
+import java.io.UnsupportedEncodingException;
+
+/**
+ * This activity is called when the user chooses to share a link
+ * to Wallabag ('Bag it!') from another app.
+ * It currently simple launches the direct-share link in the default browser.
+ */
 public class SendHandlerActivity extends Activity {
-	SharedPreferences settings;
-	static String pocheUrl;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 
-		Intent intent = getIntent();
+    private static final String TAG = SendHandlerActivity.class.getSimpleName();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.dummy);
+
+        Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        
-        getSettings();
-		
-		setContentView(R.layout.main);
+        String serverUrl = Prefs.getString(Constants.PREFS_KEY_WALLABAG_URL, "https://");
 
-		final String pageUrl = extras.getString("android.intent.extra.TEXT");
-		// Vérification de la connectivité Internet
-		final ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-		if (activeNetwork != null && activeNetwork.isConnected()) {
-			// Start to build the poche URL
-			Uri.Builder pocheSaveUrl = Uri.parse(pocheUrl).buildUpon();
-			// Add the parameters from the call
-			pocheSaveUrl.appendQueryParameter("action", "add");
-			byte[] data = null;
-			try {
-				data = pageUrl.getBytes("UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			String base64 = Base64.encodeToString(data, Base64.DEFAULT);
-			pocheSaveUrl.appendQueryParameter("url", base64);
-			System.out.println("base64 : " + base64);
-			System.out.println("pageurl : " + pageUrl);
+        final String pageUrl = extras.getString("android.intent.extra.TEXT");
 
-			// Load the constructed URL in the browser
-			Intent i = new Intent(Intent.ACTION_VIEW);
-			i.setData(pocheSaveUrl.build());
-			i.putExtra(Browser.EXTRA_APPLICATION_ID, getPackageName());
-			// If user has more then one browser installed give them a chance to
-			// select which one they want to use
+        // NOTE disabled checking for connection as it's probably more user-friendly to handle this
+        // in the browser (with the ability to refresh).
+//        final ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//        final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+//        if (activeNetwork != null && activeNetwork.isConnected()) {
 
-			startActivity(i);
-			// That is all this app needs to do, so call finish()
-			this.finish();
-		} else {
-			// Afficher alerte connectivité
-			showToast(getString(R.string.txtNetOffline));
-		}
-	}
-	
-	private void getSettings(){
-        settings = getSharedPreferences(PREFS_NAME, 0);
-        pocheUrl = settings.getString("pocheUrl", "https://");
-	}
-	
-	 public void showToast(final String toast)
-	    {
-	    	runOnUiThread(new Runnable() {
-	    		@Override
-				public void run()
-	    		{
-	    			Toast.makeText(SendHandlerActivity.this, toast, Toast.LENGTH_SHORT).show();
-	    		}
-	    	});
-	    }
+        // Start to build the poche URL
+        Uri.Builder saveUrl = Uri.parse(serverUrl).buildUpon();
+        // Add the parameters from the call
+        saveUrl.appendQueryParameter("action", "add");
+        byte[] data = null;
+        try {
+            data = pageUrl.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String base64 = Base64.encodeToString(data, Base64.DEFAULT);
+        saveUrl.appendQueryParameter("url", base64);
+        Log.d(TAG, "base64 : " + base64);
+        Log.d(TAG, "pageurl : " + pageUrl);
+
+        // Load the constructed URL in the browser
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(saveUrl.build());
+        i.putExtra(Browser.EXTRA_APPLICATION_ID, getPackageName());
+        // If user has more then one browser installed give them a chance to
+        // select which one they want to use
+        startActivity(i);
+        // That is all this app needs to do, so call finish()
+        this.finish();
+    }
 }

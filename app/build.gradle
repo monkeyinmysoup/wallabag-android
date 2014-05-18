@@ -84,4 +84,5 @@ dependencies {
     compile 'com.pixplicity:font.text.utils.library:1.3'
     compile 'nl.qbusict:cupboard:2.0.1'
     compile 'com.squareup.picasso:picasso:2.2.0'
+    compile 'com.github.castorflex.smoothprogressbar:library:0.5.1'
 }

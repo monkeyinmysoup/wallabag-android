@@ -20,7 +20,6 @@
             android:text="@string/choose_installation"
             android:textAppearance="@style/FontMedium" />
 
-
         <RadioGroup
             android:id="@+id/radioGroupServerType"
             android:layout_width="match_parent"

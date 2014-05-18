@@ -6,8 +6,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- Added to be able to use a QR scanner for reading settings off the website in the future -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
     <application
+        android:name=".WallabagApplication"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
@@ -51,6 +56,14 @@
         <activity
             android:name="com.pixplicity.wallabag.activities.GeneralSettingsActivity"
             android:label="@string/general" />
+
+        <service
+            android:name="com.pixplicity.wallabag.ApiService"
+            android:exported="false" />
+        <!-- <provider
+            android:name="com.pixplicity.wallabag.ContentProvider"
+            android:authorities="com.pixplicity.wallabag.provider"
+            android:exported="false" /> -->
     </application>
 
 </manifest>

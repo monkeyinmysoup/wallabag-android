@@ -1,6 +1,7 @@
 package com.pixplicity.wallabag.activities;
 
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.pixplicity.wallabag.R;
 
 import android.content.SharedPreferences.Editor;
@@ -13,41 +14,25 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 public class AccountSettingsActivity extends AbstractSettingsActivity {
 
     public static final String SERVER_URL = "pocheUrl";
-
     public static final String USER_ID = "APIUsername";
-
     public static final String USERNAME = "UserName";
-
     public static final String TOKEN = "APIToken";
-
     private static final String SERVER_OPTION = "ServerOption";
 
     private static final int SERVER_OPTION_FRAMABAG = R.id.radioFramabag;
-
     private static final int SERVER_OPTION_ANOTHER_SERVER = R.id.radioAnotherServer;
 
     private int selectedSeverOption;
-
     private View serverUrlLayout;
-
     private View usernameLayout;
-
     private View userIDLayout;
-
     private EditText editTextUrl;
-
     private EditText editTextUsername;
-
     private EditText editUserID;
-
     private EditText editTextToken;
-
     private String serverUrl;
-
     private String username;
-
     private String token;
-
     private String userID;
 
     @Override
@@ -57,9 +42,8 @@ public class AccountSettingsActivity extends AbstractSettingsActivity {
 
     @Override
     protected void saveSettings() {
-        Editor editor = settings.edit();
+        Editor editor = Prefs.getPreferences().edit();
         editor.putInt(SERVER_OPTION, selectedSeverOption);
-
         editor.putString(TOKEN, editTextToken.getText().toString());
 
         switch (selectedSeverOption) {
@@ -86,13 +70,11 @@ public class AccountSettingsActivity extends AbstractSettingsActivity {
     @Override
     protected void getSettings() {
         super.getSettings();
-
-        selectedSeverOption = settings.getInt(SERVER_OPTION, SERVER_OPTION_FRAMABAG);
-
-        serverUrl = settings.getString(SERVER_URL, "https://");
-        token = settings.getString(TOKEN, "");
-        username = settings.getString(USERNAME, "");
-        userID = settings.getString(USER_ID, "1");
+        selectedSeverOption = Prefs.getInt(SERVER_OPTION, SERVER_OPTION_FRAMABAG);
+        serverUrl = Prefs.getString(SERVER_URL, "https://");
+        token = Prefs.getString(TOKEN, "");
+        username = Prefs.getString(USERNAME, "");
+        userID = Prefs.getString(USER_ID, "1");
     }
 
     @Override
