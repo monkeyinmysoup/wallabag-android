@@ -15,13 +15,15 @@ public class Article {
     public String domain;
     public String[] tags;
 
-    public Article(String url, String id, String title, String archive, String isFav, String summary) {
+    public Article(String url, String id, String title, String archive, String isFav, String summary, String domain, String tags) {
         this.url = url;
         this.id = id;
         this.title = title;
         this.archive = archive;
         this.isFav = isFav;
         this.summary = summary;
+        this.domain = domain;
+        this.tags = tags.split(",");
     }
 
     public static String makeDescription(String html) {

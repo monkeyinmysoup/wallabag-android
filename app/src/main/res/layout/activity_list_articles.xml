@@ -14,12 +14,18 @@
         <ListView
             android:id="@+id/list_articles"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:padding="@dimen/li_article_margin_hor"
+            tools:listitem="@layout/li_article"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="@dimen/li_article_margin_vert"
+            android:background="@color/article_list_background"/>
 
         <RelativeLayout
             android:id="@+id/no_articles_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:background="@color/primary">
 
             <com.pixplicity.fonttextutils.FontTextView

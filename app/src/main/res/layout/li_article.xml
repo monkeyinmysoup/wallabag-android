@@ -2,9 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10sp" >
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/li_article_margin_vert"
+    android:layout_marginBottom="@dimen/li_article_margin_vert"
+    android:layout_marginLeft="@dimen/li_article_margin_hor"
+    android:layout_marginRight="@dimen/li_article_margin_hor"
+    android:background="@drawable/card"
+    android:padding="10sp"
+    android:orientation="vertical">
 
     <com.pixplicity.fonttextutils.FontTextView
         android:id="@+id/listitem_title"

@@ -21,4 +21,5 @@
     <color name="invisi_button_active">#50ffffff</color>
     <color name="invisi_button_pressed">#77ffffff</color>
     <color name="invisi_button_default">@android:color/transparent</color>
+    <color name="article_list_background">#e5e5e5</color>
 </resources>

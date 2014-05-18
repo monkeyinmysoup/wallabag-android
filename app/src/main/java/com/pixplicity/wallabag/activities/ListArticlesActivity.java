@@ -41,12 +41,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DOMAIN;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_SUMMARY;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TAGS;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DOMAIN;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TAGS;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
 
@@ -77,12 +77,21 @@ public class ListArticlesActivity extends Activity implements
 
     private final BroadcastReceiver mServiceReceiver = new BroadcastReceiver() {
 
+        @SuppressLint("AppCompatMethod")
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getExtras().getBoolean(ApiService.EXTRA_FINISHED_LOADING, false)) {
-                int unread = intent.getExtras().getInt(ApiService.EXTRA_COUNT_UNREAD);
+            Bundle extras = intent.getExtras();
+            if (extras.getBoolean(ApiService.EXTRA_FINISHED_LOADING, false)) {
+                int unread = extras.getInt(ApiService.EXTRA_COUNT_UNREAD);
                 Toast.makeText(ListArticlesActivity.this, getResources().getQuantityString(R.plurals.unread_articles, unread, unread), Toast.LENGTH_SHORT).show();
                 setBusy(false);
+            } else {
+                int done = extras.getInt(ApiService.EXTRA_PROGRESS, 0);
+                int total = extras.getInt(ApiService.EXTRA_PROGRESS_TOTAL, 100);
+                float factor = (Window.PROGRESS_END - Window.PROGRESS_START) / total;
+                int progress = (int) (done * factor + Window.PROGRESS_START);
+                setProgress(progress);
+                setProgressBarIndeterminateVisibility(Boolean.FALSE);
             }
 //            getLoaderManager().restartLoader(
 //                    R.id.loader_articles,
@@ -96,14 +105,14 @@ public class ListArticlesActivity extends Activity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        requestWindowFeature(Window.FEATURE_PROGRESS);
 
         getSettings();
         setTheme(themeId);
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
+        //actionBar.setDisplayShowTitleEnabled(false);
         Utils.setActionBarIcon(actionBar, themeId);
-        setContentView(R.layout.list);
+        setContentView(R.layout.activity_list_articles);
 
         //Database
         setupDB();
@@ -127,7 +136,7 @@ public class ListArticlesActivity extends Activity implements
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                if(adapter.getActivePosition() != pos){
+                if (adapter.getActivePosition() != pos) {
                     adapter.setActivePosition(pos);
                     adapter.notifyDataSetChanged();
                     setListFilterOption(pos);
@@ -332,9 +341,11 @@ public class ListArticlesActivity extends Activity implements
         if (busy) {
             mSettings.setVisibility(View.GONE);
             mNoArticlesText.setText(R.string.syncing);
+            setProgress(Window.PROGRESS_START);
             setProgressBarIndeterminateVisibility(Boolean.TRUE);
         } else {
             mNoArticlesText.setText(R.string.no_articles);
+            setProgress(Window.PROGRESS_END);
             setProgressBarIndeterminateVisibility(Boolean.FALSE);
         }
     }
@@ -412,7 +423,9 @@ public class ListArticlesActivity extends Activity implements
                         ac.getString(2),
                         ac.getString(3),
                         ac.getString(4),
-                        ac.getString(5));
+                        ac.getString(5),
+                        ac.getString(6),
+                        ac.getString(7));
                 articlesList.add(tempArticle);
             } while (ac.moveToNext());
         }

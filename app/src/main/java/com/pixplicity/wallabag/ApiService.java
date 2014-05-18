@@ -70,10 +70,10 @@ public class ApiService extends IntentService {
     public static final String EXTRA_COUNT_ALL = "all";
     public static final String EXTRA_COUNT_UNREAD = "unread";
     public static final String EXTRA_FINISHED_LOADING = "finished";
+    public static final String EXTRA_PROGRESS = "progress";
+    public static final String EXTRA_PROGRESS_TOTAL = "progress_total";
 
     private static final String TAG = ApiService.class.getSimpleName();
-    private static final String EXTRA_PROGRESS = "progress";
-    private static final String EXTRA_PROGRESS_TOTAL = "progress_total";
 
     private volatile Looper mServiceLooper;
     private volatile ServiceHandler mServiceHandler;
