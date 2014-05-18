@@ -51,6 +51,7 @@ public class SettingsActivity extends AbstractSettingsActivity {
 
         // List of setting categories
         ListView list = (ListView) findViewById(R.id.lv_settings);
+        list.setAdapter(mAdapter);
         list.setOnItemClickListener(new ListView.OnItemClickListener() {
 
             @Override
@@ -76,10 +77,10 @@ public class SettingsActivity extends AbstractSettingsActivity {
     private void refreshSettings() {
         mItems.clear();
         int[] images = Utils.isDarkTheme(themeId) ? images_dark : images_light;
-        mItems.add(new ListItem(R.id.setting_general, R.string.general, -1, images[0]));
-        mItems.add(new ListItem(R.id.setting_look_and_feel, R.string.look_and_feel, -1, images[1]));
-        mItems.add(new ListItem(R.id.setting_account, R.string.general, -1, images[2]));
-        mItems.add(new ListItem(R.id.setting_about, R.string.general, -1, images[3]));
+        mItems.add(new ListItem(R.id.setting_general, R.string.settings_general, -1, images[0]));
+        mItems.add(new ListItem(R.id.setting_look_and_feel, R.string.setting_look_and_feel, -1, images[1]));
+        mItems.add(new ListItem(R.id.setting_account, R.string.settings_account, -1, images[2]));
+        //mItems.add(new ListItem(R.id.setting_about, R.string.settings_about, -1, images[3]));
         mAdapter.notifyDataSetChanged();
     }
 

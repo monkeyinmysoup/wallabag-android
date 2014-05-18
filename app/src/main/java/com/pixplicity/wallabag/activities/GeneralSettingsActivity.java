@@ -19,8 +19,6 @@ import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
 
 import java.io.File;
 
-import static com.pixplicity.wallabag.Helpers.PREFS_NAME;
-
 public class GeneralSettingsActivity extends AbstractSettingsActivity {
 
     private static final int[] sortTypeOptions = new int[]{R.string.newer, R.string.older, R.string.alphabetical};
@@ -156,16 +154,11 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
     }
 
     private void cleanUserInfo() {
-        SharedPreferences settings;
-        SharedPreferences.Editor editor;
-
-        settings = getSharedPreferences(PREFS_NAME, 0);
-        editor = settings.edit();
-
-        editor.putString("pocheUrl", "https://");
-        editor.putString("APIUsername", "");
-        editor.putString("APIToken", "");
-        editor.commit();
+        SharedPreferences.Editor editor = Prefs.getPreferences().edit();
+        editor.putString(Constants.PREFS_KEY_WALLABAG_URL, null)
+            .putString(Constants.PREFS_KEY_USER_ID, null)
+            .putString(Constants.PREFS_KEY_USER_TOKEN, null)
+            .commit();
     }
 
     protected void deleteFiles() {

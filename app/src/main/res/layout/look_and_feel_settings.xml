@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/font_size_text"
                     android:max="12"
-                    android:paddingLeft="@dimen/default_padding_horizontal" />
+                    android:layout_marginLeft="@dimen/default_padding_horizontal"/>
 
                 <com.pixplicity.fonttextutils.FontTextView
                     android:id="@+id/font_size_text"

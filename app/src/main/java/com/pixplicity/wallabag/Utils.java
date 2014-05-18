@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import com.pixplicity.wallabag.activities.GeneralSettingsActivity;
 
 import java.io.File;
+import java.net.URI;
 
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
@@ -119,7 +121,7 @@ public final class Utils {
 
     /**
      * Cleans up a String by removing quotes, accents and other invalid characters
-     * from a title of an Article.s
+     * from a title of an Article.
      *
      * @param s
      * @return
@@ -142,5 +144,15 @@ public final class Utils {
                 .replace("&Atilde;&sect;", "&ccedil;")
                 .replace("&amp;", "&amp;");
         return s;
+    }
+
+    /**
+     * Returns the domain of the url, excluding www. if present.s
+     * @param url The url to strip, e.g. "https://search.google.com/something"
+     * @return The bare domain name, e.g. "search.google.com"
+     */
+    public static String getDomainFromUrl(String url) {
+        String domain = Uri.parse(url).getHost();
+        return domain.startsWith("www.") ? domain.substring(4) : domain;
     }
 }

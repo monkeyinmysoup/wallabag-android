@@ -16,7 +16,12 @@ public final class Constants {
 	public static final int REQUEST_SETTINGS = 15;
 	public static final int RESULT_LIST_SHOULD_CHANGE = 13;
 
+    public static final String PREFS_KEY_SERVER_OPTION = "ServerOption";
     public static final String PREFS_KEY_WALLABAG_URL = "pocheUrl";
+    public static final String PREFS_KEY_USER_ID = "APIUsername";
+    public static final String PREFS_KEY_USER_TOKEN = "APIToken";
+    public static final String PREFS_KEY_PREVIOUS_UPDATE = "previous_update";
+    public static final String PREFS_KEY_USER_NAME = "UserName";
 
     public static final int MAX_DESCRIPTION_CHARS = 250;
     public static final int JPEG_QUALITY = 90;

@@ -3,7 +3,6 @@ package com.pixplicity.wallabag;
 import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,7 +15,7 @@ import android.os.Message;
 import android.text.Html;
 import android.util.Log;
 
-import com.pixplicity.wallabag.activities.AccountSettingsActivity;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
 import com.pixplicity.wallabag.models.Article;
 
@@ -46,13 +45,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import static com.pixplicity.wallabag.Helpers.PREFS_NAME;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DOMAIN;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_SUMMARY;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TAGS;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
@@ -62,14 +62,18 @@ public class ApiService extends IntentService {
 
     /**
      * Intent action telling the service to fetch new articles.
+     *
      * @see #refreshArticles()
      */
     public static final String REFRESH_ARTICLES = "com.pixplicity.wallabag.REFRESH_ARTICLES";
 
     public static final String EXTRA_COUNT_ALL = "all";
     public static final String EXTRA_COUNT_UNREAD = "unread";
+    public static final String EXTRA_FINISHED_LOADING = "finished";
 
     private static final String TAG = ApiService.class.getSimpleName();
+    private static final String EXTRA_PROGRESS = "progress";
+    private static final String EXTRA_PROGRESS_TOTAL = "progress_total";
 
     private volatile Looper mServiceLooper;
     private volatile ServiceHandler mServiceHandler;
@@ -152,7 +156,11 @@ public class ApiService extends IntentService {
      * from the database.
      * After processing is done a broadcast is send to notify listeners,
      * containing the extras {@link #EXTRA_COUNT_ALL} and {@link #EXTRA_COUNT_UNREAD}
-     * indicating the numbers of newly stored articles and total unread articles respectively.
+     * indicating the numbers of newly stored articles and total unread articles respectively,
+     * or {@link #EXTRA_FINISHED_LOADING} with value {@link false} indicating that this is an intermediate
+     * update and the total numbers aren't there yet.
+     * Can also contain the extras {@link #EXTRA_PROGRESS} and {@link #EXTRA_PROGRESS_TOTAL} to show
+     * the amount of progress.
      */
     private void refreshArticles() {
 //        new AsyncTask<Void, Void, Void>() {
@@ -169,10 +177,9 @@ public class ApiService extends IntentService {
 //            }
 //        }.execute();
         URL url;
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        String wallabagUrl = settings.getString(AccountSettingsActivity.SERVER_URL, "https://");
-        String apiUsername = settings.getString(AccountSettingsActivity.USER_ID, "");
-        String apiToken = settings.getString(AccountSettingsActivity.TOKEN, "");
+        String wallabagUrl = Prefs.getString(Constants.PREFS_KEY_WALLABAG_URL, null);
+        String apiUsername = Prefs.getString(Constants.PREFS_KEY_USER_ID, null);
+        String apiToken = Prefs.getString(Constants.PREFS_KEY_USER_TOKEN, null);
 
         SQLiteDatabase database = getDatabase();
         try {
@@ -210,9 +217,9 @@ public class ApiService extends IntentService {
 
                 // Fetch items currently in database:
                 ArrayList<String> urlsInBD = new ArrayList<>();
-                Cursor ac = database.query(ARTICLE_TABLE, new String[]{
-                                ARTICLE_URL
-                        }, null,
+                Cursor ac = database.query(
+                        ARTICLE_TABLE,
+                        new String[]{ARTICLE_URL}, null,
                         null, null, null, null
                 );
                 ac.moveToFirst();
@@ -223,12 +230,21 @@ public class ApiService extends IntentService {
                 }
 
                 // Loop through the XML passing the data to the arrays
-                for (int i = itemLst.getLength() - 1; i >= 0; i--) {
+                int total = itemLst.getLength();
+                for (int i = total - 1; i >= 0; i--) {
                     Node item = itemLst.item(i);
                     if (item.getNodeType() == Node.ELEMENT_NODE) {
                         if (parseArticle(urlsInBD, database, (Element) item)) {
                             newArticles++;
                         }
+                    }
+                    if ((i % 10) == 0) {
+                        // Intermediate update
+                        Intent intent = new Intent(getString(R.string.broadcast_articles_loaded));
+                        intent.putExtra(ApiService.EXTRA_PROGRESS, total - i);
+                        intent.putExtra(ApiService.EXTRA_PROGRESS_TOTAL, total);
+                        intent.putExtra(ApiService.EXTRA_FINISHED_LOADING, false);
+                        sendOrderedBroadcast(intent, null);
                     }
                 }
 
@@ -238,12 +254,13 @@ public class ApiService extends IntentService {
 
             // Count unread articles
             int unreadArticles = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0",
-                        null, null, null, null).getCount();
+                    null, null, null, null).getCount();
 
             // Refresh status
             Intent intent = new Intent(getString(R.string.broadcast_articles_loaded));
             intent.putExtra(ApiService.EXTRA_COUNT_ALL, newArticles);
             intent.putExtra(ApiService.EXTRA_COUNT_UNREAD, unreadArticles);
+            intent.putExtra(ApiService.EXTRA_FINISHED_LOADING, true);
             sendOrderedBroadcast(intent, null);
 
         } catch (DOMException | IOException | ParserConfigurationException | SAXException e) {
@@ -265,12 +282,13 @@ public class ApiService extends IntentService {
      * @param database Database connection
      * @param item     The RSS item to parse
      * @return {@link true} on a successful insertion, {@link false} on errors or if the article is
-     *         already present in the database
+     * already present in the database
      */
     private boolean parseArticle(ArrayList<String> urlsInDB, SQLiteDatabase database, Element item) {
         String articleTitle;
         String articleDate;
         String articleUrl;
+        String articleDomain;
         String articleContent;
 
         // This section gets the elements from the XML
@@ -293,7 +311,8 @@ public class ApiService extends IntentService {
             articleUrl = getString(R.string.missing_content);
         }
         articleUrl = Html.fromHtml(articleUrl).toString();
-        Log.d(TAG, articleUrl);
+        articleDomain = Utils.getDomainFromUrl(articleUrl);
+        Log.d(TAG, articleDomain + "; " + articleUrl);
 
         // Articles in the feed are remove from the hitlist:
         if (urlsInDB.contains(articleUrl)) {
@@ -330,6 +349,8 @@ public class ApiService extends IntentService {
                 ImageUtils.changeImagesUrl(this, articleContent));
         values.put(ARTICLE_SUMMARY,
                 Article.makeDescription(articleContent));
+        values.put(ARTICLE_DOMAIN, articleDomain);
+        values.put(ARTICLE_TAGS, "");
         values.put(ARTICLE_URL, articleUrl);
         values.put(ARTICLE_DATE, articleDate);
         values.put(ARCHIVE, 0);

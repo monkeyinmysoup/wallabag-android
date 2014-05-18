@@ -2,6 +2,7 @@ package com.pixplicity.wallabag.activities;
 
 
 import com.pixplicity.easyprefs.library.Prefs;
+import com.pixplicity.wallabag.Constants;
 import com.pixplicity.wallabag.R;
 
 import android.content.SharedPreferences.Editor;
@@ -10,14 +11,10 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-
+/**
+ *
+ */
 public class AccountSettingsActivity extends AbstractSettingsActivity {
-
-    public static final String SERVER_URL = "pocheUrl";
-    public static final String USER_ID = "APIUsername";
-    public static final String USERNAME = "UserName";
-    public static final String TOKEN = "APIToken";
-    private static final String SERVER_OPTION = "ServerOption";
 
     private static final int SERVER_OPTION_FRAMABAG = R.id.radioFramabag;
     private static final int SERVER_OPTION_ANOTHER_SERVER = R.id.radioAnotherServer;
@@ -43,18 +40,18 @@ public class AccountSettingsActivity extends AbstractSettingsActivity {
     @Override
     protected void saveSettings() {
         Editor editor = Prefs.getPreferences().edit();
-        editor.putInt(SERVER_OPTION, selectedSeverOption);
-        editor.putString(TOKEN, editTextToken.getText().toString());
+        editor.putInt(Constants.PREFS_KEY_SERVER_OPTION, selectedSeverOption);
+        editor.putString(Constants.PREFS_KEY_USER_TOKEN, editTextToken.getText().toString());
 
         switch (selectedSeverOption) {
             case SERVER_OPTION_FRAMABAG:
-                editor.putString(SERVER_URL, getFramabagUrl());
-                editor.putString(USERNAME, editTextUsername.getText().toString());
-                editor.putString(USER_ID, "1");
+                editor.putString(Constants.PREFS_KEY_WALLABAG_URL, getFramabagUrl());
+                editor.putString(Constants.PREFS_KEY_USER_NAME, editTextUsername.getText().toString());
+                editor.putString(Constants.PREFS_KEY_USER_ID, "1");
                 break;
             case SERVER_OPTION_ANOTHER_SERVER:
-                editor.putString(SERVER_URL, editTextUrl.getText().toString().trim());
-                editor.putString(USER_ID, editUserID.getText().toString());
+                editor.putString(Constants.PREFS_KEY_WALLABAG_URL, editTextUrl.getText().toString().trim());
+                editor.putString(Constants.PREFS_KEY_USER_ID, editUserID.getText().toString());
                 break;
             default:
                 break;
@@ -70,11 +67,11 @@ public class AccountSettingsActivity extends AbstractSettingsActivity {
     @Override
     protected void getSettings() {
         super.getSettings();
-        selectedSeverOption = Prefs.getInt(SERVER_OPTION, SERVER_OPTION_FRAMABAG);
-        serverUrl = Prefs.getString(SERVER_URL, "https://");
-        token = Prefs.getString(TOKEN, "");
-        username = Prefs.getString(USERNAME, "");
-        userID = Prefs.getString(USER_ID, "1");
+        selectedSeverOption = Prefs.getInt(Constants.PREFS_KEY_SERVER_OPTION, SERVER_OPTION_FRAMABAG);
+        serverUrl = Prefs.getString(Constants.PREFS_KEY_WALLABAG_URL, "http://");
+        token = Prefs.getString(Constants.PREFS_KEY_USER_TOKEN, "");
+        username = Prefs.getString(Constants.PREFS_KEY_USER_NAME, "");
+        userID = Prefs.getString(Constants.PREFS_KEY_USER_ID, "1");
     }
 
     @Override

@@ -5,6 +5,8 @@
     <string name="broadcast_unread_changed">com.pixplicity.wallabag.broadcast_unread</string>
     <string name="broadcast_favorites_changed">com.pixplicity.wallabag.broadcast_favorites</string>
 
+    <item name="loader_articles" type="id" />s
+
     <item name="setting_general" type="id" />
     <item name="setting_look_and_feel" type="id" />
     <item name="setting_account" type="id" />

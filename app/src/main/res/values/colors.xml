@@ -16,9 +16,9 @@
     <color name="action_bar_light">@color/primary</color>
 
     <color name="divider">#ffc0c0c0</color>
-    <color name="drawer_background">#333</color>
+    <color name="drawer_background">#fff5f5f5</color>
     <color name="drawer_scrim">#77000000</color>
-    <color name="invisi_button_active">#77ffffff</color>
-    <color name="invisi_button_pressed">#ccffffff</color>
+    <color name="invisi_button_active">#50ffffff</color>
+    <color name="invisi_button_pressed">#77ffffff</color>
     <color name="invisi_button_default">@android:color/transparent</color>
 </resources>

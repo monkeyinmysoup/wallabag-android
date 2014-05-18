@@ -5,12 +5,15 @@ import android.text.Html;
 import com.pixplicity.wallabag.Constants;
 
 public class Article {
+
     public String url;
     public String id;
     public String title;
     public String archive;
     public String isFav;
     public String summary;
+    public String domain;
+    public String[] tags;
 
     public Article(String url, String id, String title, String archive, String isFav, String summary) {
         this.url = url;

@@ -33,7 +33,6 @@
                 android:textColor="@color/font_light"
                 android:text="@string/no_articles" />
 
-
             <com.pixplicity.fonttextutils.FontButton
                 android:id="@+id/bt_settings"
                 style="@style/TransparentButton"
@@ -52,8 +51,7 @@
                 android:src="@drawable/wallaby_light"
                 android:layout_above="@id/no_articles_text"
                 android:layout_centerHorizontal="true"
-                android:contentDescription="@string/app_name"
-                android:visibility="gone"/>
+                android:contentDescription="@string/app_name" />
         </RelativeLayout>
     </FrameLayout>
 
@@ -66,9 +64,9 @@
         android:id="@+id/left_drawer"
         android:layout_width="180dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
         android:choiceMode="singleChoice"
         android:background="@color/drawer_background"
-        tools:listitem="@layout/drawer_list_item" />
-
+        android:divider="@null"
+        android:layout_gravity="start"
+        tools:listitem="@layout/li_simple" />
 </android.support.v4.widget.DrawerLayout>

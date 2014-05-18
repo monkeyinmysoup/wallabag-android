@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.Browser;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 import com.pixplicity.wallabag.Constants;
@@ -28,17 +29,40 @@ public class SendHandlerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dummy);
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        String serverUrl = Prefs.getString(Constants.PREFS_KEY_WALLABAG_URL, "https://");
-
-        final String pageUrl = extras.getString("android.intent.extra.TEXT");
+        // If the user didn't setup the server yet, show them the settings
+        if (!Prefs.contains(Constants.PREFS_KEY_WALLABAG_URL)) {
+            Toast.makeText(this, R.string.error_share_no_server, Toast.LENGTH_LONG).show();
+            Intent settingsIntent = new Intent(this, AccountSettingsActivity.class);
+            startActivityForResult(
+                    settingsIntent,
+                    Constants.REQUEST_SETTINGS);
+        }
 
         // NOTE disabled checking for connection as it's probably more user-friendly to handle this
         // in the browser (with the ability to refresh).
 //        final ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 //        final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
 //        if (activeNetwork != null && activeNetwork.isConnected()) {
+
+        launchBrowser();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_SETTINGS) {
+            if (Prefs.contains(Constants.PREFS_KEY_WALLABAG_URL)) {
+                launchBrowser();
+            } else {
+                finish();
+            }
+        }
+    }
+
+    private void launchBrowser() {
+        Bundle extras = getIntent().getExtras();
+        String serverUrl = Prefs.getString(Constants.PREFS_KEY_WALLABAG_URL, null);
+        final String pageUrl = extras.getString("android.intent.extra.TEXT");
 
         // Start to build the poche URL
         Uri.Builder saveUrl = Uri.parse(serverUrl).buildUpon();

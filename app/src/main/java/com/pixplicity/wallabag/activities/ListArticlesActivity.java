@@ -1,5 +1,6 @@
 package com.pixplicity.wallabag.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.LoaderManager;
@@ -16,7 +17,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,6 +24,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 import com.pixplicity.wallabag.ApiService;
@@ -43,6 +45,8 @@ import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_SUMMAR
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_URL;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DOMAIN;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TAGS;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
 
@@ -64,6 +68,10 @@ public class ListArticlesActivity extends Activity implements
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private ActionBarDrawerToggle drawerToggle;
+    private View mSettings;
+    private View mNoArticles;
+    private TextView mNoArticlesText;
+    private boolean mIsLoading = false;
 
     private IntentFilter mServiceIntentFilter;
 
@@ -71,29 +79,38 @@ public class ListArticlesActivity extends Activity implements
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            // TODO restart loader
-            // TODO show toast based on unread count
-//            getSupportLoaderManager().restartLoader(
-//                    R.id.loader_recent_cards,
+            if (intent.getExtras().getBoolean(ApiService.EXTRA_FINISHED_LOADING, false)) {
+                int unread = intent.getExtras().getInt(ApiService.EXTRA_COUNT_UNREAD);
+                Toast.makeText(ListArticlesActivity.this, getResources().getQuantityString(R.plurals.unread_articles, unread, unread), Toast.LENGTH_SHORT).show();
+                setBusy(false);
+            }
+//            getLoaderManager().restartLoader(
+//                    R.id.loader_articles,
 //                    null,
-//                    RecentCardsListFragment.this);
+//                    ListArticlesActivity.this);
+            updateList();
         }
     };
 
+    @SuppressLint("AppCompatMethod")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         getSettings();
         setTheme(themeId);
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         Utils.setActionBarIcon(actionBar, themeId);
         setContentView(R.layout.list);
 
         //Database
         setupDB();
+
+        // 'no articles yet'
+        mNoArticles = findViewById(R.id.no_articles_container);
+        mNoArticlesText = (TextView) findViewById(R.id.no_articles_text);
 
         //Listview
         readList = (ListView) findViewById(R.id.list_articles);
@@ -104,9 +121,22 @@ public class ListArticlesActivity extends Activity implements
         //Drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
-        DrawerListAdapter adapter = new DrawerListAdapter(this, listFilterOption);
+        final DrawerListAdapter adapter = new DrawerListAdapter(this, listFilterOption);
         drawerList.setAdapter(adapter);
+        drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                if(adapter.getActivePosition() != pos){
+                    adapter.setActivePosition(pos);
+                    adapter.notifyDataSetChanged();
+                    setListFilterOption(pos);
+                    updateList();
+                    setTitle(adapter.getItem(pos).mTitle);
+                }
+                closeDrawer();
+            }
+        });
         drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
                 drawerLayout, /* DrawerLayout object */
                 R.drawable.ic_drawer, /* nav drawer icon */
@@ -136,18 +166,18 @@ public class ListArticlesActivity extends Activity implements
         drawerLayout.setScrimColor(getResources().getColor(R.color.drawer_scrim));
 
         // In case of no articles, link to the settings:
-        View settings = findViewById(R.id.bt_settings);
-        settings.setOnClickListener(new View.OnClickListener() {
+        mSettings = findViewById(R.id.bt_settings);
+        mSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ListArticlesActivity.this, SettingsActivity.class);
+                Intent intent = new Intent(ListArticlesActivity.this, AccountSettingsActivity.class);
                 startActivityForResult(
                         intent,
                         Constants.REQUEST_SETTINGS);
             }
         });
         if (Prefs.contains(Constants.PREFS_KEY_WALLABAG_URL)) {
-            settings.setVisibility(View.GONE);
+            mSettings.setVisibility(View.GONE);
         }
 
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -158,7 +188,6 @@ public class ListArticlesActivity extends Activity implements
             mServiceIntentFilter = new IntentFilter(getString(R.string.broadcast_articles_loaded));
             mServiceIntentFilter.addAction(getString(R.string.broadcast_unread_changed));
         }
-
     }
 
     @Override
@@ -178,8 +207,8 @@ public class ListArticlesActivity extends Activity implements
         super.onResume();
         getSettings();
         registerReceiver(mServiceReceiver, mServiceIntentFilter);
-        //getSupportLoaderManager()
-        //        .restartLoader(R.id.loader_recent_cards, null, this);
+//        getLoaderManager()
+//                .restartLoader(R.id.loader_articles, null, this);
     }
 
     @Override
@@ -198,6 +227,9 @@ public class ListArticlesActivity extends Activity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_list, menu);
+        if (mIsLoading) {
+            menu.findItem(R.id.refresh).setVisible(false);
+        }
         return true;
 
     }
@@ -210,7 +242,7 @@ public class ListArticlesActivity extends Activity implements
 
         if (requestCode == Constants.REQUEST_SETTINGS) {
             if (resultCode == Constants.RESULT_LIST_SHOULD_CHANGE) {
-                setupList();
+                updateList();
             }
         }
     }
@@ -293,19 +325,23 @@ public class ListArticlesActivity extends Activity implements
      *
      * @param busy
      */
+    @SuppressLint("AppCompatMethod")
     private void setBusy(boolean busy) {
+        mIsLoading = busy;
+        invalidateOptionsMenu();
         if (busy) {
+            mSettings.setVisibility(View.GONE);
+            mNoArticlesText.setText(R.string.syncing);
             setProgressBarIndeterminateVisibility(Boolean.TRUE);
         } else {
+            mNoArticlesText.setText(R.string.no_articles);
             setProgressBarIndeterminateVisibility(Boolean.FALSE);
         }
     }
 
     public void setupList() {
         List<Article> articlesList = getArticlesList();
-
         adapter.setListArticles(articlesList);
-
         readList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -321,11 +357,10 @@ public class ListArticlesActivity extends Activity implements
     }
 
     private void checkIfHasNoArticles() {
-        View noArticles = findViewById(R.id.no_articles_container);
         if (adapter.getCount() == 0) {
-            noArticles.setVisibility(View.VISIBLE);
+            mNoArticles.setVisibility(View.VISIBLE);
         } else {
-            noArticles.setVisibility(View.GONE);
+            mNoArticles.setVisibility(View.GONE);
         }
     }
 
@@ -356,8 +391,14 @@ public class ListArticlesActivity extends Activity implements
         List<Article> articlesList = new ArrayList<Article>();
 
         String[] getStrColumns = new String[]{
-                ARTICLE_URL, MY_ID,
-                ARTICLE_TITLE, ARCHIVE, FAV, ARTICLE_SUMMARY
+                ARTICLE_URL,
+                MY_ID,
+                ARTICLE_TITLE,
+                ARCHIVE,
+                FAV,
+                ARTICLE_SUMMARY,
+                ARTICLE_DOMAIN,
+                ARTICLE_TAGS,
         };
         Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, filter, null,
                 null, null, orderBy);
@@ -365,9 +406,13 @@ public class ListArticlesActivity extends Activity implements
         ac.moveToFirst();
         if (!ac.isAfterLast()) {
             do {
-                Article tempArticle = new Article(ac.getString(0),
-                        ac.getString(1), ac.getString(2),
-                        ac.getString(3), ac.getString(4), ac.getString(5));
+                Article tempArticle = new Article(
+                        ac.getString(0),
+                        ac.getString(1),
+                        ac.getString(2),
+                        ac.getString(3),
+                        ac.getString(4),
+                        ac.getString(5));
                 articlesList.add(tempArticle);
             } while (ac.moveToNext());
         }

@@ -20,11 +20,15 @@ import java.util.List;
 public class SimpleListAdapter extends BaseAdapter {
 
     private final Context mContext;
-    private List<ListItem> mData;
+    protected List<ListItem> mData;
 
     public SimpleListAdapter(Context context, List<ListItem> items) {
         mContext = context;
         mData = items;
+    }
+
+    protected Context getContext() {
+        return mContext;
     }
 
     @Override
@@ -37,11 +41,17 @@ public class SimpleListAdapter extends BaseAdapter {
             viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
             viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);
             viewHolder.ivIcon = (ImageView) convertView.findViewById(R.id.iv_icon);
+            viewHolder.root = convertView;
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ListItem.Holder) convertView.getTag();
         }
 
+        putItemInView(position, viewHolder);
+        return convertView;
+    }
+
+    protected void putItemInView(int position, ListItem.Holder viewHolder) {
         ListItem item = mData.get(position);
         if (item != null) {
             // Title
@@ -61,7 +71,6 @@ public class SimpleListAdapter extends BaseAdapter {
                 viewHolder.ivIcon.setVisibility(View.GONE);
             }
         }
-        return convertView;
     }
 
     @Override
@@ -70,7 +79,7 @@ public class SimpleListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public ListItem getItem(int position) {
         return mData.get(position);
     }
 

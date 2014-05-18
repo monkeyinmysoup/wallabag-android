@@ -49,13 +49,13 @@
             android:label="@string/menuSettings" />
         <activity
             android:name="com.pixplicity.wallabag.activities.AccountSettingsActivity"
-            android:label="@string/account" />
+            android:label="@string/settings_account" />
         <activity
             android:name="com.pixplicity.wallabag.activities.LookAndFeelSettingsActivity"
-            android:label="@string/look_and_feel" />
+            android:label="@string/setting_look_and_feel" />
         <activity
             android:name="com.pixplicity.wallabag.activities.GeneralSettingsActivity"
-            android:label="@string/general" />
+            android:label="@string/settings_general" />
 
         <service
             android:name="com.pixplicity.wallabag.ApiService"

@@ -3,6 +3,7 @@ package com.pixplicity.wallabag;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +17,8 @@ import java.net.URL;
  * Common tasks on images and image urls
  */
 public final class ImageUtils {
+
+    private static final String TAG = ImageUtils.class.getSimpleName();
 
     public static String changeImagesUrl(Context ctx, String html) {
         int lastImageTag = 0;
@@ -95,7 +98,7 @@ public final class ImageUtils {
             InputStream input = connection.getInputStream();
             return BitmapFactory.decodeStream(input);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.w(TAG, "Error downloading image " + src + "; " + e.getMessage());
             return null;
         }
     }

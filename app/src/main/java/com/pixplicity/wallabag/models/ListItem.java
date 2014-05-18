@@ -1,5 +1,6 @@
 package com.pixplicity.wallabag.models;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class ListItem {
      * View holder for caching the associated ui elements
      */
     public static class Holder {
+        public View root;
         public TextView tvTitle;
         public TextView tvSubtitle;
         public ImageView ivIcon;

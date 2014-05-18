@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="?android:attr/listPreferredItemHeight"
     android:paddingLeft="@dimen/small_padding_horizontal"
     android:paddingRight="@dimen/small_padding_horizontal"
     android:paddingTop="@dimen/small_padding_vertical"
