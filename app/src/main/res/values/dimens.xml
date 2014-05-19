@@ -10,6 +10,11 @@
     <dimen name="font_size_small">18sp</dimen>
     <dimen name="font_size_medium">21sp</dimen>
     <dimen name="font_size_large">34sp</dimen>
+
     <dimen name="li_article_margin_vert">4dp</dimen>
     <dimen name="li_article_margin_hor">8dp</dimen>
+    <dimen name="li_article_spacing">8dp</dimen>
+
+    <dimen name="card_corner_radius">1dp</dimen>
+    <dimen name="card_padding">8dp</dimen>
 </resources>

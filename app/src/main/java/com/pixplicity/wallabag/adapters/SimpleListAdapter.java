@@ -21,10 +21,12 @@ public class SimpleListAdapter extends BaseAdapter {
 
     private final Context mContext;
     protected List<ListItem> mData;
+    protected int mThemeId;
 
-    public SimpleListAdapter(Context context, List<ListItem> items) {
+    public SimpleListAdapter(Context context, List<ListItem> items, int themeId) {
         mContext = context;
         mData = items;
+        mThemeId = themeId;
     }
 
     protected Context getContext() {

@@ -1,6 +1,7 @@
 package com.pixplicity.wallabag.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 
 import com.pixplicity.wallabag.Constants;
@@ -13,8 +14,8 @@ public class DrawerListAdapter extends SimpleListAdapter {
 	
 	private int mActive;
 
-    public DrawerListAdapter(Context ctx, int active){
-        super(ctx, new ArrayList<ListItem>());
+    public DrawerListAdapter(Context ctx, int active, int themeId){
+        super(ctx, new ArrayList<ListItem>(), themeId);
 		this.mActive = active;
 
         mData.add(new ListItem(Constants.ALL, R.string.drawer_all, -1, R.drawable.drawer_all));
@@ -28,10 +29,22 @@ public class DrawerListAdapter extends SimpleListAdapter {
         super.putItemInView(position, viewHolder);
         if(mActive == position) {
             viewHolder.tvTitle.setTypeface(null, Typeface.BOLD);
-            viewHolder.root.setBackgroundColor(getContext().getResources().getColor(R.color.white_opaque));
+            if (mThemeId == R.style.Theme_Wallabag_Dark) {
+                viewHolder.root.setBackgroundColor(
+                        getContext().getResources().getColor(R.color.drawer_active_background_dark));
+            } else {
+                viewHolder.root.setBackgroundColor(
+                        getContext().getResources().getColor(R.color.drawer_active_background));
+            }
         } else {
             viewHolder.tvTitle.setTypeface(null, Typeface.NORMAL);
-            viewHolder.root.setBackgroundColor(getContext().getResources().getColor(R.color.drawer_background));
+            viewHolder.root.setBackgroundColor(Color.TRANSPARENT);
+//            if (mThemeId == R.style.Theme_Wallabag_Dark) {
+//                viewHolder.root.setBackgroundColor(
+//                        getContext().getResources().getColor(R.color.drawer_background_dark));
+//            } else {
+//                viewHolder.root.setBackgroundColor(getContext().getResources().getColor(R.color.drawer_background));
+//            }
         }
     }
 

@@ -68,7 +68,7 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
                         ARTICLE_READAT + " integer," +
                         ARTICLE_SUMMARY + " text," +
                         ARTICLE_DOMAIN + " text," +
-                        ARTICLE_TAGS + " text" +
+                        ARTICLE_TAGS + " text," +
                         "UNIQUE (" + ARTICLE_URL + ")" +
                         ");"
         );

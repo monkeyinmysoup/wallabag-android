@@ -130,7 +130,7 @@ public class ListArticlesActivity extends Activity implements
         //Drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
-        final DrawerListAdapter adapter = new DrawerListAdapter(this, listFilterOption);
+        final DrawerListAdapter adapter = new DrawerListAdapter(this, listFilterOption, themeId);
         drawerList.setAdapter(adapter);
         drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 

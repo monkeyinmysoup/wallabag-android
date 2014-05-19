@@ -40,7 +40,7 @@ public class SettingsActivity extends AbstractSettingsActivity {
     @Override
     protected void createUI() {
         mItems = new ArrayList<>();
-        mAdapter = new SimpleListAdapter(this, mItems);
+        mAdapter = new SimpleListAdapter(this, mItems, themeId);
         refreshSettings();
 
         // App version

@@ -15,10 +15,11 @@
             android:id="@+id/list_articles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/li_article_margin_hor"
+            android:paddingLeft="@dimen/li_article_margin_hor"
+            android:paddingRight="@dimen/li_article_margin_hor"
             tools:listitem="@layout/li_article"
             android:divider="@android:color/transparent"
-            android:dividerHeight="@dimen/li_article_margin_vert"
+            android:dividerHeight="@dimen/li_article_spacing"
             android:background="@color/article_list_background"/>
 
         <RelativeLayout
@@ -71,8 +72,8 @@
         android:layout_width="180dp"
         android:layout_height="match_parent"
         android:choiceMode="singleChoice"
-        android:background="@color/drawer_background"
         android:divider="@null"
+        android:background="?android:windowBackground"
         android:layout_gravity="start"
         tools:listitem="@layout/li_simple" />
 </android.support.v4.widget.DrawerLayout>
