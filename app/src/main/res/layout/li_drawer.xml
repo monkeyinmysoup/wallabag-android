@@ -3,22 +3,44 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clickable="true"
-    android:paddingBottom="10dp"
-    android:paddingLeft="15dp"
-    android:paddingTop="10dp" >
+    android:focusableInTouchMode="true"
+    android:paddingLeft="15dp">
 
     <ImageView
-        android:id="@+id/drawer_element_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <com.pixplicity.fonttextutils.FontTextView
-        android:id="@+id/drawer_element_text"
+        android:id="@+id/iv_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/drawer_all"/>
+
+    <com.pixplicity.fonttextutils.FontTextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/default_padding_vertical"
+        android:layout_marginBottom="@dimen/default_padding_vertical"
         tools:text="drawer entry"
         android:layout_marginLeft="5dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#FFF" />
+        android:textAppearance="@style/FontMedium" />
+
+    <com.pixplicity.fonttextutils.FontTextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Subtitle"
+        android:visibility="gone"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/view_margin_small"
+        android:textAppearance="@style/FontSmall" />
+
+    <ImageView
+        android:layout_height="match_parent"
+        android:id="@+id/iv_color"
+        android:layout_width="@dimen/drawer_color_width"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/drawer_bar_all" />
 
 </LinearLayout>

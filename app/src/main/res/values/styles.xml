@@ -22,10 +22,10 @@
 
     <!-- Font related styles -->
     <style name="Font">
-        <item name="pix_font">arvo.woff</item>
-        <item name="pix_fontBold">arvo-bold.woff</item>
-        <item name="pix_fontItalic">arvo-italic.woff</item>
-        <item name="pix_fontBoldItalic">arvo-bolditalic.woff</item>
+        <item name="pix_font">OpenSans-Regular.ttf</item>
+        <item name="pix_fontBold">OpenSans-Bold.ttf</item>
+        <item name="pix_fontItalic">OpenSans-Italic.ttf</item>
+        <item name="pix_fontBoldItalic">OpenSans-BoldItalic.ttf</item>
     </style>
 
     <style name="FontSmall" parent="Font">

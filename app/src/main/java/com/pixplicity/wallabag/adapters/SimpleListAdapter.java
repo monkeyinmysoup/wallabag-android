@@ -15,18 +15,26 @@ import java.util.List;
 
 /**
  * Adapter for showing {@link com.pixplicity.wallabag.models.ListItem} elements in an AdapterView.
- * Layout {@code li_simple} is used for displaying a ListItem.
+ * Unless otherwise specified, layout {@code li_simple} is used for displaying a ListItem.
  */
 public class SimpleListAdapter extends BaseAdapter {
 
     private final Context mContext;
+
+    private final int mLayoutRes;
+
     protected List<ListItem> mData;
     protected int mThemeId;
 
     public SimpleListAdapter(Context context, List<ListItem> items, int themeId) {
+        this(context, items, themeId, R.layout.li_simple);
+    }
+
+    public SimpleListAdapter(Context context, List<ListItem> items, int themeId, int layoutRes) {
         mContext = context;
         mData = items;
         mThemeId = themeId;
+        mLayoutRes = layoutRes;
     }
 
     protected Context getContext() {
@@ -38,7 +46,7 @@ public class SimpleListAdapter extends BaseAdapter {
         ListItem.Holder viewHolder;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.li_simple, parent, false);
+            convertView = inflater.inflate(mLayoutRes, parent, false);
             viewHolder = new ListItem.Holder();
             viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
             viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.tv_subtitle);

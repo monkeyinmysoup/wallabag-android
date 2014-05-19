@@ -17,4 +17,6 @@
 
     <dimen name="card_corner_radius">1dp</dimen>
     <dimen name="card_padding">8dp</dimen>
+    <dimen name="drawer_color_width">6dp</dimen>
+    <dimen name="drawer_width">180dp</dimen>
 </resources>

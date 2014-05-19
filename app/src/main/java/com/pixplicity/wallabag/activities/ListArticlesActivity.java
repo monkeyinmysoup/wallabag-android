@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -66,7 +67,8 @@ public class ListArticlesActivity extends Activity implements
     private int sortType;
     private int listFilterOption;
     private DrawerLayout drawerLayout;
-    private ListView drawerList;
+    private ViewGroup drawerContainer;
+
     private ActionBarDrawerToggle drawerToggle;
     private View mSettings;
     private View mNoArticles;
@@ -129,7 +131,8 @@ public class ListArticlesActivity extends Activity implements
 
         //Drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
+        drawerContainer = (ViewGroup) findViewById(R.id.left_drawer);
+        ListView drawerList = (ListView) findViewById(R.id.lv_drawer);
         final DrawerListAdapter adapter = new DrawerListAdapter(this, listFilterOption, themeId);
         drawerList.setAdapter(adapter);
         drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
@@ -260,10 +263,10 @@ public class ListArticlesActivity extends Activity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (drawerLayout.isDrawerOpen(drawerList)) {
-                    drawerLayout.closeDrawer(drawerList);
+                if (drawerLayout.isDrawerOpen(drawerContainer)) {
+                    drawerLayout.closeDrawer(drawerContainer);
                 } else {
-                    drawerLayout.openDrawer(drawerList);
+                    drawerLayout.openDrawer(drawerContainer);
                 }
                 return true;
             case R.id.refresh:
@@ -435,7 +438,7 @@ public class ListArticlesActivity extends Activity implements
     }
 
     public void closeDrawer() {
-        drawerLayout.closeDrawer(drawerList);
+        drawerLayout.closeDrawer(drawerContainer);
     }
 
     public void setListFilterOption(int option) {
