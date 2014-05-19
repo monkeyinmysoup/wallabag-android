@@ -100,7 +100,7 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
         builder.setMessage(getString(R.string.sure));
 
         View checkBoxView = View.inflate(getBaseContext(),
-                R.layout.my_checkbox, null);
+                R.layout.dialog_whipe_db, null);
         CheckBox checkBox = (CheckBox) checkBoxView
                 .findViewById(R.id.checkbox_delete_acoount);
         checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -175,7 +175,7 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
 
     @Override
     protected int getContentView() {
-        return R.layout.general_settings;
+        return R.layout.activity_general_settings;
     }
 }
 

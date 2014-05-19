@@ -274,6 +274,6 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
 
     @Override
     protected int getContentView() {
-        return R.layout.look_and_feel_settings;
+        return R.layout.activity_look_and_feel;
     }
 }

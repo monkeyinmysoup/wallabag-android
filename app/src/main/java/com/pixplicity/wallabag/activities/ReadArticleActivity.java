@@ -85,7 +85,7 @@ public class ReadArticleActivity extends Activity {
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         getSettings();
         setTheme(themeId);
-        setContentView(R.layout.article);
+        setContentView(R.layout.activity_article);
 
         actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(true);
