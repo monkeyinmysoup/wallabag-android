@@ -27,4 +27,14 @@
         tools:text="Subtitle"
         android:textAppearance="@style/FontSmall" />
 
+
+    <com.pixplicity.fonttextutils.FontTextView
+        android:id="@+id/listitem_domain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:ellipsize="end"
+        android:maxLines="2"
+        tools:text="github.com"
+        android.background="6060333333" />
 </LinearLayout>

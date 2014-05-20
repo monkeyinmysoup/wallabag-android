@@ -12,4 +12,8 @@
     <dimen name="font_size_large">34sp</dimen>
     <dimen name="li_article_margin_vert">4dp</dimen>
     <dimen name="li_article_margin_hor">8dp</dimen>
+    <dimen name="article_list_spacing">8dp</dimen>
+
+    <!-- used to be 2dp -->
+    T<dimen name="card_corner_radius">0dp</dimen>
 </resources>
