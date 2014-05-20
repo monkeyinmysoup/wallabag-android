@@ -34,7 +34,7 @@ public class AccountSettingsActivity extends AbstractSettingsActivity {
 
     @Override
     protected int getContentView() {
-        return R.layout.account_settings;
+        return R.layout.activity_account_settings;
     }
 
     @Override

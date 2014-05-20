@@ -10,10 +10,16 @@
     <dimen name="font_size_small">18sp</dimen>
     <dimen name="font_size_medium">21sp</dimen>
     <dimen name="font_size_large">34sp</dimen>
+
     <dimen name="li_article_margin_vert">4dp</dimen>
     <dimen name="li_article_margin_hor">8dp</dimen>
-    <dimen name="article_list_spacing">8dp</dimen>
+    <dimen name="li_article_spacing">8dp</dimen>
+    <dimen name="li_article_image_size">54dp</dimen>
 
-    <!-- used to be 2dp -->
-    T<dimen name="card_corner_radius">0dp</dimen>
+    <dimen name="card_corner_radius">0dp</dimen>
+    <dimen name="card_padding">8dp</dimen>
+
+    <dimen name="drawer_color_width">6dp</dimen>
+    <dimen name="drawer_width">200dp</dimen>
+
 </resources>

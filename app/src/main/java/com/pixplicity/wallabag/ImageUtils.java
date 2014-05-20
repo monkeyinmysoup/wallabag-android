@@ -20,6 +20,59 @@ public final class ImageUtils {
 
     private static final String TAG = ImageUtils.class.getSimpleName();
 
+    /**
+     * Finds the url of the first image and returns it
+     * @param html
+     * @return
+     */
+    public static String getFirstImageUrl(String url, String html) {
+        int openTagPosition = html.indexOf("<img");
+        if (openTagPosition == -1) {
+            return null;
+        }
+
+        int closeTagPosition = html.indexOf('>', openTagPosition);
+        if (closeTagPosition == -1) {
+            throw new RuntimeException("Error while parsing html");
+        }
+
+        String tagContent = html.substring(openTagPosition, closeTagPosition + 1);
+        String[] tagParams = tagContent.split(" ");
+        String imageSource = "";
+        for (String param : tagParams) {
+            if (param.startsWith("src")) {
+                imageSource = param;
+                break;
+            }
+        }
+
+        imageSource = imageSource.replaceAll("src=", "")
+            .replaceAll("\"", "")
+            .trim();
+        if (imageSource.startsWith("http://") || imageSource.startsWith("https://")) {
+            // Complete url is complete
+            return imageSource;
+        } else if (imageSource.startsWith("//")) {
+            // Protocol missing? Add protocol.
+            return (url.startsWith("http:") ? "http:" : "https:") + imageSource;
+        } else {
+            int lastSlash = url.lastIndexOf('/');
+            if (lastSlash > 0) {
+                // Strip filename (e.g. index.html) and attach image url to path:
+                return url.substring(0, lastSlash + 1) + imageSource;
+            } else {
+                return url + "/" + imageSource;
+            }
+        }
+    }
+
+    /**
+     * Replaces all image urls in the source html to local urls.
+     *
+     * @param ctx
+     * @param html
+     * @return
+     */
     public static String changeImagesUrl(Context ctx, String html) {
         int lastImageTag = 0;
 

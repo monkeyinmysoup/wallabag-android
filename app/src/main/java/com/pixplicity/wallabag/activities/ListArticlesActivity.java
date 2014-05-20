@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -45,6 +46,7 @@ import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DOMAIN
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_SUMMARY;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TAGS;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_IMAGE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
@@ -66,7 +68,8 @@ public class ListArticlesActivity extends Activity implements
     private int sortType;
     private int listFilterOption;
     private DrawerLayout drawerLayout;
-    private ListView drawerList;
+    private ViewGroup drawerContainer;
+
     private ActionBarDrawerToggle drawerToggle;
     private View mSettings;
     private View mNoArticles;
@@ -129,19 +132,27 @@ public class ListArticlesActivity extends Activity implements
 
         //Drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
-        final DrawerListAdapter adapter = new DrawerListAdapter(this, listFilterOption);
+        drawerContainer = (ViewGroup) findViewById(R.id.left_drawer);
+        ListView drawerList = (ListView) findViewById(R.id.lv_drawer);
+        final DrawerListAdapter adapter = new DrawerListAdapter(this, listFilterOption, themeId);
         drawerList.setAdapter(adapter);
         drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 if (adapter.getActivePosition() != pos) {
-                    adapter.setActivePosition(pos);
-                    adapter.notifyDataSetChanged();
-                    setListFilterOption(pos);
-                    updateList();
-                    setTitle(adapter.getItem(pos).mTitle);
+                    if (pos == Constants.SETTINGS) {
+                        Intent intent = new Intent(ListArticlesActivity.this, AccountSettingsActivity.class);
+                        startActivityForResult(
+                                intent,
+                                Constants.REQUEST_SETTINGS);
+                    } else {
+                        adapter.setActivePosition(pos);
+                        adapter.notifyDataSetChanged();
+                        setListFilterOption(pos);
+                        updateList();
+                        setTitle(adapter.getItem(pos).mTitle);
+                    }
                 }
                 closeDrawer();
             }
@@ -260,10 +271,10 @@ public class ListArticlesActivity extends Activity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (drawerLayout.isDrawerOpen(drawerList)) {
-                    drawerLayout.closeDrawer(drawerList);
+                if (drawerLayout.isDrawerOpen(drawerContainer)) {
+                    drawerLayout.closeDrawer(drawerContainer);
                 } else {
-                    drawerLayout.openDrawer(drawerList);
+                    drawerLayout.openDrawer(drawerContainer);
                 }
                 return true;
             case R.id.refresh:
@@ -410,6 +421,7 @@ public class ListArticlesActivity extends Activity implements
                 ARTICLE_SUMMARY,
                 ARTICLE_DOMAIN,
                 ARTICLE_TAGS,
+                ARTICLE_IMAGE
         };
         Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, filter, null,
                 null, null, orderBy);
@@ -425,7 +437,8 @@ public class ListArticlesActivity extends Activity implements
                         ac.getString(4),
                         ac.getString(5),
                         ac.getString(6),
-                        ac.getString(7));
+                        ac.getString(7),
+                        ac.getString(8));
                 articlesList.add(tempArticle);
             } while (ac.moveToNext());
         }
@@ -435,7 +448,7 @@ public class ListArticlesActivity extends Activity implements
     }
 
     public void closeDrawer() {
-        drawerLayout.closeDrawer(drawerList);
+        drawerLayout.closeDrawer(drawerContainer);
     }
 
     public void setListFilterOption(int option) {

@@ -4,7 +4,7 @@
     <style name="Theme.Wallabag.Dark" parent="Theme.Wallabag">
         <item name="android:windowBackground">@color/background_dark</item>
         <item name="android:actionBarStyle">@style/ActionBar.Solid.Wallabag.Dark</item>
-        <item name="android:textColor">@color/font_light</item>0
+        <item name="android:textColor">@color/primary_dark</item>
     </style>
 
     <!-- Custom ActionBar for the dark theme -->
@@ -22,10 +22,10 @@
 
     <!-- Font related styles -->
     <style name="Font">
-        <item name="pix_font">Tellural.ttf</item>
-        <item name="pix_fontBold">Tellural-Bold.ttf</item>
-        <item name="pix_fontItalic">Tellural-Italic.ttf</item>
-        <item name="pix_fontBoldItalic">Tellural-BoldItalic.ttf</item>
+        <item name="pix_font">OpenSans-Regular.ttf</item>
+        <item name="pix_fontBold">OpenSans-Bold.ttf</item>
+        <item name="pix_fontItalic">OpenSans-Italic.ttf</item>
+        <item name="pix_fontBoldItalic">OpenSans-BoldItalic.ttf</item>
     </style>
 
     <style name="FontSmall" parent="Font">
@@ -53,5 +53,4 @@
     <style name="TransparentButton" parent="android:Widget.Button">
         <item name="android:background">@drawable/invisible_button</item>
     </style>
-
 </resources>

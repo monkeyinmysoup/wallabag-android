@@ -1,25 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Generic -->
+    <color name="white_opaque">#ffffffff</color>
+    <color name="divider">#ffc0c0c0</color>
+
     <!-- Fonts -->
     <color name="primary_font">#222222</color>
     <color name="secondary_font">#666666</color>
     <color name="primary">#0090ff</color>
     <color name="font_light">#ffffff</color>
 
-    <!-- Generic -->
-    <color name="white_opaque">#FFFFFFFF</color>
+    <!-- Dark theme -->
+    <color name="primary_dark">#ffe1e1e1</color>
     <color name="background_dark">#ff002a51</color>
 
     <!-- Action Bar -->
     <color name="action_bar_dark">#ff002142</color>
     <color name="action_bar_light">@color/primary</color>
 
-    <color name="divider">#ffc0c0c0</color>
+    <!-- Cards (Articles in list) -->
+    <color name="card_disabled_shadow">#b2cccccc</color>
+    <color name="card_disabled_background">#b2ffffff</color>
+    <color name="card_normal_shadow">#cccccc</color>
+    <color name="card_normal_background">#ffffff</color>
+    <color name="card_pressed_shadow">#cccccc</color>
+    <color name="card_pressed_background">@android:color/transparent</color>
+
+    <!-- Drawer -->
+    <color name="drawer_scrim">#60ffffff</color>
     <color name="drawer_background">#fff5f5f5</color>
-    <color name="drawer_scrim">#77000000</color>
+    <color name="drawer_background_dark">#60f5f5f5</color>
+    <color name="drawer_active_background">@color/white_opaque</color>
+    <color name="drawer_active_background_dark">#60ffffff</color>
+
+    <color name="indicator_all">#ffc03000</color>
+    <color name="indicator_unread">#ffff5000</color>
+    <color name="indicator_archive">#ffc0c000</color>
+    <color name="indicator_favorites">#ff609000</color>
+    <color name="indicator_settings">#ff009090</color>
+
     <color name="invisi_button_active">#50ffffff</color>
     <color name="invisi_button_pressed">#77ffffff</color>
     <color name="invisi_button_default">@android:color/transparent</color>
+
     <color name="article_list_background">#e5e5e5</color>
+    <color name="article_list_background_dark">@color/background_dark</color>
 </resources>

@@ -50,6 +50,7 @@ import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DOMAIN;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TAGS;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_IMAGE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
 
@@ -85,7 +86,7 @@ public class ReadArticleActivity extends Activity {
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         getSettings();
         setTheme(themeId);
-        setContentView(R.layout.article);
+        setContentView(R.layout.activity_article);
 
         actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(true);
@@ -107,6 +108,7 @@ public class ReadArticleActivity extends Activity {
                 ARTICLE_READAT,
                 ARTICLE_DOMAIN,
                 ARTICLE_TAGS,
+                ARTICLE_IMAGE
         };
         Bundle data = getIntent().getExtras();
         if (data != null) {

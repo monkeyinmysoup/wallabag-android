@@ -1,77 +1,100 @@
 package com.pixplicity.wallabag.adapters;
 
-import java.util.List;
+import com.pixplicity.wallabag.R;
+import com.pixplicity.wallabag.models.Article;
+import com.pixplicity.wallabag.models.ListItem;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pixplicity.wallabag.R;
-import com.pixplicity.wallabag.models.Article;
+import java.util.List;
 
 
 public class ReadingListAdapter extends BaseAdapter {
-	private final Context context;
-	private List<Article> listArticles;
 
-	public ReadingListAdapter(Context context, List<Article> listArticles) {
-		this.context = context;
-		this.listArticles = listArticles;
-	}
-	
-	public ReadingListAdapter(Context context) {
-		this.context = context;
-	}
-	
-	public void setListArticles(List<Article> articlesList){
-		this.listArticles = articlesList;
-		notifyDataSetChanged();
-	}
+    private Context mContext;
 
-	@Override
-	public int getCount() {
-		if(listArticles != null) {
-			return listArticles.size();
-		} else {
-			return 0;
-		}
-	}
+    private List<Article> listArticles;
 
-	@Override
-	public Object getItem(int position) {
-		return listArticles.get(position);
-	}
+    private int imgSize;
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+    public ReadingListAdapter(Context context) {
+        this.mContext = context;
+        this.imgSize = context.getResources().getDimensionPixelSize(R.dimen.li_article_image_size);
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.li_article, null);
-		}
-		TextView tvTitle = (TextView) convertView
-				.findViewById(R.id.listitem_title);
-		TextView tvDescription = (TextView) convertView
-				.findViewById(R.id.listitem_description);
-		Article entry = listArticles.get(position);
+    public void setListArticles(List<Article> articlesList) {
+        this.listArticles = articlesList;
+        notifyDataSetChanged();
+    }
 
-		tvTitle.setText(entry.title);
+    @Override
+    public int getCount() {
+        if (listArticles != null) {
+            return listArticles.size();
+        } else {
+            return 0;
+        }
+    }
 
-		String description = entry.summary;
-		
-		tvDescription.setText(description);
+    @Override
+    public Object getItem(int position) {
+        return listArticles.get(position);
+    }
 
-		return convertView;
-	}
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-	
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final ListItem.Holder viewHolder;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) mContext
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.li_article, parent, false);
+            viewHolder = new ListItem.Holder();
+            viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.listitem_title);
+            viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.listitem_description);
+            viewHolder.ivIcon = (ImageView) convertView.findViewById(R.id.iv_image);
+            viewHolder.root = convertView;
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ListItem.Holder) convertView.getTag();
+        }
 
+        Article entry = listArticles.get(position);
+        viewHolder.tvTitle.setText(entry.title);
+        String description = entry.summary;
+        viewHolder.tvSubtitle.setText(description);
+        if (entry.hasImage()) {
+            Picasso.with(mContext)
+                    .load(entry.getImageUrl())
+                    //.placeholder(R.drawable.placeholder)
+                    //.error(R.drawable.placeholder)
+                    .resize(imgSize, imgSize)
+                    .centerCrop()
+                    .into(viewHolder.ivIcon, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            viewHolder.ivIcon.setVisibility(View.VISIBLE);
+                        }
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+        } else {
+            viewHolder.ivIcon.setVisibility(View.GONE);
+        }
+        return convertView;
+    }
 }

@@ -14,8 +14,9 @@ public class Article {
     public String summary;
     public String domain;
     public String[] tags;
+    public String imageUrl;
 
-    public Article(String url, String id, String title, String archive, String isFav, String summary, String domain, String tags) {
+    public Article(String url, String id, String title, String archive, String isFav, String summary, String domain, String tags, String imageUrl) {
         this.url = url;
         this.id = id;
         this.title = title;
@@ -24,6 +25,7 @@ public class Article {
         this.summary = summary;
         this.domain = domain;
         this.tags = tags.split(",");
+        this.imageUrl = imageUrl;
     }
 
     public static String makeDescription(String html) {
@@ -43,5 +45,13 @@ public class Article {
             desc += words[i] + " ";
         }
         return desc;
+    }
+
+    public boolean hasImage() {
+        return imageUrl != null;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

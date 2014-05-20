@@ -4,7 +4,7 @@
         <shape
             android:dither="true"
             android:shape="rectangle">
-            <solid android:color="#CCCCCC" />
+            <solid android:color="@color/card_normal_shadow" />
             <corners android:radius="@dimen/card_corner_radius" />
         </shape>
     </item>
@@ -12,13 +12,8 @@
         <shape
             android:dither="true"
             android:shape="rectangle">
-            <solid android:color="#FFFFFF" />
+            <solid android:color="@color/card_normal_background" />
             <corners android:radius="@dimen/card_corner_radius" />
-            <padding
-                android:top="8dp"
-                android:bottom="8dp"
-                android:left="8dp"
-                android:right="8dp" />
         </shape>
     </item>
 </layer-list>

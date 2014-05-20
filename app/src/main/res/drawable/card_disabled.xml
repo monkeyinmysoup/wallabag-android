@@ -4,21 +4,21 @@
         <shape
             android:dither="true"
             android:shape="rectangle">
-            <solid android:color="#B2CCCCCC" />
-            <corners android:radius="2dp" />
+            <solid android:color="@color/card_disabled_shadow" />
+            <corners android:radius="@dimen/card_corner_radius" />
         </shape>
     </item>
     <item android:bottom="2dp">
         <shape
             android:dither="true"
             android:shape="rectangle">
-            <solid android:color="#B2FFFFFF" />
-            <corners android:radius="2dp" />
+            <solid android:color="@color/card_disabled_background" />
+            <corners android:radius="@dimen/card_corner_radius" />
             <padding
-                android:top="8dp"
-                android:bottom="8dp"
-                android:left="8dp"
-                android:right="8dp" />
+                android:top="@dimen/card_padding"
+                android:bottom="@dimen/card_padding"
+                android:left="@dimen/card_padding"
+                android:right="@dimen/card_padding" />
         </shape>
     </item>
 </layer-list>
