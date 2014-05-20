@@ -94,4 +94,16 @@
             android:dividerHeight="1dp"
             tools:listitem="@layout/li_drawer" />
     </FrameLayout>
+    <!--
+            <ListView
+                android:id="@+id/lv_drawer"
+                android:choiceMode="singleChoice"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="1dp"
+                tools:listitem="@layout/li_drawer"
+                android:layout_width="@dimen/drawer_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="?android:windowBackground" />
+     -->
 </android.support.v4.widget.DrawerLayout>

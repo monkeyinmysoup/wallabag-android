@@ -53,6 +53,7 @@ import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_SUMMAR
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TAGS;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_IMAGE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
@@ -345,12 +346,14 @@ public class ApiService extends IntentService {
         ContentValues values = new ContentValues();
         values.put(ARTICLE_TITLE, Html.fromHtml(articleTitle)
                 .toString());
-        values.put(ARTICLE_CONTENT,
-                ImageUtils.changeImagesUrl(this, articleContent));
+//        values.put(ARTICLE_CONTENT,
+//                ImageUtils.changeImagesUrl(this, articleContent));
+        values.put(ARTICLE_CONTENT, articleContent);
         values.put(ARTICLE_SUMMARY,
                 Article.makeDescription(articleContent));
         values.put(ARTICLE_DOMAIN, articleDomain);
         values.put(ARTICLE_TAGS, "");
+        values.put(ARTICLE_IMAGE, ImageUtils.getFirstImageUrl(articleUrl, articleContent));
         values.put(ARTICLE_URL, articleUrl);
         values.put(ARTICLE_DATE, articleDate);
         values.put(ARCHIVE, 0);
@@ -382,10 +385,6 @@ public class ApiService extends IntentService {
      * @param urlsInBD List of article urls that should be removed
      */
     private void removeDeletedArticlesFromDB(SQLiteDatabase db, ArrayList<String> urlsInBD) {
-//        for (String url : urlsInBD) {
-//            db.execSQL("DELETE FROM " + ARTICLE_TABLE + " WHERE "
-//                    + ARTICLE_URL + "=" + "'" + url + "'" + ";");
-//        }
         if (urlsInBD.size() == 0) {
             return;
         }
@@ -406,28 +405,6 @@ public class ApiService extends IntentService {
         query.append(");");
         db.execSQL(query.toString());
     }
-
-
-//    private void updateUnread() {
-//        runOnUiThread(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0",
-//                        null, null, null, null).getCount();
-//                if (news == 0) {
-//                    Utils.showToast(ListArticlesActivity.this,
-//                            getString(R.string.no_unread_articles));
-//                } else if (news == 1) {
-//                    Utils.showToast(ListArticlesActivity.this,
-//                            getString(R.string.one_unread_article));
-//                } else {
-//                    Utils.showToast(ListArticlesActivity.this, String.format(
-//                            getString(R.string.many_unread_articles), news));
-//                }
-//            }
-//        });
-//    }
 
     private void trustEveryone() {
         try {

@@ -2,12 +2,16 @@ package com.pixplicity.wallabag.adapters;
 
 import com.pixplicity.wallabag.R;
 import com.pixplicity.wallabag.models.Article;
+import com.pixplicity.wallabag.models.ListItem;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -15,17 +19,15 @@ import java.util.List;
 
 public class ReadingListAdapter extends BaseAdapter {
 
-    private final Context context;
+    private Context mContext;
 
     private List<Article> listArticles;
 
-    public ReadingListAdapter(Context context, List<Article> listArticles) {
-        this(context);
-        this.listArticles = listArticles;
-    }
+    private int imgSize;
 
     public ReadingListAdapter(Context context) {
-        this.context = context;
+        this.mContext = context;
+        this.imgSize = context.getResources().getDimensionPixelSize(R.dimen.li_article_image_size);
     }
 
     public void setListArticles(List<Article> articlesList) {
@@ -54,21 +56,45 @@ public class ReadingListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        final ListItem.Holder viewHolder;
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context
+            LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.li_article, null);
+            convertView = inflater.inflate(R.layout.li_article, parent, false);
+            viewHolder = new ListItem.Holder();
+            viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.listitem_title);
+            viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.listitem_description);
+            viewHolder.ivIcon = (ImageView) convertView.findViewById(R.id.iv_image);
+            viewHolder.root = convertView;
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ListItem.Holder) convertView.getTag();
         }
-        TextView tvTitle = (TextView) convertView
-                .findViewById(R.id.listitem_title);
-        TextView tvDescription = (TextView) convertView
-                .findViewById(R.id.listitem_description);
 
         Article entry = listArticles.get(position);
-        tvTitle.setText(entry.title);
+        viewHolder.tvTitle.setText(entry.title);
         String description = entry.summary;
-        tvDescription.setText(description);
+        viewHolder.tvSubtitle.setText(description);
+        if (entry.hasImage()) {
+            Picasso.with(mContext)
+                    .load(entry.getImageUrl())
+                    //.placeholder(R.drawable.placeholder)
+                    //.error(R.drawable.placeholder)
+                    .resize(imgSize, imgSize)
+                    .centerCrop()
+                    .into(viewHolder.ivIcon, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            viewHolder.ivIcon.setVisibility(View.VISIBLE);
+                        }
+                        @Override
+                        public void onError() {
 
+                        }
+                    });
+        } else {
+            viewHolder.ivIcon.setVisibility(View.GONE);
+        }
         return convertView;
     }
 }
