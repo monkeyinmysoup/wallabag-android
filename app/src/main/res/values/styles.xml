@@ -14,6 +14,10 @@
         <item name="android:backgroundSplit">@color/action_bar_dark</item>
     </style>
 
+    <style name="Theme.Wallabag.OverFlow">
+        <item name="android:src">@drawable/ic_overflow_dark</item>
+    </style>
+
     <!-- FloatLabel style -->
     <style name="TextAppearance.Wallabag.FloatLabel" parent="Font">
         <item name="android:textSize">11sp</item>

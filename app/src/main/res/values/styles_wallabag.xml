@@ -33,7 +33,7 @@
     </style>
 
     <style name="ActionBar.Solid.Wallabag" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@drawable/ab_solid_wallabag</item>
+        <item name="android:background">@color/primary</item>
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_wallabag</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_wallabag</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Wallabag</item>
@@ -76,6 +76,7 @@
     <style name="Theme.Wallabag.Widget" parent="@android:style/Theme.Holo">
         <item name="android:popupMenuStyle">@style/PopupMenu.Wallabag</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Wallabag</item>
+        <item name="android:actionOverflowButtonStyle">@style/Theme.Wallabag.OverFlow</item>
     </style>
 
 </resources>
