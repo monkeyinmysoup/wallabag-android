@@ -7,8 +7,8 @@
     <dimen name="small_padding_vertical">6dp</dimen>
     <dimen name="view_margin_small">2dp</dimen>
 
-    <dimen name="font_size_small">18sp</dimen>
-    <dimen name="font_size_medium">21sp</dimen>
+    <dimen name="font_size_small">17sp</dimen>
+    <dimen name="font_size_medium">19sp</dimen>
     <dimen name="font_size_large">34sp</dimen>
 
     <dimen name="li_article_margin_vert">4dp</dimen>

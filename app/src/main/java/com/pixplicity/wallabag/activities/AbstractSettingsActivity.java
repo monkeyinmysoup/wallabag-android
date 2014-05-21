@@ -1,5 +1,6 @@
 package com.pixplicity.wallabag.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -20,12 +21,16 @@ public abstract class AbstractSettingsActivity extends Activity {
     protected ActionBar actionBar;
     protected int themeId;
 
+    @SuppressLint("AppCompatMethod")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSettings();
-        setTheme(themeId);
+        if (themeId == R.style.Theme_Wallabag || themeId == R.style.Theme_Wallabag_Dark) {
+            setTheme(themeId);
+        }
         actionBar = getActionBar();
+        assert actionBar != null;
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 

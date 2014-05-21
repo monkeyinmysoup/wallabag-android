@@ -85,7 +85,9 @@ public class ReadArticleActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         getSettings();
-        setTheme(themeId);
+        if (themeId == R.style.Theme_Wallabag || themeId == R.style.Theme_Wallabag_Dark) {
+            setTheme(themeId);
+        }
         setContentView(R.layout.activity_article);
 
         actionBar = getActionBar();

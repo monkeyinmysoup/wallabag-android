@@ -53,4 +53,7 @@
     <style name="TransparentButton" parent="android:Widget.Button">
         <item name="android:background">@drawable/invisible_button</item>
     </style>
+    <style name="DomainTextView" parent="FontSmall">
+        <item name="android:color">#80888888</item>
+    </style>
 </resources>

@@ -56,19 +56,20 @@ public class ReadingListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final ListItem.Holder viewHolder;
+        final Holder viewHolder;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.li_article, parent, false);
-            viewHolder = new ListItem.Holder();
+            viewHolder = new Holder();
             viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.listitem_title);
             viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.listitem_description);
+            viewHolder.tvDomain = (TextView) convertView.findViewById(R.id.listitem_domain);
             viewHolder.ivIcon = (ImageView) convertView.findViewById(R.id.iv_image);
             viewHolder.root = convertView;
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ListItem.Holder) convertView.getTag();
+            viewHolder = (Holder) convertView.getTag();
         }
 
         Article entry = listArticles.get(position);
@@ -88,13 +89,24 @@ public class ReadingListAdapter extends BaseAdapter {
                             viewHolder.ivIcon.setVisibility(View.VISIBLE);
                         }
                         @Override
-                        public void onError() {
-
-                        }
+                        public void onError() { }
                     });
         } else {
             viewHolder.ivIcon.setVisibility(View.GONE);
         }
+        String domain = entry.domain;
+        viewHolder.tvDomain.setText(domain);
         return convertView;
+    }
+
+    /**
+     * View holder for caching the associated ui elements
+     */
+    public static class Holder {
+        public View root;
+        public TextView tvTitle;
+        public TextView tvSubtitle;
+        public TextView tvDomain;
+        public ImageView ivIcon;
     }
 }

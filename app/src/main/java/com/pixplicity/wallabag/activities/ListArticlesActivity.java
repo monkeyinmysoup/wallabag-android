@@ -111,11 +111,16 @@ public class ListArticlesActivity extends Activity implements
         requestWindowFeature(Window.FEATURE_PROGRESS);
 
         getSettings();
-        setTheme(themeId);
-        ActionBar actionBar = getActionBar();
-        //actionBar.setDisplayShowTitleEnabled(false);
-        Utils.setActionBarIcon(actionBar, themeId);
+        if (themeId == R.style.Theme_Wallabag || themeId == R.style.Theme_Wallabag_Dark) {
+            setTheme(themeId);
+        }
         setContentView(R.layout.activity_list_articles);
+
+        ActionBar actionBar = getActionBar();
+        assert actionBar != null;
+        Utils.setActionBarIcon(actionBar, themeId);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
 
         //Database
         setupDB();
@@ -199,9 +204,6 @@ public class ListArticlesActivity extends Activity implements
         if (Prefs.contains(Constants.PREFS_KEY_WALLABAG_URL)) {
             mSettings.setVisibility(View.GONE);
         }
-
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
 
         //
         if (mServiceIntentFilter == null) {
