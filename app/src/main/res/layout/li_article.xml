@@ -7,7 +7,10 @@
     android:layout_marginBottom="@dimen/li_article_margin_vert"
     android:layout_marginLeft="@dimen/li_article_margin_hor"
     android:layout_marginRight="@dimen/li_article_margin_hor"
-    android:padding="0dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="2dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
     android:background="@drawable/card"
     android:orientation="horizontal">
 

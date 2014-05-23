@@ -69,6 +69,7 @@ public class ListArticlesActivity extends Activity implements
     private int listFilterOption;
     private DrawerLayout drawerLayout;
     private ViewGroup drawerContainer;
+    private DrawerListAdapter mDrawerAdapter;
 
     private ActionBarDrawerToggle drawerToggle;
     private View mSettings;
@@ -118,7 +119,9 @@ public class ListArticlesActivity extends Activity implements
 
         ActionBar actionBar = getActionBar();
         assert actionBar != null;
-        Utils.setActionBarIcon(actionBar, themeId);
+        //Utils.setActionBarIcon(actionBar, themeId);
+        actionBar.setLogo(R.drawable.actionbar_wide);
+        actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
@@ -139,24 +142,24 @@ public class ListArticlesActivity extends Activity implements
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerContainer = (ViewGroup) findViewById(R.id.left_drawer);
         ListView drawerList = (ListView) findViewById(R.id.lv_drawer);
-        final DrawerListAdapter adapter = new DrawerListAdapter(this, listFilterOption, themeId);
-        drawerList.setAdapter(adapter);
+        mDrawerAdapter = new DrawerListAdapter(this, listFilterOption, themeId);
+        drawerList.setAdapter(mDrawerAdapter);
         drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                if (adapter.getActivePosition() != pos) {
+                if (mDrawerAdapter.getActivePosition() != pos) {
                     if (pos == Constants.SETTINGS) {
                         Intent intent = new Intent(ListArticlesActivity.this, AccountSettingsActivity.class);
                         startActivityForResult(
                                 intent,
                                 Constants.REQUEST_SETTINGS);
                     } else {
-                        adapter.setActivePosition(pos);
-                        adapter.notifyDataSetChanged();
+                        mDrawerAdapter.setActivePosition(pos);
+                        mDrawerAdapter.notifyDataSetChanged();
                         setListFilterOption(pos);
                         updateList();
-                        setTitle(adapter.getItem(pos).mTitle);
+                        setTitle(mDrawerAdapter.getItem(pos).mTitle);
                     }
                 }
                 closeDrawer();
@@ -175,6 +178,7 @@ public class ListArticlesActivity extends Activity implements
              */
             @Override
             public void onDrawerClosed(View view) {
+                setActionBarLogo();
             }
 
             /**
@@ -183,6 +187,7 @@ public class ListArticlesActivity extends Activity implements
              */
             @Override
             public void onDrawerOpened(View drawerView) {
+                getActionBar().setLogo(R.drawable.actionbar_wide);
             }
         };
 
@@ -205,11 +210,31 @@ public class ListArticlesActivity extends Activity implements
             mSettings.setVisibility(View.GONE);
         }
 
-        //
+        // Set logo (must happen after setting drawer adapter)
+        setActionBarLogo();
+
+        // Prepare IntentFilter for registration
         if (mServiceIntentFilter == null) {
             mServiceIntentFilter = new IntentFilter(getString(R.string.broadcast_articles_loaded));
             mServiceIntentFilter.addAction(getString(R.string.broadcast_unread_changed));
         }
+    }
+
+    private void setActionBarLogo() {
+        int res;
+        switch(mDrawerAdapter.getActivePosition()) {
+            case Constants.ALL:
+                res = R.drawable.actionbar_all; break;
+            case Constants.UNREAD:
+                res = R.drawable.actionbar_unread; break;
+            case Constants.READ:
+                res = R.drawable.actionbar_archive; break;
+            case Constants.FAVS:
+                res = R.drawable.actionbar_favorites; break;
+            default:
+                res = R.drawable.actionbar_wide; break;
+        }
+        getActionBar().setLogo(res);
     }
 
     @Override
