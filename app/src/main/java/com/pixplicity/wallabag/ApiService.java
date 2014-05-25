@@ -152,7 +152,18 @@ public class ApiService extends IntentService {
     }
 
     /**
-     * Fetches the RSS feed of the user and loads the articles in it.
+     * Synchronizes all feeds by calling {@link #refreshArticles(ArticleType)} on each of them sequentially.
+     */
+    private void refreshArticles() {
+        refreshArticles(ArticleType.UNREAD);
+        refreshArticles(ArticleType.FAVORITES);
+        refreshArticles(ArticleType.ARCHIVE);
+        // TODO synchronize articles by tag
+        // ArticleType.TAG
+    }
+
+    /**
+     * Fetches the specified RSS feed and loads the articles in it.
      * New articles are stored in the database, missing articles are removed
      * from the database.
      * After processing is done a broadcast is send to notify listeners,
@@ -163,20 +174,7 @@ public class ApiService extends IntentService {
      * Can also contain the extras {@link #EXTRA_PROGRESS} and {@link #EXTRA_PROGRESS_TOTAL} to show
      * the amount of progress.
      */
-    private void refreshArticles() {
-//        new AsyncTask<Void, Void, Void>() {
-//
-//            @Override
-//            protected Void doInBackground(Void... params) {
-//                parseRSS();
-//                return null;
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Void result) {
-//                updateList();
-//            }
-//        }.execute();
+    private void refreshArticles(ArticleType feed) {
         URL url;
         String wallabagUrl = Prefs.getString(Constants.PREFS_KEY_WALLABAG_URL, null);
         String apiUsername = Prefs.getString(Constants.PREFS_KEY_USER_ID, null);
@@ -185,7 +183,7 @@ public class ApiService extends IntentService {
         SQLiteDatabase database = getDatabase();
         try {
             // Set the url (you will need to change this to your RSS URL
-            url = new URL(wallabagUrl + "/?feed&type=home&user_id=" + apiUsername
+            url = new URL(wallabagUrl + "/?feed&type=" + feed.getQueryString() + "&user_id=" + apiUsername
                     + "&token=" + apiToken);
 
             // Setup the connection
@@ -203,7 +201,7 @@ public class ApiService extends IntentService {
                     || ((conn_s != null) && (conn_s.getResponseCode()
                     == HttpURLConnection.HTTP_OK))) {
 
-                // Retreive the XML from the URL
+                // Retrieve the XML from the URL
                 DocumentBuilderFactory dbf = DocumentBuilderFactory
                         .newInstance();
                 DocumentBuilder db = dbf.newDocumentBuilder();
@@ -217,16 +215,23 @@ public class ApiService extends IntentService {
                 NodeList itemLst = doc.getElementsByTagName("item");
 
                 // Fetch items currently in database:
-                ArrayList<String> urlsInBD = new ArrayList<>();
+                ArrayList<String> urlsInDB = new ArrayList<>();
+                String feedSelection = null;
+                if (feed == ArticleType.ARCHIVE) {
+                    feedSelection = ARCHIVE + "=1";
+                } else if (feed == ArticleType.FAVORITES) {
+                    feedSelection = FAV + "=1";
+                }
                 Cursor ac = database.query(
                         ARTICLE_TABLE,
-                        new String[]{ARTICLE_URL}, null,
+                        new String[]{ARTICLE_URL},
+                        feedSelection,
                         null, null, null, null
                 );
                 ac.moveToFirst();
                 if (!ac.isAfterLast()) {
                     do {
-                        urlsInBD.add(ac.getString(0));
+                        urlsInDB.add(ac.getString(0));
                     } while (ac.moveToNext());
                 }
 
@@ -235,7 +240,7 @@ public class ApiService extends IntentService {
                 for (int i = total - 1; i >= 0; i--) {
                     Node item = itemLst.item(i);
                     if (item.getNodeType() == Node.ELEMENT_NODE) {
-                        if (parseArticle(urlsInBD, database, (Element) item)) {
+                        if (parseArticle(feed, urlsInDB, database, (Element) item)) {
                             newArticles++;
                         }
                     }
@@ -250,7 +255,13 @@ public class ApiService extends IntentService {
                 }
 
                 // Remove items from db that are no longer in the feed
-                removeDeletedArticlesFromDB(database, urlsInBD);
+                if (feed == ArticleType.ARCHIVE) {
+                    removeArticlesFromArchive(database, urlsInDB);
+                } else if (feed == ArticleType.FAVORITES) {
+                    removeArticlesFromFavs(database, urlsInDB);
+                } else {
+                    removeDeletedArticlesFromDB(database, urlsInDB);
+                }
             }
 
             // Count unread articles
@@ -258,34 +269,39 @@ public class ApiService extends IntentService {
                     null, null, null, null).getCount();
 
             // Refresh status
-            Intent intent = new Intent(getString(R.string.broadcast_articles_loaded));
+            Intent intent;
+            if (feed== ArticleType.ARCHIVE) {
+                intent = new Intent(getString(R.string.broadcast_archive_loaded));
+            } else if (feed==ArticleType.FAVORITES) {
+                intent = new Intent(getString(R.string.broadcast_favorites_loaded));
+            } else {
+                intent = new Intent(getString(R.string.broadcast_articles_loaded));
+            }
             intent.putExtra(ApiService.EXTRA_COUNT_ALL, newArticles);
             intent.putExtra(ApiService.EXTRA_COUNT_UNREAD, unreadArticles);
             intent.putExtra(ApiService.EXTRA_FINISHED_LOADING, true);
             sendOrderedBroadcast(intent, null);
-
         } catch (DOMException | IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
-            Utils.showToast(this, getString(R.string.fail_to_update));
-        } catch (Exception e) {
-            e.printStackTrace();
-            Utils.showToast(this, getString(R.string.fail_to_update));
+            if (feed == ArticleType.UNREAD) {
+                Utils.showToast(this, getString(R.string.fail_to_update));
+            }
         } finally {
             database.close();
         }
-
     }
 
     /**
      * Parses a single RSS node and stores it as an Article in the database
      *
+     * @param feed     The feed this article is being fetched from
      * @param urlsInDB List of articles that are marked for deletion
      * @param database Database connection
      * @param item     The RSS item to parse
      * @return {@link true} on a successful insertion, {@link false} on errors or if the article is
      * already present in the database
      */
-    private boolean parseArticle(ArrayList<String> urlsInDB, SQLiteDatabase database, Element item) {
+    private boolean parseArticle(ArticleType feed, ArrayList<String> urlsInDB, SQLiteDatabase database, Element item) {
         String articleTitle;
         String articleDate;
         String articleUrl;
@@ -356,8 +372,8 @@ public class ApiService extends IntentService {
         values.put(ARTICLE_IMAGE, ImageUtils.getFirstImageUrl(articleUrl, articleContent));
         values.put(ARTICLE_URL, articleUrl);
         values.put(ARTICLE_DATE, articleDate);
-        values.put(ARCHIVE, 0);
-        values.put(FAV, 0);
+        values.put(ARCHIVE, feed == ArticleType.ARCHIVE ? 1 : 0);
+        values.put(FAV, feed == ArticleType.FAVORITES ? 1 : 0);
         values.put(ARTICLE_SYNC, 0);
 
         try {
@@ -382,10 +398,10 @@ public class ApiService extends IntentService {
      * Removes articles from the database that are no longer in the feed
      *
      * @param db       Database connection
-     * @param urlsInBD List of article urls that should be removed
+     * @param urlsInDB List of article urls that should be removed
      */
-    private void removeDeletedArticlesFromDB(SQLiteDatabase db, ArrayList<String> urlsInBD) {
-        if (urlsInBD.size() == 0) {
+    private void removeDeletedArticlesFromDB(SQLiteDatabase db, ArrayList<String> urlsInDB) {
+        if (urlsInDB.size() == 0) {
             return;
         }
         StringBuilder query = new StringBuilder();
@@ -394,12 +410,56 @@ public class ApiService extends IntentService {
                 .append(" WHERE ")
                 .append(ARTICLE_URL)
                 .append(" IN (");
-        for (int i = 0; i < urlsInBD.size(); i++) {
+        for (int i = 0; i < urlsInDB.size(); i++) {
             if (i > 0) {
                 query.append(",");
             }
             query.append("'")
-                    .append(urlsInBD.toString())
+                    .append(urlsInDB.toString())
+                    .append("'");
+        }
+        query.append(");");
+        db.execSQL(query.toString());
+    }
+
+    private void removeArticlesFromArchive(SQLiteDatabase db, ArrayList<String> urlsInDB) {
+        if (urlsInDB.size() == 0) {
+            return;
+        }
+        StringBuilder query = new StringBuilder();
+        query.append("UPDATE TABLE ")
+                .append(ARTICLE_TABLE)
+                .append(" SET " + ARCHIVE + "=0 WHERE ")
+                .append(ARTICLE_URL)
+                .append(" IN (");
+        for (int i = 0; i < urlsInDB.size(); i++) {
+            if (i > 0) {
+                query.append(",");
+            }
+            query.append("'")
+                    .append(urlsInDB.toString())
+                    .append("'");
+        }
+        query.append(");");
+        db.execSQL(query.toString());
+    }
+
+    private void removeArticlesFromFavs(SQLiteDatabase db, ArrayList<String> urlsInDB) {
+        if (urlsInDB.size() == 0) {
+            return;
+        }
+        StringBuilder query = new StringBuilder();
+        query.append("UPDATE TABLE ")
+                .append(ARTICLE_TABLE)
+                .append(" SET " + FAV + "=0 WHERE ")
+                .append(ARTICLE_URL)
+                .append(" IN (");
+        for (int i = 0; i < urlsInDB.size(); i++) {
+            if (i > 0) {
+                query.append(",");
+            }
+            query.append("'")
+                    .append(urlsInDB.toString())
                     .append("'");
         }
         query.append(");");
