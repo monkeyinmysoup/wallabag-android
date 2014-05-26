@@ -150,7 +150,7 @@ public class ListArticlesActivity extends Activity implements
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 if (mDrawerAdapter.getActivePosition() != pos) {
                     if (pos == Constants.SETTINGS) {
-                        Intent intent = new Intent(ListArticlesActivity.this, AccountSettingsActivity.class);
+                        Intent intent = new Intent(ListArticlesActivity.this, SettingsActivity.class);
                         startActivityForResult(
                                 intent,
                                 Constants.REQUEST_SETTINGS);
@@ -216,7 +216,7 @@ public class ListArticlesActivity extends Activity implements
         // Prepare IntentFilter for registration
         if (mServiceIntentFilter == null) {
             mServiceIntentFilter = new IntentFilter(getString(R.string.broadcast_articles_loaded));
-            mServiceIntentFilter.addAction(getString(R.string.broadcast_unread_changed));
+            mServiceIntentFilter.addAction(getString(R.string.broadcast_archive_loaded));
         }
     }
 
