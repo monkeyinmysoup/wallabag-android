@@ -11,10 +11,11 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <TextView
+    <com.pixplicity.fonttextutils.FontTextView
         android:id="@+id/tv_version"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        tools:text="v.1.0.0"/>
+        tools:text="v.1.0.0"
+        style="@style/FontSmall"/>
 </LinearLayout>

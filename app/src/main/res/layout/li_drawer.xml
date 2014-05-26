@@ -19,9 +19,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginTop="@dimen/default_padding_vertical"
+        android:layout_marginLeft="5dp"
         android:layout_marginBottom="@dimen/default_padding_vertical"
         tools:text="drawer entry"
-        android:layout_marginLeft="5dp"
         style="@style/FontMedium" />
 
     <com.pixplicity.fonttextutils.FontTextView

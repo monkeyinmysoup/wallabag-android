@@ -76,7 +76,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:paddingRight="@dimen/default_padding_horizontal"
-                    android:text="" />
+                    android:text=""
+                    tools:text="11pt"
+                    style="@style/FontSmall" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -107,7 +109,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/default_padding_horizontal"
-                tools:text="Sans serif"/>
+                tools:text="Sans serif"
+                style="@style/FontSmall"/>
         </LinearLayout>
 
         <ImageView
@@ -136,7 +139,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/default_padding_horizontal"
-                tools:text="Auto" />
+                tools:text="Auto"
+                style="@style/FontSmall"/>
         </LinearLayout>
 
         <ImageView
@@ -166,7 +170,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/default_padding_horizontal"
-                tools:text="Dynamic" />
+                tools:text="Dynamic"
+                style="@style/FontSmall" />
         </LinearLayout>
 
         <ImageView
