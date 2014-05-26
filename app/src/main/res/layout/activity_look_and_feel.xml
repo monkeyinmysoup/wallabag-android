@@ -21,7 +21,7 @@
                 android:paddingLeft="@dimen/default_padding_horizontal"
                 android:paddingTop="@dimen/default_padding_vertical"
                 android:text="@string/dark_theme"
-                android:textAppearance="@style/FontMedium" />
+                style="@style/FontMedium" />
 
             <CheckBox
                 android:id="@+id/dark_theme_check_box"
@@ -55,7 +55,7 @@
                 android:clickable="false"
                 android:paddingLeft="@dimen/default_padding_horizontal"
                 android:text="@string/font_size"
-                android:textAppearance="@style/FontMedium" />
+                style="@style/FontMedium" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/default_padding_horizontal"
                 android:text="@string/font_style"
-                android:textAppearance="@style/FontMedium" />
+                style="@style/FontMedium" />
 
             <com.pixplicity.fonttextutils.FontTextView
                 android:id="@+id/font_type"
@@ -129,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/default_padding_horizontal"
                 android:text="@string/text_align"
-                android:textAppearance="@style/FontMedium" />
+                style="@style/FontMedium" />
 
             <com.pixplicity.fonttextutils.FontTextView
                 android:id="@+id/align_type"
@@ -159,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/default_padding_horizontal"
                 android:text="@string/rotation"
-                android:textAppearance="@style/FontMedium" />
+                style="@style/FontMedium" />
 
             <com.pixplicity.fonttextutils.FontTextView
                 android:id="@+id/orientation_type"
@@ -189,7 +189,7 @@
                 android:paddingTop="@dimen/default_padding_vertical"
                 android:text="@string/immersive"
                 android:layout_centerVertical="true"
-                android:textAppearance="@style/FontMedium" />
+                style="@style/FontMedium" />
 
             <CheckBox
                 android:id="@+id/immersive_check_box"
@@ -223,7 +223,7 @@
                 android:paddingLeft="@dimen/default_padding_horizontal"
                 android:paddingTop="@dimen/default_padding_vertical"
                 android:text="@string/keep_screen_on"
-                android:textAppearance="@style/FontMedium" />
+                style="@style/FontMedium" />
 
             <CheckBox
                 android:id="@+id/screen_on_check_box"

@@ -12,7 +12,8 @@ public abstract class Style {
 	public final static String endTag = "</body></html>";
 	public final static String textColorWhite = "#FFF";
 	public final static String textColorBlack = "#000";
-	
+
+    // Giggity
 	public static String getHead(int fontStyle, int textAlign, int fontSize, boolean isDarkTheme, boolean isRtl){
 		String align;
 		String textColor;

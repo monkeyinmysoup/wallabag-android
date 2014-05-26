@@ -34,7 +34,7 @@
 
             <com.pixplicity.fonttextutils.FontTextView
                 android:id="@+id/no_articles_text"
-                android:textAppearance="@style/FontTitle"
+                style="@style/FontTitle"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

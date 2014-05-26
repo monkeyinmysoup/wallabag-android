@@ -11,7 +11,7 @@
         android:paddingTop="@dimen/default_padding_vertical"
         android:paddingBottom="@dimen/default_padding_vertical"
         android:gravity="center_horizontal"
-        android:textAppearance="@style/FontLarge" />
+        style="@style/FontLarge" />
 
     <ImageView
         android:id="@+id/imageView1"

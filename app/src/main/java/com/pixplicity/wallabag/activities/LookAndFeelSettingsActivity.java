@@ -14,6 +14,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.pixplicity.easyprefs.library.Prefs;
+import com.pixplicity.wallabag.Constants;
 import com.pixplicity.wallabag.R;
 import com.pixplicity.wallabag.Utils;
 
@@ -131,9 +132,7 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
         //Font style
         View fontStyleLayout = findViewById(R.id.font_style_layout);
         final TextView fontType = (TextView) findViewById(R.id.font_type);
-
         fontType.setText(getStringFontStyle(fontStyle));
-
         fontStyleLayout.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -239,12 +238,12 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
     @Override
     protected void getSettings() {
         super.getSettings();
-        fontSize = Prefs.getInt(FONT_SIZE, 12);
-        fontStyle = Prefs.getInt(FONT_STYLE, 0);
-        textAlign = Prefs.getInt(ALIGN, 0);
-        orientation = Prefs.getInt(ORIENTATION, 0);
-        isImmerviveModeSelected = Prefs.getBoolean(IMMERSIVE, true);
-        isScreenAlwaysOn = Prefs.getBoolean(KEEP_SCREEN_ON, false);
+        fontSize = Prefs.getInt(FONT_SIZE, Constants.DEFAULT_FONT_SIZE);
+        fontStyle = Prefs.getInt(FONT_STYLE, Constants.DEFAULT_FONT_STYLE);
+        textAlign = Prefs.getInt(ALIGN, Constants.DEFAULT_TEXT_ALIGN);
+        orientation = Prefs.getInt(ORIENTATION, Constants.DEFAULT_ORIENTATION);
+        isImmerviveModeSelected = Prefs.getBoolean(IMMERSIVE, Constants.DEFAULT_IMMERSIVE_ENABLED);
+        isScreenAlwaysOn = Prefs.getBoolean(KEEP_SCREEN_ON, Constants.DEFAULT_KEEP_SCREEN_ON);
     }
 
     @Override

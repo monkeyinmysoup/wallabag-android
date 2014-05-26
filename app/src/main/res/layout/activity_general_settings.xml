@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/default_padding_horizontal"
                 android:text="@string/sort"
-                android:textAppearance="@style/FontMedium" />
+                style="@style/FontMedium" />
 
             <com.pixplicity.fonttextutils.FontTextView
                 android:id="@+id/sort_text"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/default_padding_horizontal"
                 android:text="@string/menuWipeDb"
-                android:textAppearance="@style/FontMedium" />
+                style="@style/FontMedium" />
         </LinearLayout>
     </LinearLayout>
 

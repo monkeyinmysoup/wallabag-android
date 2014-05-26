@@ -1,5 +1,14 @@
 package com.pixplicity.wallabag.activities;
 
+import com.pixplicity.easyprefs.library.Prefs;
+import com.pixplicity.wallabag.Constants;
+import com.pixplicity.wallabag.R;
+import com.pixplicity.wallabag.Style;
+import com.pixplicity.wallabag.Utils;
+import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
+import com.pixplicity.wallabag.ui.OnViewScrollListener;
+import com.pixplicity.wallabag.ui.ResponsiveScrollView;
+
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -28,15 +37,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
-import com.pixplicity.easyprefs.library.Prefs;
-import com.pixplicity.wallabag.Constants;
-import com.pixplicity.wallabag.R;
-import com.pixplicity.wallabag.Style;
-import com.pixplicity.wallabag.Utils;
-import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
-import com.pixplicity.wallabag.ui.OnViewScrollListener;
-import com.pixplicity.wallabag.ui.ResponsiveScrollView;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -44,13 +44,13 @@ import java.util.List;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DOMAIN;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_IMAGE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_READAT;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
+import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TAGS;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DOMAIN;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TAGS;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_IMAGE;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
 import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
 
@@ -59,25 +59,41 @@ public class ReadArticleActivity extends Activity {
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
 
     private SQLiteDatabase database;
+
     private String id = "";
+
     private ResponsiveScrollView view;
+
     private WebView contentWebView;
 
     private int currentResult;
+
     private boolean isRtl;
 
     private String articleUrl;
+
     private Menu menu;
+
     private ActionBar actionBar;
+
     private boolean isRead;
+
     private boolean isFav;
+
     private String articleContent;
+
     private int fontStyle;
+
     private int textAlign;
+
     private boolean canGoImmersive;
+
     private boolean keepScreenOn;
+
     private int themeId;
+
     private int fontSize;
+
     private int yPositionReadAt;
 
     @Override
@@ -133,7 +149,8 @@ public class ReadArticleActivity extends Activity {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(url));
 
-                Intent bagItIntent = new Intent(ReadArticleActivity.this, SendHandlerActivity.class);
+                Intent bagItIntent = new Intent(ReadArticleActivity.this,
+                        SendHandlerActivity.class);
 
                 bagItIntent.setAction(Intent.ACTION_SEND);
                 bagItIntent.setType("text/plain");
@@ -191,7 +208,9 @@ public class ReadArticleActivity extends Activity {
         view.setOnScrollViewListener(new OnViewScrollListener() {
 
             private int goingDown
+
                     ,
+
                     goingUp;
 
             @Override
@@ -251,8 +270,16 @@ public class ReadArticleActivity extends Activity {
     private void loadDataToWebView() {
 
         contentWebView.loadDataWithBaseURL(null,
-                Style.getHead(fontStyle, textAlign, fontSize, Utils.isDarkTheme(themeId), isRtl)
-                        + articleContent + Style.endTag, "text/html", "utf-8", null
+                Style.getHead(
+                        fontStyle,
+                        textAlign,
+                        fontSize,
+                        Utils.isDarkTheme(themeId),
+                        isRtl)
+                        + articleContent + Style.endTag,
+                "text/html",
+                "utf-8",
+                null
         );
 
         TypedValue a = new TypedValue();
@@ -323,13 +350,13 @@ public class ReadArticleActivity extends Activity {
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private void getSettings() {
-        fontSize = Prefs.getInt(LookAndFeelSettingsActivity.FONT_SIZE, 16);
-        canGoImmersive = Prefs.getBoolean(LookAndFeelSettingsActivity.IMMERSIVE, true);
-        keepScreenOn = Prefs.getBoolean(LookAndFeelSettingsActivity.KEEP_SCREEN_ON, false);
-        fontStyle = Prefs.getInt(LookAndFeelSettingsActivity.FONT_STYLE, 0);
-        textAlign = Prefs.getInt(LookAndFeelSettingsActivity.ALIGN, 0);
+        fontSize = Prefs.getInt(LookAndFeelSettingsActivity.FONT_SIZE, Constants.DEFAULT_FONT_SIZE);
+        canGoImmersive = Prefs.getBoolean(LookAndFeelSettingsActivity.IMMERSIVE, Constants.DEFAULT_IMMERSIVE_ENABLED);
+        keepScreenOn = Prefs.getBoolean(LookAndFeelSettingsActivity.KEEP_SCREEN_ON, Constants.DEFAULT_KEEP_SCREEN_ON);
+        fontStyle = Prefs.getInt(LookAndFeelSettingsActivity.FONT_STYLE, Constants.DEFAULT_FONT_STYLE);
+        textAlign = Prefs.getInt(LookAndFeelSettingsActivity.ALIGN, Constants.DEFAULT_TEXT_ALIGN);
         int screenOrientation = Prefs.getInt(LookAndFeelSettingsActivity.ORIENTATION,
-                LookAndFeelSettingsActivity.PORTRAIT);
+                Constants.DEFAULT_ORIENTATION);
 
         switch (screenOrientation) {
             case LookAndFeelSettingsActivity.PORTRAIT:
@@ -472,7 +499,7 @@ public class ReadArticleActivity extends Activity {
     }
 
     private Intent createIntentChooserForTwoIntents(Intent first,
-                                                    Intent second, String title) {
+            Intent second, String title) {
 
         PackageManager pm = getPackageManager();
 

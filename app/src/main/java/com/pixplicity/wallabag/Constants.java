@@ -1,5 +1,7 @@
 package com.pixplicity.wallabag;
 
+import com.pixplicity.wallabag.activities.LookAndFeelSettingsActivity;
+
 public final class Constants {
 
     // Navigation drawer entries:
@@ -26,4 +28,11 @@ public final class Constants {
 
     public static final int MAX_DESCRIPTION_CHARS = 250;
     public static final int JPEG_QUALITY = 90;
+
+    public static final int DEFAULT_FONT_SIZE = 11;
+    public static final int DEFAULT_FONT_STYLE = Style.SERIF;
+    public static final int DEFAULT_TEXT_ALIGN = Style.JUSTIFY;
+    public static final int DEFAULT_ORIENTATION = LookAndFeelSettingsActivity.PORTRAIT;
+    public static final boolean DEFAULT_IMMERSIVE_ENABLED = false;
+    public static final boolean DEFAULT_KEEP_SCREEN_ON = false;
 }
