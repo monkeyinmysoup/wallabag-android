@@ -100,7 +100,6 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
                 } else {
                     themeId = R.style.Theme_Wallabag;
                 }
-
                 changed = !changed;
                 Utils.restartActivity(LookAndFeelSettingsActivity.this);
             }

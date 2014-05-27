@@ -26,9 +26,7 @@ public abstract class AbstractSettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSettings();
-        if (themeId == R.style.Theme_Wallabag || themeId == R.style.Theme_Wallabag_Dark) {
-            setTheme(themeId);
-        }
+        Utils.setTheme(this, false);
         actionBar = getActionBar();
         assert actionBar != null;
         actionBar.setHomeButtonEnabled(true);

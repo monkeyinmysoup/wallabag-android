@@ -59,41 +59,23 @@ public class ReadArticleActivity extends Activity {
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
 
     private SQLiteDatabase database;
-
     private String id = "";
-
     private ResponsiveScrollView view;
-
     private WebView contentWebView;
-
     private int currentResult;
-
     private boolean isRtl;
-
     private String articleUrl;
-
     private Menu menu;
-
     private ActionBar actionBar;
-
     private boolean isRead;
-
     private boolean isFav;
-
     private String articleContent;
-
     private int fontStyle;
-
     private int textAlign;
-
     private boolean canGoImmersive;
-
     private boolean keepScreenOn;
-
     private int themeId;
-
     private int fontSize;
-
     private int yPositionReadAt;
 
     @Override
@@ -101,9 +83,7 @@ public class ReadArticleActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         getSettings();
-        if (themeId == R.style.Theme_Wallabag || themeId == R.style.Theme_Wallabag_Dark) {
-            setTheme(themeId);
-        }
+        Utils.setTheme(this, true);
         setContentView(R.layout.activity_article);
 
         actionBar = getActionBar();
@@ -208,9 +188,7 @@ public class ReadArticleActivity extends Activity {
         view.setOnScrollViewListener(new OnViewScrollListener() {
 
             private int goingDown
-
                     ,
-
                     goingUp;
 
             @Override
@@ -268,7 +246,6 @@ public class ReadArticleActivity extends Activity {
     }
 
     private void loadDataToWebView() {
-
         contentWebView.loadDataWithBaseURL(null,
                 Style.getHead(
                         fontStyle,
@@ -299,7 +276,6 @@ public class ReadArticleActivity extends Activity {
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void goImmersive() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if (canGoImmersive) {
                 getWindow().getDecorView().setSystemUiVisibility(
@@ -351,9 +327,12 @@ public class ReadArticleActivity extends Activity {
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private void getSettings() {
         fontSize = Prefs.getInt(LookAndFeelSettingsActivity.FONT_SIZE, Constants.DEFAULT_FONT_SIZE);
-        canGoImmersive = Prefs.getBoolean(LookAndFeelSettingsActivity.IMMERSIVE, Constants.DEFAULT_IMMERSIVE_ENABLED);
-        keepScreenOn = Prefs.getBoolean(LookAndFeelSettingsActivity.KEEP_SCREEN_ON, Constants.DEFAULT_KEEP_SCREEN_ON);
-        fontStyle = Prefs.getInt(LookAndFeelSettingsActivity.FONT_STYLE, Constants.DEFAULT_FONT_STYLE);
+        canGoImmersive = Prefs.getBoolean(LookAndFeelSettingsActivity.IMMERSIVE,
+                Constants.DEFAULT_IMMERSIVE_ENABLED);
+        keepScreenOn = Prefs.getBoolean(LookAndFeelSettingsActivity.KEEP_SCREEN_ON,
+                Constants.DEFAULT_KEEP_SCREEN_ON);
+        fontStyle = Prefs
+                .getInt(LookAndFeelSettingsActivity.FONT_STYLE, Constants.DEFAULT_FONT_STYLE);
         textAlign = Prefs.getInt(LookAndFeelSettingsActivity.ALIGN, Constants.DEFAULT_TEXT_ALIGN);
         int screenOrientation = Prefs.getInt(LookAndFeelSettingsActivity.ORIENTATION,
                 Constants.DEFAULT_ORIENTATION);

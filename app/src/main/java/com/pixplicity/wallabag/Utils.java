@@ -11,7 +11,10 @@ import android.os.Environment;
 import android.os.Handler;
 import android.widget.Toast;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.pixplicity.wallabag.activities.GeneralSettingsActivity;
+import com.pixplicity.wallabag.activities.ListArticlesActivity;
+import com.pixplicity.wallabag.activities.LookAndFeelSettingsActivity;
 
 import java.io.File;
 import java.net.URI;
@@ -24,6 +27,33 @@ import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
 public final class Utils {
 
     public static final int RESULT_CHANGE_THEME = 42;
+
+    /**
+     * Sets the theme on the Activity as specified in the Prefs.
+     * @param activity The Activity to set the theme on
+     * @param overlap Whether or not to use the 'overlap' version of the theme (only applicable on SDK 19 and up)
+     */
+    public static void setTheme(Activity activity, boolean overlap) {
+        int normal, dark;
+        if (overlap) {
+            if (activity instanceof ListArticlesActivity) {
+                normal = R.style.Theme_Wallabag_OverlapTop;
+                dark = R.style.Theme_Wallabag_Dark_OverlapTop;
+            } else {
+                normal = R.style.Theme_Wallabag_Overlap;
+                dark = R.style.Theme_Wallabag_Dark_Overlap;
+            }
+        } else {
+            normal = R.style.Theme_Wallabag;
+            dark = R.style.Theme_Wallabag_Dark;
+        }
+        int themeId = Prefs.getInt(LookAndFeelSettingsActivity.DARK_THEME, normal);
+        if (themeId == R.style.Theme_Wallabag) {
+            activity.setTheme(normal);
+        } else if (themeId == R.style.Theme_Wallabag_Dark) {
+            activity.setTheme(dark);
+        }
+    }
 
     public static boolean isDarkTheme(int themeId) {
         return themeId == R.style.Theme_Wallabag_Dark;

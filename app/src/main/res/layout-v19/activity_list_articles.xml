@@ -11,19 +11,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/list_articles"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/li_article_margin_hor"
-            android:paddingRight="@dimen/li_article_margin_hor"
-            android:paddingTop="@dimen/li_article_spacing"
-            android:paddingBottom="@dimen/li_article_spacing"
-            android:clipToPadding="false"
-            tools:listitem="@layout/li_article"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="@dimen/li_article_spacing"
-            android:background="@color/article_list_background" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!-- This element at the top makes sure the status bar turns blue -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:background="@color/primary"
+                android:layout_marginBottom="@dimen/actionbar_padding"/>
+
+            <ListView
+                android:id="@+id/list_articles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/li_article_margin_hor"
+                android:paddingRight="@dimen/li_article_margin_hor"
+                android:paddingTop="@dimen/li_article_spacing"
+                android:paddingBottom="@dimen/li_article_spacing"
+                android:clipToPadding="false"
+                tools:listitem="@layout/li_article"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="@dimen/li_article_spacing"
+                android:background="@color/article_list_background" />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/no_articles_container"
@@ -68,7 +80,8 @@
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingTop="?android:attr/actionBarSize" />
 
     <!-- The navigation drawer -->
     <FrameLayout
@@ -84,10 +97,13 @@
             android:layout_height="match_parent"
             tools:ignore="ContentDescription"
             android:src="@drawable/drawer_bar"
+            android:layout_marginTop="?android:attr/actionBarSize"
             android:layout_gravity="end" />
 
         <ListView
             android:id="@+id/lv_drawer"
+            android:layout_marginTop="?android:attr/actionBarSize"
+            android:paddingTop="@dimen/actionbar_padding"
             android:layout_width="@dimen/drawer_width"
             android:layout_height="wrap_content"
             android:choiceMode="singleChoice"

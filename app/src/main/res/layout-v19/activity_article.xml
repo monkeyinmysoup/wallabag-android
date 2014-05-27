@@ -4,12 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/scroll">
-    <!-- This element at the top makes sure the status bar turns blue -->
-    <!-- <View
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/primary" /> -->
+    android:id="@+id/scroll"
+    android:paddingTop="@dimen/actionbar_padding">
+
     <LinearLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"

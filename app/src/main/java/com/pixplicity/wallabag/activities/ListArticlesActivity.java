@@ -14,6 +14,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -61,16 +62,15 @@ public class ListArticlesActivity extends Activity implements
 
     private static final String TAG = ListArticlesActivity.class.getSimpleName();
 
-    private ListView readList;
     private static SQLiteDatabase database;
-    private ReadingListAdapter adapter;
     private int themeId;
     private int sortType;
     private int listFilterOption;
+    private ReadingListAdapter adapter;
+    private ListView mListView;
     private DrawerLayout drawerLayout;
     private ViewGroup drawerContainer;
     private DrawerListAdapter mDrawerAdapter;
-
     private ActionBarDrawerToggle drawerToggle;
     private View mSettings;
     private View mNoArticles;
@@ -112,9 +112,7 @@ public class ListArticlesActivity extends Activity implements
         requestWindowFeature(Window.FEATURE_PROGRESS);
 
         getSettings();
-        if (themeId == R.style.Theme_Wallabag || themeId == R.style.Theme_Wallabag_Dark) {
-            setTheme(themeId);
-        }
+        Utils.setTheme(this, true);
         setContentView(R.layout.activity_list_articles);
 
         ActionBar actionBar = getActionBar();
@@ -133,9 +131,9 @@ public class ListArticlesActivity extends Activity implements
         mNoArticlesText = (TextView) findViewById(R.id.no_articles_text);
 
         //Listview
-        readList = (ListView) findViewById(R.id.list_articles);
+        mListView = (ListView) findViewById(R.id.list_articles);
         adapter = new ReadingListAdapter(getBaseContext());
-        readList.setAdapter(adapter);
+        mListView.setAdapter(adapter);
         setupList();
 
         //Drawer
@@ -391,17 +389,27 @@ public class ListArticlesActivity extends Activity implements
     public void setupList() {
         List<Article> articlesList = getArticlesList();
         adapter.setListArticles(articlesList);
-        readList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+                    int position, long id) {
                 Intent i = new Intent(getBaseContext(), ReadArticleActivity.class);
                 i.putExtra("id", ((Article) adapter.getItem(position)).id);
                 startActivityForResult(i, Constants.REQUEST_READ_ARTICLE);
             }
         });
 
+        // Add footer view to allow scrolling above the navigation buttons
+        // (navigation buttons overlaps with ui on SDK 19 and above)
+        if (Build.VERSION.SDK_INT >= 19) {
+            View foot = new View(this);
+            foot.setMinimumHeight(getResources().getDimensionPixelSize(R.dimen.navigation_size));
+            mListView.addFooterView(foot);
+        }
+
+        // Show 'no articles yet' if needed
         checkIfHasNoArticles();
     }
 

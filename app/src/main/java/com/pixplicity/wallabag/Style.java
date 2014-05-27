@@ -1,6 +1,7 @@
 package com.pixplicity.wallabag;
 
 public abstract class Style {
+
 	public static final int SANS = 0;
 	public static final int SERIF = 1;
 	public final static int AUTO_ALIGN = 0;
@@ -9,7 +10,7 @@ public abstract class Style {
 	
 	public final static String fontFamilySans = "Helvetica, Arial, sans-serif";
 	public final static String fontFamilySerif = "\"Times New Roman\", Times, serif";
-	public final static String endTag = "</body></html>";
+	public final static String endTag = "<br /><br /><br /><br /></body></html>";
 	public final static String textColorWhite = "#FFF";
 	public final static String textColorBlack = "#000";
 

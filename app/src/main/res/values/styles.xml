@@ -1,5 +1,11 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Notification Overlap -->
+    <style name="Theme.Wallabag.Overlap" parent="Theme.Wallabag" />
+    <style name="Theme.Wallabag.Dark.Overlap" parent="Theme.Wallabag.Dark" />
+    <style name="Theme.Wallabag.OverlapTop" parent="Theme.Wallabag" />
+    <style name="Theme.Wallabag.Dark.OverlapTop" parent="Theme.Wallabag.Dark" />
+
     <!-- Additional Dark theme -->
     <style name="Theme.Wallabag.Dark" parent="Theme.Wallabag">
         <item name="android:windowBackground">@color/background_dark</item>

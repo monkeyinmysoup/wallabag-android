@@ -8,8 +8,13 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- Added to be able to use a QR scanner for reading settings off the website in the future -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
 
     <application
         android:name=".WallabagApplication"
@@ -23,13 +28,14 @@
             android:label="@string/app_name" />
         <activity
             android:name="com.pixplicity.wallabag.activities.ReadArticleActivity"
+            android:theme="@style/Theme.Wallabag.Overlap"
             android:label="@string/app_name" />
         <activity
             android:name="com.pixplicity.wallabag.activities.ListArticlesActivity"
+            android:theme="@style/Theme.Wallabag.OverFlow"
             android:label="@string/app_name">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -38,9 +44,7 @@
             android:label="@string/bag_it">
             <intent-filter android:label="@string/bag_it">
                 <action android:name="android.intent.action.SEND" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
@@ -56,7 +60,6 @@
         <activity
             android:name="com.pixplicity.wallabag.activities.GeneralSettingsActivity"
             android:label="@string/settings_general" />
-
         <service
             android:name="com.pixplicity.wallabag.ApiService"
             android:exported="false" />
