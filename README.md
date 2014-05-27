@@ -6,12 +6,16 @@ This app is based on the excellent work of [Erik Pires' fork][0] of the [origina
 
 - a new design (this is somewhat of an ongoing thing),
 - code clean-up and refactoring to work with Android Studio,
-- showing app thumbnails in the list of articles.
+- app thumbnails in the list of articles.
+
+
+![wallabag screenshot](https://i.imgur.com/MVretvH.png)
+
 
 My other goals for this fork are to: 
 - improve the code further,
 - add support to submit articles to wallabag without being redirected to the website,
-- add support for tagging articles after 'wallabagging' them* (much like Pocket does),
+- add support for tagging articles after 'wallabagging' them (much like Pocket does),
 - improve syncing of read/unread status.
 
 Most of those features will probably require some changes on the [wallabag][] server as well.
