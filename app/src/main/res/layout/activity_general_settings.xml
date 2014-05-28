@@ -5,7 +5,7 @@
     android:layout_height="wrap_content" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
@@ -30,6 +30,38 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/default_padding_horizontal" />
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/divider"
+            tools:ignore="ContentDescription" />
+
+        <RelativeLayout
+            android:id="@+id/auto_refresh_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <com.pixplicity.fonttextutils.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/default_padding_vertical"
+                android:paddingLeft="@dimen/default_padding_horizontal"
+                android:paddingTop="@dimen/default_padding_vertical"
+                android:text="@string/auto_refresh"
+                android:layout_centerVertical="true"
+                style="@style/FontMedium" />
+
+            <CheckBox
+                android:id="@+id/auto_refresh_check_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingBottom="@dimen/default_padding_vertical"
+                android:paddingRight="@dimen/default_padding_horizontal"
+                android:paddingTop="@dimen/default_padding_vertical" />
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/imageView1"

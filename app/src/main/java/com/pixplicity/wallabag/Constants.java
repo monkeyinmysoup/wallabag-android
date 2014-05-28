@@ -5,11 +5,11 @@ import com.pixplicity.wallabag.activities.LookAndFeelSettingsActivity;
 public final class Constants {
 
     // Navigation drawer entries:
-	public static final int ALL = 0;
-	public static final int UNREAD = 1;
-	public static final int READ = 2;
-	public static final int FAVS = 3;
-    public static final int SETTINGS = 4;
+	//public static final int ALL = 0;
+	public static final int UNREAD = 0;
+	public static final int READ = 1;
+	public static final int FAVS = 2;
+    public static final int SETTINGS = 3;
 
 	public static final String LIST_FILTER_OPTION = "ListFilterOption";
 
@@ -25,6 +25,9 @@ public final class Constants {
     public static final String PREFS_KEY_USER_TOKEN = "APIToken";
     public static final String PREFS_KEY_PREVIOUS_UPDATE = "previous_update";
     public static final String PREFS_KEY_USER_NAME = "UserName";
+    public static final String PREFS_KEY_AUTO_REFRESH = "AutoRefresh";
+    public static final String PREFS_SORT_TYPE = "SortType";
+    public static final String PREFS_LAST_REFRESH = "LastRefresh";
 
     public static final int MAX_DESCRIPTION_CHARS = 250;
     public static final int JPEG_QUALITY = 90;
@@ -35,4 +38,14 @@ public final class Constants {
     public static final int DEFAULT_ORIENTATION = LookAndFeelSettingsActivity.PORTRAIT;
     public static final boolean DEFAULT_IMMERSIVE_ENABLED = false;
     public static final boolean DEFAULT_KEEP_SCREEN_ON = false;
+    public static final boolean DEFAULT_AUTO_REFRESH_ON = false;
+
+    /**
+     * Timeout for automatic refreshes. 5 minutes.
+     */
+    public static final long AUTO_REFRESH_TIMEOUT = 5 * 60 * 1000;
+
+    public static final int SORT_NEWER = 0;
+    public static final int SORT_OLDER = 1;
+    public static final int SORT_ALPHA = 2;
 }

@@ -102,18 +102,12 @@ public final class Utils {
 
     public static String getFilter(int filterOption) {
         switch (filterOption) {
-            case Constants.ALL:
-                return null;
-
             case Constants.UNREAD:
                 return ARCHIVE + " = 0";
-
             case Constants.READ:
                 return ARCHIVE + " = 1";
-
             case Constants.FAVS:
                 return FAV + " = 1";
-
             default:
                 return null;
         }
@@ -122,19 +116,19 @@ public final class Utils {
     /**
      * Returns the proper sort order for the given type.
      * The {@code sortType} parameter must be either of the
-     * values {@link com.pixplicity.wallabag.activities.GeneralSettingsActivity#NEWER},
-     * {@link com.pixplicity.wallabag.activities.GeneralSettingsActivity#OLDER} or
-     * {@link com.pixplicity.wallabag.activities.GeneralSettingsActivity#ALPHA}.
+     * values {@link com.pixplicity.wallabag.Constants#SORT_NEWER},
+     * {@link com.pixplicity.wallabag.Constants#SORT_OLDER} or
+     * {@link com.pixplicity.wallabag.Constants#SORT_ALPHA}.
      * @param sortType
      * @return
      */
     public static String getOrderBy(int sortType) {
         switch (sortType) {
-            case GeneralSettingsActivity.NEWER:
+            case Constants.SORT_NEWER:
                 return MY_ID + " DESC";
-            case GeneralSettingsActivity.OLDER:
+            case Constants.SORT_OLDER:
                 return MY_ID;
-            case GeneralSettingsActivity.ALPHA:
+            case Constants.SORT_ALPHA:
                 return ARTICLE_TITLE + " COLLATE NOCASE";
             default:
                 throw new RuntimeException("Unknown sort order " + sortType);

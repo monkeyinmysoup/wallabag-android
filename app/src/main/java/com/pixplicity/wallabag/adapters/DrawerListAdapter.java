@@ -19,11 +19,11 @@ public class DrawerListAdapter extends SimpleListAdapter {
         super(ctx, new ArrayList<ListItem>(), themeId, R.layout.li_drawer);
 		this.mActive = active;
 
-        mData.add(new ListItem(Constants.ALL, R.string.drawer_all, -1, R.drawable.drawer_all));
+        //mData.add(new ListItem(Constants.ALL, R.string.drawer_all, -1, R.drawable.drawer_all));
         mData.add(new ListItem(Constants.UNREAD, R.string.drawer_unread, -1, R.drawable.drawer_unread));
         mData.add(new ListItem(Constants.READ, R.string.drawer_read, -1, R.drawable.drawer_archive));
         mData.add(new ListItem(Constants.FAVS, R.string.drawer_favorites, -1, R.drawable.drawer_favorites));
-        mData.add(new ListItem(Constants.SETTINGS, R.string.drawer_settings, -1, -1));
+        mData.add(new ListItem(Constants.SETTINGS, R.string.drawer_settings, -1, R.drawable.drawer_options));
 	}
 
     @Override
@@ -45,9 +45,6 @@ public class DrawerListAdapter extends SimpleListAdapter {
 
         ImageView color = (ImageView) viewHolder.root.findViewById(R.id.iv_color);
         switch(position) {
-            case Constants.ALL:
-                color.setImageResource(R.drawable.drawer_bar_all);
-                break;
             case Constants.UNREAD:
                 color.setImageResource(R.drawable.drawer_bar_unread);
                 break;
@@ -60,6 +57,9 @@ public class DrawerListAdapter extends SimpleListAdapter {
             case Constants.SETTINGS:
                 color.setImageResource(R.drawable.drawer_bar_settings);
                 break;
+//            case Constants.ALL:
+//                color.setImageResource(R.drawable.drawer_bar_all);
+//                break;
         }
     }
 

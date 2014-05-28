@@ -427,7 +427,7 @@ public class ApiService extends IntentService {
             return;
         }
         StringBuilder query = new StringBuilder();
-        query.append("UPDATE TABLE ")
+        query.append("UPDATE ")
                 .append(ARTICLE_TABLE)
                 .append(" SET " + ARCHIVE + "=0 WHERE ")
                 .append(ARTICLE_URL)
@@ -449,7 +449,7 @@ public class ApiService extends IntentService {
             return;
         }
         StringBuilder query = new StringBuilder();
-        query.append("UPDATE TABLE ")
+        query.append("UPDATE ")
                 .append(ARTICLE_TABLE)
                 .append(" SET " + FAV + "=0 WHERE ")
                 .append(ARTICLE_URL)

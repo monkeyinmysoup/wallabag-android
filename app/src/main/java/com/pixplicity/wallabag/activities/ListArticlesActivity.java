@@ -216,19 +216,27 @@ public class ListArticlesActivity extends Activity implements
             mServiceIntentFilter = new IntentFilter(getString(R.string.broadcast_articles_loaded));
             mServiceIntentFilter.addAction(getString(R.string.broadcast_archive_loaded));
         }
+
+        // Auto-refresh if needed
+        boolean auto = Prefs.getBoolean(Constants.PREFS_KEY_AUTO_REFRESH, Constants.DEFAULT_AUTO_REFRESH_ON);
+        long last = Prefs.getLong(Constants.PREFS_LAST_REFRESH, 0);
+        if (auto && last < System.currentTimeMillis() - Constants.AUTO_REFRESH_TIMEOUT) {
+            refresh();
+            Prefs.putLong(Constants.PREFS_LAST_REFRESH, System.currentTimeMillis());
+        }
     }
 
     private void setActionBarLogo() {
         int res;
         switch(mDrawerAdapter.getActivePosition()) {
-            case Constants.ALL:
-                res = R.drawable.actionbar_all; break;
             case Constants.UNREAD:
                 res = R.drawable.actionbar_unread; break;
             case Constants.READ:
                 res = R.drawable.actionbar_archive; break;
             case Constants.FAVS:
                 res = R.drawable.actionbar_favorites; break;
+//            case Constants.ALL:
+//                res = R.drawable.actionbar_all; break;
             default:
                 res = R.drawable.actionbar_wide; break;
         }
@@ -334,11 +342,11 @@ public class ListArticlesActivity extends Activity implements
         }
 
         sortType = Prefs.getInt(
-                GeneralSettingsActivity.SORT_TYPE,
-                GeneralSettingsActivity.NEWER);
+                Constants.PREFS_SORT_TYPE,
+                Constants.SORT_NEWER);
         listFilterOption = Prefs.getInt(
                 Constants.LIST_FILTER_OPTION,
-                Constants.ALL);
+                Constants.UNREAD);
     }
 
     /**
