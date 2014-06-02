@@ -218,9 +218,13 @@ public class ListArticlesActivity extends Activity implements
         }
 
         // Auto-refresh if needed
-        boolean auto = Prefs.getBoolean(Constants.PREFS_KEY_AUTO_REFRESH, Constants.DEFAULT_AUTO_REFRESH_ON);
+        int auto = Prefs.getInt(Constants.PREFS_KEY_AUTO_REFRESH, Constants.DEFAULT_AUTO_REFRESH);
         long last = Prefs.getLong(Constants.PREFS_LAST_REFRESH, 0);
-        if (auto && last < System.currentTimeMillis() - Constants.AUTO_REFRESH_TIMEOUT) {
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if ((auto == Constants.REFRESH_ALWAYS
+                || (auto == Constants.REFRESH_WIFI && wifi.isConnected()))
+                && last < System.currentTimeMillis() - Constants.AUTO_REFRESH_TIMEOUT) {
             refresh();
             Prefs.putLong(Constants.PREFS_LAST_REFRESH, System.currentTimeMillis());
         }

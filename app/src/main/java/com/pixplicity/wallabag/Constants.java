@@ -25,12 +25,16 @@ public final class Constants {
     public static final String PREFS_KEY_USER_TOKEN = "APIToken";
     public static final String PREFS_KEY_PREVIOUS_UPDATE = "previous_update";
     public static final String PREFS_KEY_USER_NAME = "UserName";
-    public static final String PREFS_KEY_AUTO_REFRESH = "AutoRefresh";
-    public static final String PREFS_SORT_TYPE = "SortType";
-    public static final String PREFS_LAST_REFRESH = "LastRefresh";
+    public static final String PREFS_KEY_AUTO_REFRESH = "auto_refresh";
+    public static final String PREFS_SORT_TYPE = "sort_type";
+    public static final String PREFS_LAST_REFRESH = "last_refresh";
 
     public static final int MAX_DESCRIPTION_CHARS = 250;
     public static final int JPEG_QUALITY = 90;
+
+    public static final int REFRESH_MANUAL = 0;
+    public static final int REFRESH_WIFI = 1;
+    public static final int REFRESH_ALWAYS = 2;
 
     public static final int DEFAULT_FONT_SIZE = 11;
     public static final int DEFAULT_FONT_STYLE = Style.SERIF;
@@ -38,7 +42,7 @@ public final class Constants {
     public static final int DEFAULT_ORIENTATION = LookAndFeelSettingsActivity.PORTRAIT;
     public static final boolean DEFAULT_IMMERSIVE_ENABLED = false;
     public static final boolean DEFAULT_KEEP_SCREEN_ON = false;
-    public static final boolean DEFAULT_AUTO_REFRESH_ON = false;
+    public static final int DEFAULT_AUTO_REFRESH = REFRESH_MANUAL;
 
     /**
      * Timeout for automatic refreshes. 5 minutes.

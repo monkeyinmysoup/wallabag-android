@@ -16,7 +16,7 @@
     <dimen name="li_article_spacing">8dp</dimen>
     <dimen name="li_article_image_size">54dp</dimen>
 
-    <dimen name="card_corner_radius">0dp</dimen>
+    <dimen name="card_corner_radius">1dp</dimen>
     <dimen name="card_padding">8dp</dimen>
 
     <dimen name="drawer_color_width">6dp</dimen>

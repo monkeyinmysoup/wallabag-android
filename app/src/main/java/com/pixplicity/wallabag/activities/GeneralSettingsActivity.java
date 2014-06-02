@@ -25,27 +25,31 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
             R.string.newer,
             R.string.older,
             R.string.alphabetical};
+    private static final int[] refreshOptions = new int[]{
+            R.string.refresh_manual,
+            R.string.refresh_wifi,
+            R.string.refresh_always};
 
     private int sortType;
     private boolean willAlsoDeleteUserAccount;
-    private boolean isAutoRefreshOn;
+    private int autoRefresh;
 
     @Override
     protected void saveSettings() {
         Prefs.putInt(Constants.PREFS_SORT_TYPE, sortType);
-        Prefs.putBoolean(Constants.PREFS_KEY_AUTO_REFRESH, isAutoRefreshOn);
+        Prefs.putInt(Constants.PREFS_KEY_AUTO_REFRESH, autoRefresh);
     }
 
     @Override
     protected void getSettings() {
         super.getSettings();
         sortType = Prefs.getInt(Constants.PREFS_SORT_TYPE, 0);
-        isAutoRefreshOn = Prefs.getBoolean(Constants.PREFS_KEY_AUTO_REFRESH, Constants.DEFAULT_AUTO_REFRESH_ON);
+        autoRefresh = Prefs.getInt(Constants.PREFS_KEY_AUTO_REFRESH, Constants.DEFAULT_AUTO_REFRESH);
     }
 
     @Override
     protected void createUI() {
-        //Sort
+        // Sort
         View sortLayout = findViewById(R.id.sort_layout);
         final TextView sortTypeView = (TextView) sortLayout.findViewById(R.id.sort_text);
         sortTypeView.setText(getStringSortType(sortType));
@@ -74,25 +78,34 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
             }
         });
 
-        //Sort
+        // Auto-refresh
         View refreshLayout = findViewById(R.id.auto_refresh_layout);
-        final CheckBox refreshCheckBox = (CheckBox) findViewById(R.id.auto_refresh_check_box);
-        refreshCheckBox.setChecked(isAutoRefreshOn);
+        final TextView refreshView = (TextView) refreshLayout.findViewById(R.id.auto_refresh_text);
+        refreshView.setText(getStringRefresh(autoRefresh));
         refreshLayout.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                refreshCheckBox.toggle();
-            }
-        });
-        refreshCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isAutoRefreshOn = isChecked;
+                AlertDialog.Builder builder = new AlertDialog.Builder(GeneralSettingsActivity.this);
+                String[] choices = new String[]{
+                        getStringRefresh(0),
+                        getStringRefresh(1),
+                        getStringRefresh(2)};
+                builder.setSingleChoiceItems(choices, autoRefresh,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                autoRefresh = which;
+                                refreshView.setText(getStringRefresh(which));
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
             }
         });
 
-        //Wipe database
+        // Wipe database
         View wipeDatabaseLayout = findViewById(R.id.wipe_database_layout);
         wipeDatabaseLayout.setOnClickListener(new OnClickListener() {
 
@@ -174,6 +187,10 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
 
     private String getStringSortType(int which) {
         return getString(sortTypeOptions[which]);
+    }
+
+    private String getStringRefresh(int which) {
+        return getString(refreshOptions[which]);
     }
 
     @Override

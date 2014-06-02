@@ -93,5 +93,8 @@
     <string name="syncing">Syncing…</string>
     <string name="open_in_browser">Open in browser</string>
     <string name="auto_refresh">Auto-refresh on launch</string>
+    <string name="refresh_manual">Never</string>
+    <string name="refresh_wifi">Only on WiFi</string>
+    <string name="refresh_always">On WiFi and mobile data connection</string>
 
 </resources>
