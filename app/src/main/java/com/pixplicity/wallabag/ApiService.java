@@ -1,22 +1,6 @@
 package com.pixplicity.wallabag;
 
-import android.app.IntentService;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.text.Html;
-import android.util.Log;
-
 import com.pixplicity.easyprefs.library.Prefs;
-import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
 import com.pixplicity.wallabag.models.Article;
 
 import org.w3c.dom.DOMException;
@@ -27,6 +11,18 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.app.IntentService;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
+import android.text.Html;
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -34,7 +30,7 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -45,18 +41,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DOMAIN;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_SUMMARY;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TAGS;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_IMAGE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 
 public class ApiService extends IntentService {
@@ -67,12 +52,19 @@ public class ApiService extends IntentService {
      * @see #refreshArticles()
      */
     public static final String REFRESH_ARTICLES = "com.pixplicity.wallabag.REFRESH_ARTICLES";
+    /**
+     * Intent action telling the service to remove an article locally.
+     *
+     * @see #deleteArticle(String)
+     */
+    public static final String DELETE_ARTICLE = "com.pixplicity.wallabag.DELETE_ARTICLE";
 
     public static final String EXTRA_COUNT_ALL = "all";
     public static final String EXTRA_COUNT_UNREAD = "unread";
     public static final String EXTRA_FINISHED_LOADING = "finished";
     public static final String EXTRA_PROGRESS = "progress";
     public static final String EXTRA_PROGRESS_TOTAL = "progress_total";
+    public static final String EXTRA_ARTICLE_URL = "article";
 
     private static final String TAG = ApiService.class.getSimpleName();
 
@@ -80,6 +72,7 @@ public class ApiService extends IntentService {
     private volatile ServiceHandler mServiceHandler;
 
     private final class ServiceHandler extends Handler {
+
         public ServiceHandler(Looper looper) {
             super(looper);
         }
@@ -146,13 +139,35 @@ public class ApiService extends IntentService {
             case REFRESH_ARTICLES:
                 refreshArticles();
                 break;
+            case DELETE_ARTICLE:
+                deleteArticle(intent.getStringExtra(EXTRA_ARTICLE_URL));
+                break;
             default:
-                throw new RuntimeException("Unknown action passed to service: " + intent.getAction());
+                throw new RuntimeException(
+                        "Unknown action passed to service: " + intent.getAction());
         }
     }
 
     /**
-     * Synchronizes all feeds by calling {@link #refreshArticles(ArticleType)} on each of them sequentially.
+     * Removes an article from all lists by deactivating the database entry
+     */
+    private void deleteArticle(String articleUrl) {
+        ContentValues values = new ContentValues();
+        values.put(Article.FIELD_IS_DELETED, true);
+        int result = cupboard().withContext(this).update(
+                Article.URI,
+                values,
+                Article.FIELD_URL + "=?",
+                articleUrl);
+        Intent intent = new Intent(getString(R.string.broadcast_articles_loaded));
+        intent.putExtra(ApiService.EXTRA_FINISHED_LOADING, true);
+        intent.putExtra(ApiService.EXTRA_COUNT_ALL, -result);
+        sendOrderedBroadcast(intent, null);
+    }
+
+    /**
+     * Synchronizes all feeds by calling {@link #refreshArticles(ArticleType)} on each of them
+     * sequentially.
      */
     private void refreshArticles() {
         refreshArticles(ArticleType.UNREAD);
@@ -169,9 +184,11 @@ public class ApiService extends IntentService {
      * After processing is done a broadcast is send to notify listeners,
      * containing the extras {@link #EXTRA_COUNT_ALL} and {@link #EXTRA_COUNT_UNREAD}
      * indicating the numbers of newly stored articles and total unread articles respectively,
-     * or {@link #EXTRA_FINISHED_LOADING} with value {@link false} indicating that this is an intermediate
+     * or {@link #EXTRA_FINISHED_LOADING} with value {@link false} indicating that this is an
+     * intermediate
      * update and the total numbers aren't there yet.
-     * Can also contain the extras {@link #EXTRA_PROGRESS} and {@link #EXTRA_PROGRESS_TOTAL} to show
+     * Can also contain the extras {@link #EXTRA_PROGRESS} and {@link #EXTRA_PROGRESS_TOTAL} to
+     * show
      * the amount of progress.
      */
     private void refreshArticles(ArticleType feed) {
@@ -180,11 +197,12 @@ public class ApiService extends IntentService {
         String apiUsername = Prefs.getString(Constants.PREFS_KEY_USER_ID, null);
         String apiToken = Prefs.getString(Constants.PREFS_KEY_USER_TOKEN, null);
 
-        SQLiteDatabase database = getDatabase();
         try {
-            // Set the url (you will need to change this to your RSS URL
-            url = new URL(wallabagUrl + "/?feed&type=" + feed.getQueryString() + "&user_id=" + apiUsername
-                    + "&token=" + apiToken);
+            // Set the url
+            url = new URL(
+                    wallabagUrl + "/?feed&type=" + feed.getQueryString() + "&user_id=" + apiUsername
+                            + "&token=" + apiToken
+            );
 
             // Setup the connection
             HttpsURLConnection conn_s = null;
@@ -215,36 +233,29 @@ public class ApiService extends IntentService {
                 NodeList itemLst = doc.getElementsByTagName("item");
 
                 // Fetch items currently in database:
-                ArrayList<String> urlsInDB = new ArrayList<>();
                 String feedSelection = null;
                 if (feed == ArticleType.ARCHIVE) {
-                    feedSelection = ARCHIVE + "=1";
+                    feedSelection = Article.FIELD_IS_ARCHIVED + "=1";
                 } else if (feed == ArticleType.FAVORITES) {
-                    feedSelection = FAV + "=1";
+                    feedSelection = Article.FIELD_IS_FAV + "=1";
                 }
-                Cursor ac = database.query(
-                        ARTICLE_TABLE,
-                        new String[]{ARTICLE_URL},
-                        feedSelection,
-                        null, null, null, null
-                );
-                ac.moveToFirst();
-                if (!ac.isAfterLast()) {
-                    do {
-                        urlsInDB.add(ac.getString(0));
-                    } while (ac.moveToNext());
-                }
+                feedSelection += " AND " + Article.FIELD_IS_DELETED + "!=1";
+                List<Article> urlsInDB = cupboard().withContext(this).query(
+                        Article.URI,
+                        Article.class)
+                        .withSelection(feedSelection)
+                        .list();
 
                 // Loop through the XML passing the data to the arrays
                 int total = itemLst.getLength();
                 for (int i = total - 1; i >= 0; i--) {
                     Node item = itemLst.item(i);
                     if (item.getNodeType() == Node.ELEMENT_NODE) {
-                        if (parseArticle(feed, urlsInDB, database, (Element) item)) {
+                        if (parseArticle(feed, urlsInDB, (Element) item)) {
                             newArticles++;
                         }
                     }
-                    if ((i % 10) == 0) {
+                    if ((i % Constants.UPDATE_LIST_EVERY_X_ITEMS) == 0) {
                         // Intermediate update
                         Intent intent = new Intent(getString(R.string.broadcast_articles_loaded));
                         intent.putExtra(ApiService.EXTRA_PROGRESS, total - i);
@@ -256,29 +267,36 @@ public class ApiService extends IntentService {
 
                 // Remove items from db that are no longer in the feed
                 if (feed == ArticleType.ARCHIVE) {
-                    removeArticlesFromArchive(database, urlsInDB);
+                    removeArticlesFromArchive(urlsInDB);
                 } else if (feed == ArticleType.FAVORITES) {
-                    removeArticlesFromFavs(database, urlsInDB);
+                    removeArticlesFromFavs(urlsInDB);
                 } else {
-                    removeDeletedArticlesFromDB(database, urlsInDB);
+                    removeDeletedArticlesFromDB(urlsInDB);
                 }
             }
 
             // Count unread articles
-            int unreadArticles = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0",
-                    null, null, null, null).getCount();
+            Cursor c = cupboard()
+                    .withContext(this)
+                    .query(Article.URI, Article.class)
+                    .withSelection(Article.FIELD_IS_ARCHIVED + "=0 AND " + Article.FIELD_IS_DELETED + "=0")
+                    .getCursor();
+            int unreadArticles = c.getCount();
+            c.close();
 
             // Refresh status
             Intent intent;
-            if (feed== ArticleType.ARCHIVE) {
+            if (feed == ArticleType.ARCHIVE) {
                 intent = new Intent(getString(R.string.broadcast_archive_loaded));
-            } else if (feed==ArticleType.FAVORITES) {
+            } else if (feed == ArticleType.FAVORITES) {
                 intent = new Intent(getString(R.string.broadcast_favorites_loaded));
             } else {
                 intent = new Intent(getString(R.string.broadcast_articles_loaded));
             }
             intent.putExtra(ApiService.EXTRA_COUNT_ALL, newArticles);
-            intent.putExtra(ApiService.EXTRA_COUNT_UNREAD, unreadArticles);
+            if (feed == ArticleType.UNREAD) {
+                intent.putExtra(ApiService.EXTRA_COUNT_UNREAD, unreadArticles);
+            }
             intent.putExtra(ApiService.EXTRA_FINISHED_LOADING, true);
             sendOrderedBroadcast(intent, null);
         } catch (DOMException | IOException | ParserConfigurationException | SAXException e) {
@@ -286,22 +304,19 @@ public class ApiService extends IntentService {
             if (feed == ArticleType.UNREAD) {
                 Utils.showToast(this, getString(R.string.fail_to_update));
             }
-        } finally {
-            database.close();
         }
     }
 
     /**
      * Parses a single RSS node and stores it as an Article in the database
      *
-     * @param feed     The feed this article is being fetched from
-     * @param urlsInDB List of articles that are marked for deletion
-     * @param database Database connection
-     * @param item     The RSS item to parse
+     * @param feed         The feed this article is being fetched from
+     * @param articlesInDB List of articles that are marked for deletion
+     * @param item         The RSS item to parse
      * @return {@link true} on a successful insertion, {@link false} on errors or if the article is
      * already present in the database
      */
-    private boolean parseArticle(ArticleType feed, ArrayList<String> urlsInDB, SQLiteDatabase database, Element item) {
+    private boolean parseArticle(ArticleType feed, List<Article> articlesInDB, Element item) {
         String articleTitle;
         String articleDate;
         String articleUrl;
@@ -331,9 +346,10 @@ public class ApiService extends IntentService {
         articleDomain = Utils.getDomainFromUrl(articleUrl);
         Log.d(TAG, articleDomain + "; " + articleUrl);
 
-        // Articles in the feed are remove from the hitlist:
-        if (urlsInDB.contains(articleUrl)) {
-            urlsInDB.remove(articleUrl);
+        // Articles in the feed are removed from the hitlist:
+        int pos = findArticleInList(articlesInDB, articleUrl);
+        if (pos >= 0) {
+            articlesInDB.remove(pos);
             return true;
         }
 
@@ -360,110 +376,131 @@ public class ApiService extends IntentService {
         }
 
         ContentValues values = new ContentValues();
-        values.put(ARTICLE_TITLE, Html.fromHtml(articleTitle)
-                .toString());
-//        values.put(ARTICLE_CONTENT,
-//                ImageUtils.changeImagesUrl(this, articleContent));
-        values.put(ARTICLE_CONTENT, articleContent);
-        values.put(ARTICLE_SUMMARY,
-                Article.makeDescription(articleContent));
-        values.put(ARTICLE_DOMAIN, articleDomain);
-        values.put(ARTICLE_TAGS, "");
-        values.put(ARTICLE_IMAGE, ImageUtils.getFirstImageUrl(articleUrl, articleContent));
-        values.put(ARTICLE_URL, articleUrl);
-        values.put(ARTICLE_DATE, articleDate);
-        values.put(ARCHIVE, feed == ArticleType.ARCHIVE ? 1 : 0);
-        values.put(FAV, feed == ArticleType.FAVORITES ? 1 : 0);
-        values.put(ARTICLE_SYNC, 0);
+        values.put(Article.FIELD_TITLE, Html.fromHtml(articleTitle).toString());
+        values.put(Article.FIELD_CONTENT, articleContent);
+        values.put(Article.FIELD_SUMMARY, Article.makeDescription(articleContent));
+        values.put(Article.FIELD_DOMAIN, articleDomain);
+        values.put(Article.FIELD_IMAGE_URL,
+                ImageUtils.getFirstImageUrl(articleUrl, articleContent));
+        values.put(Article.FIELD_URL, articleUrl);
+        values.put(Article.FIELD_DATE, articleDate);
+        values.put(Article.FIELD_IS_ARCHIVED, feed == ArticleType.ARCHIVE);
+        values.put(Article.FIELD_IS_FAV, feed == ArticleType.FAVORITES);
+        //values.put(ARTICLE_SYNC, 0);
 
-        try {
-            database.insertOrThrow(ARTICLE_TABLE, null, values);
-        } catch (SQLiteConstraintException e) {
-            return true;
-        } catch (SQLiteException e) {
-            database.execSQL("ALTER TABLE " + ARTICLE_TABLE
-                    + " ADD COLUMN " + ARTICLE_DATE
-                    + " datetime;");
-            database.insertOrThrow(ARTICLE_TABLE, null, values);
-        }
+        Article article = new Article(values);
+        // TODO what happens on conflicts?
+        cupboard().withContext(this).put(Article.URI, article);
+
+//        try {
+//            database.insertOrThrow(ARTICLE_TABLE, null, values);
+//        } catch (SQLiteConstraintException e) {
+//            return true;
+//        } catch (SQLiteException e) {
+//            database.execSQL("ALTER TABLE " + ARTICLE_TABLE
+//                    + " ADD COLUMN " + ARTICLE_DATE
+//                    + " datetime;");
+//            database.insertOrThrow(ARTICLE_TABLE, null, values);
+//        }
         return false;
     }
 
-    private SQLiteDatabase getDatabase() {
-        ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
-        return helper.getWritableDatabase();
+    /**
+     * Finds an article (specified by url) in the list and returns the position.
+     * Returns -1 if the article is not in the list.
+     * Runs in linear time.
+     *
+     * @param articlesInDB List of articles to search through (the haystack)
+     * @param articleUrl   The article to look for (the needle)
+     * @return The position of the item in the list, or -1 if the item is not found.
+     */
+    private int findArticleInList(List<Article> articlesInDB, String articleUrl) {
+        int i = 0;
+        for (Article article : articlesInDB) {
+            if (article.mUrl.equals(articleUrl)) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
     }
 
     /**
      * Removes articles from the database that are no longer in the feed
      *
-     * @param db       Database connection
-     * @param urlsInDB List of article urls that should be removed
+     * @param articlesInDB List of articles that should be removed
      */
-    private void removeDeletedArticlesFromDB(SQLiteDatabase db, ArrayList<String> urlsInDB) {
-        if (urlsInDB.size() == 0) {
+    private void removeDeletedArticlesFromDB(List<Article> articlesInDB) {
+        if (articlesInDB.size() == 0) {
             return;
         }
-        StringBuilder query = new StringBuilder();
-        query.append("DELETE FROM ")
-                .append(ARTICLE_TABLE)
-                .append(" WHERE ")
-                .append(ARTICLE_URL)
-                .append(" IN (");
-        for (int i = 0; i < urlsInDB.size(); i++) {
+        // Updated values: is_archived = 1
+        ContentValues values = new ContentValues();
+        values.put(Article.FIELD_IS_DELETED, 1);
+        // Where: id IN (...)
+        StringBuilder selection = new StringBuilder();
+        selection.append(Article.FIELD_URL).append(" IN (");
+        for (int i = 0; i < articlesInDB.size(); i++) {
             if (i > 0) {
-                query.append(",");
+                selection.append(",");
             }
-            query.append("'")
-                    .append(urlsInDB.toString())
+            selection.append("'")
+                    .append(articlesInDB.get(i).mUrl)
                     .append("'");
         }
-        query.append(");");
-        db.execSQL(query.toString());
+        selection.append(");");
+        // Execute query
+        cupboard().withContext(this)
+                .update(Article.URI, values, selection.toString(), (String[]) null);
     }
 
-    private void removeArticlesFromArchive(SQLiteDatabase db, ArrayList<String> urlsInDB) {
-        if (urlsInDB.size() == 0) {
+    private void removeArticlesFromArchive(List<Article> articlesInDB) {
+        if (articlesInDB.size() == 0) {
             return;
         }
-        StringBuilder query = new StringBuilder();
-        query.append("UPDATE ")
-                .append(ARTICLE_TABLE)
-                .append(" SET " + ARCHIVE + "=0 WHERE ")
-                .append(ARTICLE_URL)
-                .append(" IN (");
-        for (int i = 0; i < urlsInDB.size(); i++) {
+
+        // Updated values: is_archived = 1
+        ContentValues values = new ContentValues();
+        values.put(Article.FIELD_IS_ARCHIVED, 1);
+        // Where: id IN (...)
+        StringBuilder selection = new StringBuilder();
+        selection.append(Article.FIELD_URL).append(" IN (");
+        for (int i = 0; i < articlesInDB.size(); i++) {
             if (i > 0) {
-                query.append(",");
+                selection.append(",");
             }
-            query.append("'")
-                    .append(urlsInDB.toString())
+            selection.append("'")
+                    .append(articlesInDB.get(i).mUrl)
                     .append("'");
         }
-        query.append(");");
-        db.execSQL(query.toString());
+        selection.append(");");
+        // Execute query
+        cupboard().withContext(this)
+                .update(Article.URI, values, selection.toString(), (String[]) null);
     }
 
-    private void removeArticlesFromFavs(SQLiteDatabase db, ArrayList<String> urlsInDB) {
-        if (urlsInDB.size() == 0) {
+    private void removeArticlesFromFavs(List<Article> articlesInDB) {
+        if (articlesInDB.size() == 0) {
             return;
         }
-        StringBuilder query = new StringBuilder();
-        query.append("UPDATE ")
-                .append(ARTICLE_TABLE)
-                .append(" SET " + FAV + "=0 WHERE ")
-                .append(ARTICLE_URL)
-                .append(" IN (");
-        for (int i = 0; i < urlsInDB.size(); i++) {
+        // Updated values: is_archived = 1
+        ContentValues values = new ContentValues();
+        values.put(Article.FIELD_IS_FAV, 1);
+        // Where: id IN (...)
+        StringBuilder selection = new StringBuilder();
+        selection.append(Article.FIELD_URL).append(" IN (");
+        for (int i = 0; i < articlesInDB.size(); i++) {
             if (i > 0) {
-                query.append(",");
+                selection.append(",");
             }
-            query.append("'")
-                    .append(urlsInDB.toString())
+            selection.append("'")
+                    .append(articlesInDB.get(i).mUrl)
                     .append("'");
         }
-        query.append(");");
-        db.execSQL(query.toString());
+        selection.append(");");
+        // Execute query
+        cupboard().withContext(this)
+                .update(Article.URI, values, selection.toString(), (String[]) null);
     }
 
     private void trustEveryone() {
@@ -473,7 +510,7 @@ public class ApiService extends IntentService {
 
                         @Override
                         public boolean verify(String hostname,
-                                              SSLSession session) {
+                                SSLSession session) {
                             return true;
                         }
                     });
@@ -483,12 +520,12 @@ public class ApiService extends IntentService {
 
                         @Override
                         public void checkClientTrusted(X509Certificate[] chain,
-                                                       String authType) throws CertificateException {
+                                String authType) throws CertificateException {
                         }
 
                         @Override
                         public void checkServerTrusted(X509Certificate[] chain,
-                                                       String authType) throws CertificateException {
+                                String authType) throws CertificateException {
                         }
 
                         @Override

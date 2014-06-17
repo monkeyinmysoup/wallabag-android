@@ -1,5 +1,15 @@
 package com.pixplicity.wallabag.activities;
 
+import com.pixplicity.easyprefs.library.Prefs;
+import com.pixplicity.wallabag.ApiService;
+import com.pixplicity.wallabag.Constants;
+import com.pixplicity.wallabag.R;
+import com.pixplicity.wallabag.Utils;
+import com.pixplicity.wallabag.adapters.DrawerListAdapter;
+import com.pixplicity.wallabag.adapters.ReadingListAdapter;
+import com.pixplicity.wallabag.db.ArticleLoader;
+import com.pixplicity.wallabag.models.Article;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -11,7 +21,7 @@ import android.content.IntentFilter;
 import android.content.Loader;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.CursorWrapper;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -29,29 +39,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pixplicity.easyprefs.library.Prefs;
-import com.pixplicity.wallabag.ApiService;
-import com.pixplicity.wallabag.Constants;
-import com.pixplicity.wallabag.R;
-import com.pixplicity.wallabag.Utils;
-import com.pixplicity.wallabag.adapters.DrawerListAdapter;
-import com.pixplicity.wallabag.adapters.ReadingListAdapter;
-import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
-import com.pixplicity.wallabag.models.Article;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DOMAIN;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_SUMMARY;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TAGS;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_IMAGE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
  * Main Activity of the app.
@@ -62,11 +50,10 @@ public class ListArticlesActivity extends Activity implements
 
     private static final String TAG = ListArticlesActivity.class.getSimpleName();
 
-    private static SQLiteDatabase database;
     private int themeId;
     private int sortType;
     private int listFilterOption;
-    private ReadingListAdapter adapter;
+    private ReadingListAdapter mAdapter;
     private ListView mListView;
     private DrawerLayout drawerLayout;
     private ViewGroup drawerContainer;
@@ -86,8 +73,14 @@ public class ListArticlesActivity extends Activity implements
         public void onReceive(Context context, Intent intent) {
             Bundle extras = intent.getExtras();
             if (extras.getBoolean(ApiService.EXTRA_FINISHED_LOADING, false)) {
-                int unread = extras.getInt(ApiService.EXTRA_COUNT_UNREAD);
-                Toast.makeText(ListArticlesActivity.this, getResources().getQuantityString(R.plurals.unread_articles, unread, unread), Toast.LENGTH_SHORT).show();
+                int unread = extras.getInt(ApiService.EXTRA_COUNT_UNREAD, 0);
+                if (unread >= 0) {
+                    // Note: if unread < 0, an article has been deleted.
+                    Toast.makeText(ListArticlesActivity.this, getResources()
+                                    .getQuantityString(R.plurals.unread_articles, unread, unread),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
                 setBusy(false);
             } else {
                 int done = extras.getInt(ApiService.EXTRA_PROGRESS, 0);
@@ -123,17 +116,14 @@ public class ListArticlesActivity extends Activity implements
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
-        //Database
-        setupDB();
-
         // 'no articles yet'
         mNoArticles = findViewById(R.id.no_articles_container);
         mNoArticlesText = (TextView) findViewById(R.id.no_articles_text);
 
         //Listview
         mListView = (ListView) findViewById(R.id.list_articles);
-        adapter = new ReadingListAdapter(getBaseContext());
-        mListView.setAdapter(adapter);
+        mAdapter = new ReadingListAdapter(getBaseContext());
+        mListView.setAdapter(mAdapter);
         setupList();
 
         //Drawer
@@ -148,7 +138,8 @@ public class ListArticlesActivity extends Activity implements
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 if (mDrawerAdapter.getActivePosition() != pos) {
                     if (pos == Constants.SETTINGS) {
-                        Intent intent = new Intent(ListArticlesActivity.this, SettingsActivity.class);
+                        Intent intent = new Intent(ListArticlesActivity.this,
+                                SettingsActivity.class);
                         startActivityForResult(
                                 intent,
                                 Constants.REQUEST_SETTINGS);
@@ -198,7 +189,8 @@ public class ListArticlesActivity extends Activity implements
         mSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ListArticlesActivity.this, AccountSettingsActivity.class);
+                Intent intent = new Intent(ListArticlesActivity.this,
+                        AccountSettingsActivity.class);
                 startActivityForResult(
                         intent,
                         Constants.REQUEST_SETTINGS);
@@ -208,7 +200,7 @@ public class ListArticlesActivity extends Activity implements
             mSettings.setVisibility(View.GONE);
         }
 
-        // Set logo (must happen after setting drawer adapter)
+        // Set logo (must happen after setting drawer mAdapter)
         setActionBarLogo();
 
         // Prepare IntentFilter for registration
@@ -220,7 +212,8 @@ public class ListArticlesActivity extends Activity implements
         // Auto-refresh if needed
         int auto = Prefs.getInt(Constants.PREFS_KEY_AUTO_REFRESH, Constants.DEFAULT_AUTO_REFRESH);
         long last = Prefs.getLong(Constants.PREFS_LAST_REFRESH, 0);
-        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(
+                Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         if ((auto == Constants.REFRESH_ALWAYS
                 || (auto == Constants.REFRESH_WIFI && wifi.isConnected()))
@@ -232,17 +225,21 @@ public class ListArticlesActivity extends Activity implements
 
     private void setActionBarLogo() {
         int res;
-        switch(mDrawerAdapter.getActivePosition()) {
+        switch (mDrawerAdapter.getActivePosition()) {
             case Constants.UNREAD:
-                res = R.drawable.actionbar_unread; break;
+                res = R.drawable.actionbar_unread;
+                break;
             case Constants.READ:
-                res = R.drawable.actionbar_archive; break;
+                res = R.drawable.actionbar_archive;
+                break;
             case Constants.FAVS:
-                res = R.drawable.actionbar_favorites; break;
+                res = R.drawable.actionbar_favorites;
+                break;
 //            case Constants.ALL:
 //                res = R.drawable.actionbar_all; break;
             default:
-                res = R.drawable.actionbar_wide; break;
+                res = R.drawable.actionbar_wide;
+                break;
         }
         getActionBar().setLogo(res);
     }
@@ -272,12 +269,6 @@ public class ListArticlesActivity extends Activity implements
     public void onPause() {
         super.onPause();
         unregisterReceiver(mServiceReceiver);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        database.close();
     }
 
     @Override
@@ -324,11 +315,6 @@ public class ListArticlesActivity extends Activity implements
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void setupDB() {
-        ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
-        database = helper.getWritableDatabase();
     }
 
     /**
@@ -379,8 +365,6 @@ public class ListArticlesActivity extends Activity implements
 
     /**
      * Toggles the progress spinner in the actionbar
-     *
-     * @param busy
      */
     @SuppressLint("AppCompatMethod")
     private void setBusy(boolean busy) {
@@ -399,16 +383,13 @@ public class ListArticlesActivity extends Activity implements
     }
 
     public void setupList() {
-        List<Article> articlesList = getArticlesList();
-        adapter.setListArticles(articlesList);
-
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
                 Intent i = new Intent(getBaseContext(), ReadArticleActivity.class);
-                i.putExtra("id", ((Article) adapter.getItem(position)).id);
+                i.putExtra("id", mAdapter.getItem(position).mId);
                 startActivityForResult(i, Constants.REQUEST_READ_ARTICLE);
             }
         });
@@ -421,12 +402,11 @@ public class ListArticlesActivity extends Activity implements
             mListView.addFooterView(foot);
         }
 
-        // Show 'no articles yet' if needed
-        checkIfHasNoArticles();
+        updateList();
     }
 
     private void checkIfHasNoArticles() {
-        if (adapter.getCount() == 0) {
+        if (mAdapter.getCount() == 0) {
             mNoArticles.setVisibility(View.VISIBLE);
         } else {
             mNoArticles.setVisibility(View.GONE);
@@ -434,9 +414,7 @@ public class ListArticlesActivity extends Activity implements
     }
 
     public void updateList() {
-        List<Article> articlesList = getArticlesList();
-        adapter.setListArticles(articlesList);
-        checkIfHasNoArticles();
+        getLoaderManager().restartLoader(R.id.loader_articles, null, this);
     }
 
     public void updateList(int result) {
@@ -452,48 +430,6 @@ public class ListArticlesActivity extends Activity implements
         }
     }
 
-    private List<Article> getArticlesList() {
-        getSettings();
-        String orderBy = Utils.getOrderBy(sortType);
-        String filter = Utils.getFilter(listFilterOption);
-
-        List<Article> articlesList = new ArrayList<Article>();
-
-        String[] getStrColumns = new String[]{
-                ARTICLE_URL,
-                MY_ID,
-                ARTICLE_TITLE,
-                ARCHIVE,
-                FAV,
-                ARTICLE_SUMMARY,
-                ARTICLE_DOMAIN,
-                ARTICLE_TAGS,
-                ARTICLE_IMAGE
-        };
-        Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, filter, null,
-                null, null, orderBy);
-
-        ac.moveToFirst();
-        if (!ac.isAfterLast()) {
-            do {
-                Article tempArticle = new Article(
-                        ac.getString(0),
-                        ac.getString(1),
-                        ac.getString(2),
-                        ac.getString(3),
-                        ac.getString(4),
-                        ac.getString(5),
-                        ac.getString(6),
-                        ac.getString(7),
-                        ac.getString(8));
-                articlesList.add(tempArticle);
-            } while (ac.moveToNext());
-        }
-        ac.close();
-
-        return articlesList;
-    }
-
     public void closeDrawer() {
         drawerLayout.closeDrawer(drawerContainer);
     }
@@ -504,17 +440,21 @@ public class ListArticlesActivity extends Activity implements
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return null;
+    public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
+        getSettings();
+        return new ArticleLoader(this, sortType, listFilterOption);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-
+        mAdapter.swapCursor(cursor);
+        checkIfHasNoArticles();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
+        if (mAdapter != null) {
+            mAdapter.swapCursor(null);
+        }
     }
 }

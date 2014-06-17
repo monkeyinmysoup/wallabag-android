@@ -13,14 +13,16 @@ def buildTime() {
 apt {
     arguments {
         // androidManifestFile 'path_to_AndroidManifest_file'
-        resourcePackageName android.defaultConfig.packageName
+        resourcePackageName android.defaultConfig.applicationId
         androidManifestFile variant.processResources.manifestFile
     }
 }
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.3"
+    buildToolsVersion "19.1.0"
+    final PROVIDER_DEBUG = "com.pixplicity.wallabag.debug.provider"
+    final PROVIDER_RELEASE = "com.pixplicity.wallabag.provider"
 
     // Fixes PopupMenu giving segfaults on 2.3.5
     aaptOptions.useAaptPngCruncher = true
@@ -31,7 +33,7 @@ android {
     }
 
     defaultConfig {
-        packageName "com.pixplicity.wallabag"
+        applicationId "com.pixplicity.wallabag"
         minSdkVersion 14
         targetSdkVersion 19
         versionCode Integer.parseInt(VERSION_CODE)
@@ -60,10 +62,12 @@ android {
             zipAlign true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            buildConfigField "String", "PROVIDER_AUTHORITY", "\"${PROVIDER_RELEASE}\""
         }
         debug {
-            packageNameSuffix ".debug"
+            applicationIdSuffix ".debug"
             versionNameSuffix "-dev"
+            buildConfigField "String", "PROVIDER_AUTHORITY", "\"${PROVIDER_DEBUG}\""
         }
     }
 }

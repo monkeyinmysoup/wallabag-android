@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="com.pixplicity.wallabag.debug"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:name="com.pixplicity.wallabag.WallabagApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:logo="@drawable/actionbar"
+        android:theme="@style/Theme.Wallabag">
+
+        <provider
+            android:name="com.pixplicity.wallabag.db.WallabagProvider"
+            android:authorities="com.pixplicity.wallabag.debug.provider"
+            android:exported="false"/>
+
+    </application>
+</manifest>

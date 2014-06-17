@@ -31,6 +31,7 @@ public final class Constants {
 
     public static final int MAX_DESCRIPTION_CHARS = 250;
     public static final int JPEG_QUALITY = 90;
+    public static final int UPDATE_LIST_EVERY_X_ITEMS = 10;
 
     public static final int REFRESH_MANUAL = 0;
     public static final int REFRESH_WIFI = 1;

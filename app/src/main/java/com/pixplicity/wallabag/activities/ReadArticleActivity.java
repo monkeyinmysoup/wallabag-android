@@ -1,11 +1,12 @@
 package com.pixplicity.wallabag.activities;
 
 import com.pixplicity.easyprefs.library.Prefs;
+import com.pixplicity.wallabag.ApiService;
 import com.pixplicity.wallabag.Constants;
 import com.pixplicity.wallabag.R;
 import com.pixplicity.wallabag.Style;
 import com.pixplicity.wallabag.Utils;
-import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
+import com.pixplicity.wallabag.models.Article;
 import com.pixplicity.wallabag.ui.OnViewScrollListener;
 import com.pixplicity.wallabag.ui.ResponsiveScrollView;
 
@@ -13,20 +14,15 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.text.BidiFormatter;
-import android.text.Html;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,35 +37,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_DOMAIN;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_IMAGE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_READAT;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TAGS;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
-
 public class ReadArticleActivity extends Activity {
 
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
+    private static final String ARG_ARTICLE_SCROLL = "scroll_pos";
 
-    private SQLiteDatabase database;
-    private String id = "";
+    private long id = -1;
     private ResponsiveScrollView view;
     private WebView contentWebView;
     private int currentResult;
     private boolean isRtl;
-    private String articleUrl;
     private Menu menu;
     private ActionBar actionBar;
-    private boolean isRead;
-    private boolean isFav;
-    private String articleContent;
     private int fontStyle;
     private int textAlign;
     private boolean canGoImmersive;
@@ -78,6 +57,8 @@ public class ReadArticleActivity extends Activity {
     private int fontSize;
     private int yPositionReadAt;
 
+    private Article mArticle;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,40 +66,24 @@ public class ReadArticleActivity extends Activity {
         getSettings();
         Utils.setTheme(this, true);
         setContentView(R.layout.activity_article);
-
         actionBar = getActionBar();
+        assert actionBar != null;
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setLogo(R.drawable.actionbar_wide);
         Utils.setActionBarIcon(actionBar, themeId);
 
-        ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(
-                getApplicationContext());
-        database = helper.getWritableDatabase();
-        String[] getStrColumns = new String[]{
-                ARTICLE_URL,
-                MY_ID,
-                ARTICLE_TITLE,
-                ARTICLE_CONTENT,
-                ARCHIVE,
-                ARTICLE_AUTHOR,
-                FAV,
-                ARTICLE_READAT,
-                ARTICLE_DOMAIN,
-                ARTICLE_TAGS,
-                ARTICLE_IMAGE
-        };
         Bundle data = getIntent().getExtras();
         if (data != null) {
-            id = data.getString("id");
+            id = data.getLong("id");
         }
 
-        Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "="
-                + id, null, null, null, null);
-        ac.moveToFirst();
+        // Load article from DB
+        mArticle = Article.get(this, id);
 
         TextView txtTitle = (TextView) findViewById(R.id.article_title_text);
-        txtTitle.setText(ac.getString(2));
+        txtTitle.setText(mArticle.mTitle);
         view = (ResponsiveScrollView) findViewById(R.id.scroll);
         contentWebView = (WebView) findViewById(R.id.webContent);
 
@@ -148,9 +113,6 @@ public class ReadArticleActivity extends Activity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-
-                Log.i(TAG, "finished");
-
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
 
@@ -163,28 +125,19 @@ public class ReadArticleActivity extends Activity {
         };
 
         contentWebView.setWebViewClient(mWebClient);
-
-        articleContent = ac.getString(3);
-        isRtl = BidiFormatter.getInstance().isRtl(Html.fromHtml(articleContent).toString());
-
-        yPositionReadAt = ac.getInt(7);
+        isRtl = BidiFormatter.getInstance().isRtl(mArticle.getContent());
 
         TextView txtAuthor = (TextView) findViewById(R.id.article_url_text);
 
-        articleUrl = ac.getString(0);
         String articleUrlHostName = "";
         try {
-            URL url = new URL(articleUrl);
+            URL url = new URL(mArticle.mUrl);
             articleUrlHostName = url.getHost();
         } catch (MalformedURLException ignored) {
         }
 
         txtAuthor.setText(articleUrlHostName);
 
-        findOutIfIsRead(ac.getInt(4));
-        findOutIfIsFav(ac.getInt(6));
-
-        ac.close();
         view.setOnScrollViewListener(new OnViewScrollListener() {
 
             private int goingDown
@@ -232,14 +185,14 @@ public class ReadArticleActivity extends Activity {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(ARTICLE_READAT, view.getScrollY());
+        outState.putInt(ARG_ARTICLE_SCROLL, view.getScrollY());
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        if (savedInstanceState != null && savedInstanceState.containsKey(ARTICLE_READAT)) {
-            yPositionReadAt = savedInstanceState.getInt(ARTICLE_READAT);
+        if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ARTICLE_SCROLL)) {
+            yPositionReadAt = savedInstanceState.getInt(ARG_ARTICLE_SCROLL);
         }
 
         super.onRestoreInstanceState(savedInstanceState);
@@ -253,7 +206,7 @@ public class ReadArticleActivity extends Activity {
                         fontSize,
                         Utils.isDarkTheme(themeId),
                         isRtl)
-                        + articleContent + Style.endTag,
+                        + mArticle.getContent() + Style.endTag,
                 "text/html",
                 "utf-8",
                 null
@@ -305,11 +258,14 @@ public class ReadArticleActivity extends Activity {
             case R.id.read:
                 toggleMarkAsRead();
                 return true;
+            case R.id.delete:
+                delete();
+                return true;
             case R.id.fav:
                 toggleFav();
                 return true;
             case R.id.browser:
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(articleUrl));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mArticle.mUrl));
                 startActivity(intent);
                 return true;
             case R.id.settings:
@@ -368,12 +324,9 @@ public class ReadArticleActivity extends Activity {
     private void shareUrl() {
         Intent viewIntent = new Intent(Intent.ACTION_VIEW);
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
-
-        viewIntent.setData(Uri.parse(articleUrl));
-
+        viewIntent.setData(Uri.parse(mArticle.mUrl));
         sendIntent.setType("text/plain");
-        sendIntent.putExtra(Intent.EXTRA_TEXT, articleUrl);
-
+        sendIntent.putExtra(Intent.EXTRA_TEXT, mArticle.mUrl);
         Intent intentChooser = createIntentChooserForTwoIntents(viewIntent,
                 sendIntent, getString(R.string.share_title));
 
@@ -389,39 +342,17 @@ public class ReadArticleActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        database.close();
-    }
-
-    @Override
     public void finish() {
         yPositionReadAt = view.getScrollY();
         setResult(currentResult);
-        ContentValues values = new ContentValues();
-
-        if (Utils.hasToggledFavorite(currentResult)) {
-            int value = isFav ? 1 : 0;
-            values.put(FAV, value);
-        }
-
-        if (Utils.hasToggledRead(currentResult)) {
-            int value = isRead ? 1 : 0;
-            values.put(ARCHIVE, value);
-        }
-
-        values.put(ARTICLE_READAT, yPositionReadAt);
-
-        if (values.size() != 0) {
-            database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
-        }
-
+        mArticle.mScrollPos = view.getScrollY();
+        mArticle.store(this);
         super.finish();
     }
 
     private void setReadStateIcon() {
         MenuItem item = menu.findItem(R.id.read);
-        if (isRead) {
+        if (mArticle.mIsArchived) {
             item.setIcon(R.drawable.ic_action_undo_dark);
             item.setTitle(getString(R.string.unread_title));
         } else {
@@ -432,47 +363,45 @@ public class ReadArticleActivity extends Activity {
 
     private void setFavStateIcon() {
         MenuItem item = menu.findItem(R.id.fav);
-        if (isFav) {
+        if (mArticle.mIsFav) {
             item.setIcon(R.drawable.ic_action_important_dark);
         } else {
             item.setIcon(R.drawable.ic_action_not_important_dark);
         }
     }
 
-    private void findOutIfIsRead(int read) {
-
-        isRead = read == 1 ? true : false;
-    }
-
-    private void findOutIfIsFav(int fav) {
-
-        isFav = fav == 1 ? true : false;
-    }
-
     private void toggleMarkAsRead() {
         currentResult ^= Constants.RESULT_TOGGLE_READ;
-
-        if (isRead) {
+        if (mArticle.mIsArchived) {
             Utils.showToast(this, getString(R.string.marked_as_unread));
-            isRead = false;
+            mArticle.mIsArchived = false;
+            mArticle.store(this);
         } else {
             Utils.showToast(this, getString(R.string.marked_as_read));
-            isRead = true;
+            mArticle.mIsArchived = true;
+            mArticle.store(this);
             finish();
         }
         setReadStateIcon();
     }
 
+    private void delete() {
+        Utils.showToast(this, getString(R.string.article_deleted));
+        finish();
+        Intent intent = new Intent(this, ApiService.class);
+        intent.setAction(ApiService.DELETE_ARTICLE);
+        intent.putExtra(ApiService.EXTRA_ARTICLE_URL, mArticle.mUrl);
+        startService(intent);
+    }
+
     private void toggleFav() {
-
         currentResult ^= Constants.RESULT_TOGGLE_FAVORITE;
-
-        if (isFav) {
+        if (mArticle.mIsFav) {
             Utils.showToast(this, getString(R.string.marked_as_not_fav));
-            isFav = false;
+            mArticle.mIsFav = false;
         } else {
             Utils.showToast(this, getString(R.string.marked_as_fav));
-            isFav = true;
+            mArticle.mIsFav = true;
         }
         setFavStateIcon();
     }

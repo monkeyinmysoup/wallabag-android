@@ -4,7 +4,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.pixplicity.wallabag.Constants;
 import com.pixplicity.wallabag.R;
 import com.pixplicity.wallabag.Utils;
-import com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper;
+import com.pixplicity.wallabag.db.CupboardSQLiteOpenHelper;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -18,6 +18,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import java.io.File;
+
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 public class GeneralSettingsActivity extends AbstractSettingsActivity {
 
@@ -139,12 +141,14 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
         builder.setView(checkBoxView);
         builder.setPositiveButton(getString(R.string.yes),
                 new DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(
-                                GeneralSettingsActivity.this);
+
+
+                        CupboardSQLiteOpenHelper helper = new CupboardSQLiteOpenHelper(GeneralSettingsActivity.this);
                         SQLiteDatabase database = helper.getWritableDatabase();
-                        helper.truncateTables(database);
+                        cupboard().withDatabase(database).dropAllTables();
                         deleteFiles();
                         if (willAlsoDeleteUserAccount) {
                             cleanUserInfo();

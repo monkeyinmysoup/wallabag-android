@@ -1,5 +1,10 @@
 package com.pixplicity.wallabag;
 
+import com.pixplicity.easyprefs.library.Prefs;
+import com.pixplicity.wallabag.activities.ListArticlesActivity;
+import com.pixplicity.wallabag.activities.LookAndFeelSettingsActivity;
+import com.pixplicity.wallabag.models.Article;
+
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -7,31 +12,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
+import android.provider.BaseColumns;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.pixplicity.easyprefs.library.Prefs;
-import com.pixplicity.wallabag.activities.GeneralSettingsActivity;
-import com.pixplicity.wallabag.activities.ListArticlesActivity;
-import com.pixplicity.wallabag.activities.LookAndFeelSettingsActivity;
-
 import java.io.File;
-import java.net.URI;
 
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.FAV;
-import static com.pixplicity.wallabag.db.ArticlesSQLiteOpenHelper.MY_ID;
 
 public final class Utils {
 
     public static final int RESULT_CHANGE_THEME = 42;
+    private static final String TAG = "wallabag";
 
     /**
      * Sets the theme on the Activity as specified in the Prefs.
+     *
      * @param activity The Activity to set the theme on
-     * @param overlap Whether or not to use the 'overlap' version of the theme (only applicable on SDK 19 and up)
+     * @param overlap  Whether or not to use the 'overlap' version of the theme (only applicable on
+     *                 SDK 19 and up)
      */
     public static void setTheme(Activity activity, boolean overlap) {
         int normal, dark;
@@ -90,7 +89,7 @@ public final class Utils {
 
     public static File getSaveDir(Context ctx) {
         File f = ctx.getExternalFilesDir(null);
-        if (!f.exists() ) {
+        if (!f.exists()) {
             return ctx.getFilesDir();
         }
         return f;
@@ -103,11 +102,11 @@ public final class Utils {
     public static String getFilter(int filterOption) {
         switch (filterOption) {
             case Constants.UNREAD:
-                return ARCHIVE + " = 0";
+                return Article.FIELD_IS_DELETED + "=0 AND " + Article.FIELD_IS_ARCHIVED + "=0";
             case Constants.READ:
-                return ARCHIVE + " = 1";
+                return Article.FIELD_IS_DELETED + "=0 AND " + Article.FIELD_IS_ARCHIVED + "=1";
             case Constants.FAVS:
-                return FAV + " = 1";
+                return Article.FIELD_IS_DELETED + "=0 AND " + Article.FIELD_IS_FAV + "=1";
             default:
                 return null;
         }
@@ -119,17 +118,15 @@ public final class Utils {
      * values {@link com.pixplicity.wallabag.Constants#SORT_NEWER},
      * {@link com.pixplicity.wallabag.Constants#SORT_OLDER} or
      * {@link com.pixplicity.wallabag.Constants#SORT_ALPHA}.
-     * @param sortType
-     * @return
      */
     public static String getOrderBy(int sortType) {
         switch (sortType) {
             case Constants.SORT_NEWER:
-                return MY_ID + " DESC";
+                return BaseColumns._ID + " DESC";
             case Constants.SORT_OLDER:
-                return MY_ID;
+                return BaseColumns._ID;
             case Constants.SORT_ALPHA:
-                return ARTICLE_TITLE + " COLLATE NOCASE";
+                return Article.FIELD_TITLE + " COLLATE NOCASE";
             default:
                 throw new RuntimeException("Unknown sort order " + sortType);
         }
@@ -146,9 +143,6 @@ public final class Utils {
     /**
      * Cleans up a String by removing quotes, accents and other invalid characters
      * from a title of an Article.
-     *
-     * @param s
-     * @return
      */
     public static String cleanString(String s) {
         s = s.replace("&Atilde;&copy;", "&eacute;")
@@ -172,11 +166,16 @@ public final class Utils {
 
     /**
      * Returns the domain of the url, excluding www. if present.s
+     *
      * @param url The url to strip, e.g. "https://search.google.com/something"
      * @return The bare domain name, e.g. "search.google.com"
      */
     public static String getDomainFromUrl(String url) {
         String domain = Uri.parse(url).getHost();
+        if (domain == null) {
+            Log.e(Utils.TAG, String.format("Unable to get host from url: '%s'", url));
+            return "";
+        }
         return domain.startsWith("www.") ? domain.substring(4) : domain;
     }
 }

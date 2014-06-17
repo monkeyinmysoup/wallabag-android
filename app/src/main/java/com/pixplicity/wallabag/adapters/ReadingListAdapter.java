@@ -7,80 +7,64 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
-public class ReadingListAdapter extends BaseAdapter {
+
+public class ReadingListAdapter extends CursorAdapter {
 
     private Context mContext;
-
-    private List<Article> listArticles;
-
     private int imgSize;
+    private LayoutInflater mInflater;
 
     public ReadingListAdapter(Context context) {
+        super(context, null, 0);
         this.mContext = context;
         this.imgSize = context.getResources().getDimensionPixelSize(R.dimen.li_article_image_size);
-    }
-
-    public void setListArticles(List<Article> articlesList) {
-        this.listArticles = articlesList;
-        notifyDataSetChanged();
+        this.mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
-    public int getCount() {
-        if (listArticles != null) {
-            return listArticles.size();
-        } else {
-            return 0;
-        }
+    public Article getItem(int position) {
+        getCursor().moveToPosition(position);
+        return cupboard().withCursor(getCursor()).get(Article.class);
     }
 
     @Override
-    public Object getItem(int position) {
-        return listArticles.get(position);
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        View convertView = mInflater.inflate(R.layout.li_article, parent, false);
+        Holder viewHolder = new Holder();
+        viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.listitem_title);
+        viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.listitem_description);
+        viewHolder.tvDomain = (TextView) convertView.findViewById(R.id.listitem_domain);
+        viewHolder.ivIcon = (ImageView) convertView.findViewById(R.id.iv_image);
+        viewHolder.root = convertView;
+        convertView.setTag(viewHolder);
+        return convertView;
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        final Holder viewHolder;
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) mContext
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.li_article, parent, false);
-            viewHolder = new Holder();
-            viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.listitem_title);
-            viewHolder.tvSubtitle = (TextView) convertView.findViewById(R.id.listitem_description);
-            viewHolder.tvDomain = (TextView) convertView.findViewById(R.id.listitem_domain);
-            viewHolder.ivIcon = (ImageView) convertView.findViewById(R.id.iv_image);
-            viewHolder.root = convertView;
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (Holder) convertView.getTag();
-        }
-
-        Article entry = listArticles.get(position);
-        viewHolder.tvTitle.setText(entry.title);
-        String description = entry.summary;
+    public void bindView(View view, Context context, Cursor cursor) {
+        final Holder viewHolder = (Holder) view.getTag();
+        final Article entry = cupboard().withCursor(cursor).get(Article.class);
+        viewHolder.tvTitle.setText(entry.mTitle);
+        String description = entry.mSummary;
         viewHolder.tvSubtitle.setText(description);
         if (entry.hasImage()) {
             Picasso.with(mContext)
                     .load(entry.getImageUrl())
-                    //.placeholder(R.drawable.placeholder)
-                    //.error(R.drawable.placeholder)
+                            //.placeholder(R.drawable.placeholder)
+                            //.error(R.drawable.placeholder)
                     .resize(imgSize, imgSize)
                     .centerCrop()
                     .into(viewHolder.ivIcon, new Callback() {
@@ -94,9 +78,8 @@ public class ReadingListAdapter extends BaseAdapter {
         } else {
             viewHolder.ivIcon.setVisibility(View.GONE);
         }
-        String domain = entry.domain;
+        String domain = entry.mDomain;
         viewHolder.tvDomain.setText(domain);
-        return convertView;
     }
 
     /**

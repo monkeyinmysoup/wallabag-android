@@ -96,5 +96,7 @@
     <string name="refresh_manual">Never</string>
     <string name="refresh_wifi">Only on WiFi</string>
     <string name="refresh_always">On WiFi and mobile data connection</string>
+    <string name="delete_article">Delete</string>
+    <string name="article_deleted">Article deleted</string>
 
 </resources>
