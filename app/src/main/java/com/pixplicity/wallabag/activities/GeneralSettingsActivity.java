@@ -149,6 +149,7 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
                         CupboardSQLiteOpenHelper helper = new CupboardSQLiteOpenHelper(GeneralSettingsActivity.this);
                         SQLiteDatabase database = helper.getWritableDatabase();
                         cupboard().withDatabase(database).dropAllTables();
+                        cupboard().withDatabase(database).createTables();
                         deleteFiles();
                         if (willAlsoDeleteUserAccount) {
                             cleanUserInfo();
