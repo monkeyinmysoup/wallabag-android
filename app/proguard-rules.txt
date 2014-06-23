@@ -1,0 +1,50 @@
+# Add project specific ProGuard rules here.
+# By default, the flags in this file are appended to flags specified
+# in C:/Program Files (x86)/Android/android-studio/sdk/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the ProGuard
+# include property in project.properties.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+# Add any project specific keep options here:
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+# Useful for debugging:
+# -keepattributes SourceFile,LineNumberTable
+
+
+# Serializable classes, Parcelables
+-keep public class com.pixplicity.wallabag.models.** {      public protected *;}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+-keepclassmembers class * implements android.os.Parcelable {
+    static ** CREATOR;
+}
+
+#### COMMON ####
+-keep public class org.w3c.** {public private protected *;}
+-dontwarn org.w3c.**
+-keep public class org.codehaus.** { *; }
+-dontwarn org.codehaus.**
+-keep class org.apache.** { *; }
+-dontwarn org.apache.**
+-keep class org.springframework.** { *; }
+-dontwarn org.springframework.**
+
+# Retrofit, Picasso
+-keep class com.squareup.okhttp.** { *; }
+-dontwarn com.squareup.okhttp.**
+-keep class com.squareup.picasso.**
+-dontwarn com.squareup.picasso.**
+-dontwarn rx.**
+-keep class retrofit.** { *; }
+-keep interface retrofit.** { *; }
