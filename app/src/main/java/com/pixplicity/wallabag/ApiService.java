@@ -149,7 +149,13 @@ public class ApiService extends IntentService {
     }
 
     /**
-     * Removes an article from all lists by deactivating the database entry
+     * Removes an article from all lists by deactivating the database entry.
+     * Send a Refresh broadcast afterwards to update any lists of articles.
+     * <p>
+     * Do not call this method for batch operations, since the refresh broadcast will be
+     * sent for every call.
+     *
+     * @param articleUrl The url of the article to remove.
      */
     private void deleteArticle(String articleUrl) {
         ContentValues values = new ContentValues();
@@ -159,6 +165,7 @@ public class ApiService extends IntentService {
                 values,
                 Article.FIELD_URL + "=?",
                 articleUrl);
+        // Send intent to inform listeners of the change
         Intent intent = new Intent(getString(R.string.broadcast_articles_loaded));
         intent.putExtra(ApiService.EXTRA_FINISHED_LOADING, true);
         intent.putExtra(ApiService.EXTRA_COUNT_ALL, -result);
@@ -168,6 +175,8 @@ public class ApiService extends IntentService {
     /**
      * Synchronizes all feeds by calling {@link #refreshArticles(ArticleType)} on each of them
      * sequentially.
+     *
+     * @see #refreshArticles()
      */
     private void refreshArticles() {
         refreshArticles(ArticleType.UNREAD);
@@ -181,15 +190,15 @@ public class ApiService extends IntentService {
      * Fetches the specified RSS feed and loads the articles in it.
      * New articles are stored in the database, missing articles are removed
      * from the database.
+     * <p>
      * After processing is done a broadcast is send to notify listeners,
      * containing the extras {@link #EXTRA_COUNT_ALL} and {@link #EXTRA_COUNT_UNREAD}
      * indicating the numbers of newly stored articles and total unread articles respectively,
      * or {@link #EXTRA_FINISHED_LOADING} with value {@link false} indicating that this is an
-     * intermediate
-     * update and the total numbers aren't there yet.
-     * Can also contain the extras {@link #EXTRA_PROGRESS} and {@link #EXTRA_PROGRESS_TOTAL} to
-     * show
-     * the amount of progress.
+     * intermediate update and the total numbers aren't there yet. Can also contain the extras
+     * {@link #EXTRA_PROGRESS} and {@link #EXTRA_PROGRESS_TOTAL} to show the amount of progress.
+     *
+     * @param feed The type of feed to refresh.
      */
     private void refreshArticles(ArticleType feed) {
         URL url;
@@ -200,9 +209,10 @@ public class ApiService extends IntentService {
         try {
             // Set the url
             url = new URL(
-                    wallabagUrl + "/?feed&type=" + feed.getQueryString() + "&user_id=" + apiUsername
-                            + "&token=" + apiToken
-            );
+                    wallabagUrl
+                            + "/?feed&type=" + feed.getQueryString()
+                            + "&user_id=" + apiUsername
+                            + "&token=" + apiToken);
 
             // Setup the connection
             HttpsURLConnection conn_s = null;
@@ -215,42 +225,39 @@ public class ApiService extends IntentService {
             }
 
             int newArticles = 0;
-            if (((conn != null) && (conn.getResponseCode() == HttpURLConnection.HTTP_OK))
-                    || ((conn_s != null) && (conn_s.getResponseCode()
-                    == HttpURLConnection.HTTP_OK))) {
+            if ((conn != null && conn.getResponseCode() == HttpURLConnection.HTTP_OK)
+                    || (conn_s != null && conn_s.getResponseCode() == HttpURLConnection.HTTP_OK)) {
 
                 // Retrieve the XML from the URL
-                DocumentBuilderFactory dbf = DocumentBuilderFactory
-                        .newInstance();
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 DocumentBuilder db = dbf.newDocumentBuilder();
-                Document doc;
-                InputSource is = new InputSource(new InputStreamReader(
-                        url.openStream()));
-                doc = db.parse(is);
+                InputSource is = new InputSource(new InputStreamReader(url.openStream()));
+                Document doc = db.parse(is);
                 doc.getDocumentElement().normalize();
 
                 // This is the root node of each section you want to parse
-                NodeList itemLst = doc.getElementsByTagName("item");
+                NodeList itemList = doc.getElementsByTagName("item");
 
                 // Fetch items currently in database:
-                String feedSelection = null;
+                String feedSelection = "";
                 if (feed == ArticleType.ARCHIVE) {
-                    feedSelection = Article.FIELD_IS_ARCHIVED + "=1";
+                    feedSelection = Article.FIELD_IS_ARCHIVED + "=1 AND ";
                 } else if (feed == ArticleType.FAVORITES) {
-                    feedSelection = Article.FIELD_IS_FAV + "=1";
+                    feedSelection = Article.FIELD_IS_FAV + "=1 AND ";
                 }
-                feedSelection += " AND " + Article.FIELD_IS_DELETED + "!=1";
+                feedSelection += Article.FIELD_IS_DELETED + "<>1";
                 List<Article> urlsInDB = cupboard().withContext(this).query(
                         Article.URI,
                         Article.class)
                         .withSelection(feedSelection)
                         .list();
 
-                // Loop through the XML passing the data to the arrays
-                int total = itemLst.getLength();
+                // Iterate over all articles in the XML
+                int total = itemList.getLength();
                 for (int i = total - 1; i >= 0; i--) {
-                    Node item = itemLst.item(i);
+                    Node item = itemList.item(i);
                     if (item.getNodeType() == Node.ELEMENT_NODE) {
+                        // Parse XML node and add it to the database
                         if (parseArticle(feed, urlsInDB, (Element) item)) {
                             newArticles++;
                         }
@@ -279,7 +286,8 @@ public class ApiService extends IntentService {
             Cursor c = cupboard()
                     .withContext(this)
                     .query(Article.URI, Article.class)
-                    .withSelection(Article.FIELD_IS_ARCHIVED + "=0 AND " + Article.FIELD_IS_DELETED + "=0")
+                    .withSelection(
+                            Article.FIELD_IS_ARCHIVED + "=0 AND " + Article.FIELD_IS_DELETED + "=0")
                     .getCursor();
             int unreadArticles = c.getCount();
             c.close();
@@ -375,33 +383,29 @@ public class ApiService extends IntentService {
             articleContent = getString(R.string.missing_content);
         }
 
-        ContentValues values = new ContentValues();
-        values.put(Article.FIELD_TITLE, Html.fromHtml(articleTitle).toString());
-        values.put(Article.FIELD_CONTENT, articleContent);
-        values.put(Article.FIELD_SUMMARY, Article.makeDescription(articleContent));
-        values.put(Article.FIELD_DOMAIN, articleDomain);
-        values.put(Article.FIELD_IMAGE_URL,
-                ImageUtils.getFirstImageUrl(articleUrl, articleContent));
-        values.put(Article.FIELD_URL, articleUrl);
-        values.put(Article.FIELD_DATE, articleDate);
-        values.put(Article.FIELD_IS_ARCHIVED, feed == ArticleType.ARCHIVE);
-        values.put(Article.FIELD_IS_FAV, feed == ArticleType.FAVORITES);
-        //values.put(ARTICLE_SYNC, 0);
+        // Check db for the
+//        Article dbArticle = cupboard()
+//                .withContext(this).query(Article.URI, Article.class).withSelection(Article.FIELD_URL + "=?", articleUrl).get();
+//        if (dbArticle == null) {
+            ContentValues values = new ContentValues();
+            values.put(Article.FIELD_TITLE, Html.fromHtml(articleTitle).toString());
+            values.put(Article.FIELD_CONTENT, articleContent);
+            values.put(Article.FIELD_SUMMARY, Article.makeDescription(articleContent));
+            values.put(Article.FIELD_DOMAIN, articleDomain);
+            values.put(Article.FIELD_IMAGE_URL,
+                    ImageUtils.getFirstImageUrl(articleUrl, articleContent));
+            values.put(Article.FIELD_URL, articleUrl);
+            values.put(Article.FIELD_DATE, articleDate);
+            values.put(Article.FIELD_IS_ARCHIVED, feed == ArticleType.ARCHIVE);
+            values.put(Article.FIELD_IS_FAV, feed == ArticleType.FAVORITES);
+            //values.put(ARTICLE_SYNC, 0);
 
-        Article article = new Article(values);
-        // TODO what happens on conflicts?
-        cupboard().withContext(this).put(Article.URI, article);
-
-//        try {
-//            database.insertOrThrow(ARTICLE_TABLE, null, values);
-//        } catch (SQLiteConstraintException e) {
-//            return true;
-//        } catch (SQLiteException e) {
-//            database.execSQL("ALTER TABLE " + ARTICLE_TABLE
-//                    + " ADD COLUMN " + ARTICLE_DATE
-//                    + " datetime;");
-//            database.insertOrThrow(ARTICLE_TABLE, null, values);
+            Article article = new Article(values);
+            cupboard().withContext(this).put(Article.URI, article);
+//        } else {
+//            Log.i(TAG, articleUrl + " already in database");
 //        }
+
         return false;
     }
 
@@ -434,7 +438,7 @@ public class ApiService extends IntentService {
         if (articlesInDB.size() == 0) {
             return;
         }
-        // Updated values: is_archived = 1
+        // Updated values: is_deleted = 1
         ContentValues values = new ContentValues();
         values.put(Article.FIELD_IS_DELETED, 1);
         // Where: id IN (...)
@@ -483,7 +487,7 @@ public class ApiService extends IntentService {
         if (articlesInDB.size() == 0) {
             return;
         }
-        // Updated values: is_archived = 1
+        // Updated values: is_favorite = 1
         ContentValues values = new ContentValues();
         values.put(Article.FIELD_IS_FAV, 1);
         // Where: id IN (...)
@@ -503,6 +507,9 @@ public class ApiService extends IntentService {
                 .update(Article.URI, values, selection.toString(), (String[]) null);
     }
 
+    // TODO remove this! Trusting all SSL certificates is asking for trouble.
+    // Better solution would be either to ask the user if SSL certificate should be
+    // trusted by showing its fingerprint
     private void trustEveryone() {
         try {
             HttpsURLConnection
