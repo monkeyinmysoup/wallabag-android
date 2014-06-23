@@ -16,4 +16,4 @@ branches:
     - develop-studio
 
 script:
-  - TERM=dumb ./gradlew test assembleDebug
+  - TERM=dumb ./gradlew assembleDebug
