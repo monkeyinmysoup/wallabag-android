@@ -21,7 +21,7 @@
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:logo="@drawable/actionbar"
+        android:logo="@drawable/actionbar_wide"
         android:theme="@style/Theme.Wallabag">
         <activity
             android:name="com.pixplicity.wallabag.activities.WelcomeActivity"
@@ -32,7 +32,7 @@
             android:label="@string/app_name" />
         <activity
             android:name="com.pixplicity.wallabag.activities.ListArticlesActivity"
-            android:theme="@style/Theme.Wallabag.OverFlow"
+            android:theme="@style/Theme.Wallabag.OverlapTop"
             android:label="@string/app_name">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />

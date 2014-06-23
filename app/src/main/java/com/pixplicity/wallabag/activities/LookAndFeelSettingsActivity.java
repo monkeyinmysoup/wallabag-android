@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -110,6 +111,7 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
         SeekBar fontBar = (SeekBar) findViewById(R.id.font_bar);
         final TextView fontSizeText = (TextView) findViewById(R.id.font_size_text);
         fontSizeText.setText(fontSize + "pt");
+        //fontSizeText.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize);
         fontBar.setProgress(progressFromSize());
         fontBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
@@ -125,6 +127,7 @@ public class LookAndFeelSettingsActivity extends AbstractSettingsActivity {
                                           boolean fromUser) {
                 fontSize = fontSizeFromProgress(progress);
                 fontSizeText.setText(fontSize + "pt");
+                //fontSizeText.setTextSize(TypedValue.COMPLEX_UNIT_PT, fontSize);
             }
         });
 

@@ -46,7 +46,8 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
     protected void getSettings() {
         super.getSettings();
         sortType = Prefs.getInt(Constants.PREFS_SORT_TYPE, 0);
-        autoRefresh = Prefs.getInt(Constants.PREFS_KEY_AUTO_REFRESH, Constants.DEFAULT_AUTO_REFRESH);
+        autoRefresh = Prefs
+                .getInt(Constants.PREFS_KEY_AUTO_REFRESH, Constants.DEFAULT_AUTO_REFRESH);
     }
 
     @Override
@@ -74,7 +75,8 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
                                 sortTypeView.setText(getStringSortType(which));
                                 dialog.dismiss();
                             }
-                        });
+                        }
+                );
                 AlertDialog alert = builder.create();
                 alert.show();
             }
@@ -101,7 +103,8 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
                                 refreshView.setText(getStringRefresh(which));
                                 dialog.dismiss();
                             }
-                        });
+                        }
+                );
                 AlertDialog alert = builder.create();
                 alert.show();
             }
@@ -145,8 +148,8 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-
-                        CupboardSQLiteOpenHelper helper = new CupboardSQLiteOpenHelper(GeneralSettingsActivity.this);
+                        CupboardSQLiteOpenHelper helper = new CupboardSQLiteOpenHelper(
+                                GeneralSettingsActivity.this);
                         SQLiteDatabase database = helper.getWritableDatabase();
                         cupboard().withDatabase(database).dropAllTables();
                         cupboard().withDatabase(database).createTables();
