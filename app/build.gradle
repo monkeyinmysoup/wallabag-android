@@ -18,6 +18,9 @@ apt {
     }
 }
 
+def isTravis = "true".equals(System.getenv("TRAVIS"))
+def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
+
 android {
     compileSdkVersion 19
     buildToolsVersion "19.1.0"
@@ -26,6 +29,11 @@ android {
 
     // Fixes PopupMenu giving segfaults on 2.3.5
     aaptOptions.useAaptPngCruncher = true
+
+    dexOptions {
+        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
+        preDexLibraries = preDexEnabled && !isTravis
+    }
 
     lintOptions {
         //checkReleaseBuilds false
