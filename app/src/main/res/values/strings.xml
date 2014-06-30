@@ -98,5 +98,8 @@
     <string name="refresh_always">On WiFi and mobile data connection</string>
     <string name="delete_article">Delete</string>
     <string name="article_deleted">Article deleted</string>
+    <string name="unable_to_retrieve">[unable to retrieve full-text content]</string>
+    <string name="unable_to_retrieve_disp">Unable to retrieve full-text content</string>
+    <string name="error_invalid_url">Sorry, unable to find a suitable app to open this link: %s.</string>
 
 </resources>

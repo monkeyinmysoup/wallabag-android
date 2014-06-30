@@ -436,28 +436,21 @@ public class ApiService extends IntentService {
             articleContent = getString(R.string.missing_content);
         }
 
-        // Check db for the
-//        Article dbArticle = cupboard()
-//                .withContext(this).query(Article.URI, Article.class).withSelection(Article.FIELD_URL + "=?", articleUrl).get();
-//        if (dbArticle == null) {
-            ContentValues values = new ContentValues();
-            values.put(Article.FIELD_TITLE, Html.fromHtml(articleTitle).toString());
-            values.put(Article.FIELD_CONTENT, articleContent);
-            values.put(Article.FIELD_SUMMARY, Article.makeDescription(articleContent));
-            values.put(Article.FIELD_DOMAIN, articleDomain);
-            values.put(Article.FIELD_IMAGE_URL,
-                    ImageUtils.getFirstImageUrl(articleUrl, articleContent));
-            values.put(Article.FIELD_URL, articleUrl);
-            values.put(Article.FIELD_DATE, articleDate);
-            values.put(Article.FIELD_IS_ARCHIVED, feed == ArticleType.ARCHIVE);
-            values.put(Article.FIELD_IS_FAV, feed == ArticleType.FAVORITES);
-            //values.put(ARTICLE_SYNC, 0);
+        ContentValues values = new ContentValues();
+        values.put(Article.FIELD_TITLE, Html.fromHtml(articleTitle).toString());
+        values.put(Article.FIELD_CONTENT, articleContent);
+        values.put(Article.FIELD_SUMMARY, Article.makeDescription(articleContent));
+        values.put(Article.FIELD_DOMAIN, articleDomain);
+        values.put(Article.FIELD_IMAGE_URL,
+                ImageUtils.getFirstImageUrl(articleUrl, articleContent));
+        values.put(Article.FIELD_URL, articleUrl);
+        values.put(Article.FIELD_DATE, articleDate);
+        values.put(Article.FIELD_IS_ARCHIVED, feed == ArticleType.ARCHIVE);
+        values.put(Article.FIELD_IS_FAV, feed == ArticleType.FAVORITES);
+        //values.put(ARTICLE_SYNC, 0);
 
-            Article article = new Article(values);
-            cupboard().withContext(this).put(Article.URI, article);
-//        } else {
-//            Log.i(TAG, articleUrl + " already in database");
-//        }
+        Article article = new Article(values);
+        cupboard().withContext(this).put(Article.URI, article);
 
         return false;
     }

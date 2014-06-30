@@ -13,6 +13,8 @@ import com.pixplicity.wallabag.ui.ResponsiveScrollView;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -43,8 +45,9 @@ public class ReadArticleActivity extends Activity {
     private static final String ARG_ARTICLE_SCROLL = "scroll_pos";
 
     private long id = -1;
-    private ResponsiveScrollView view;
-    private WebView contentWebView;
+    private ResponsiveScrollView mScrollView;
+    private WebView mWebView;
+    private View mNoContentWrap;
     private int currentResult;
     private boolean isRtl;
     private Menu menu;
@@ -84,8 +87,9 @@ public class ReadArticleActivity extends Activity {
 
         TextView txtTitle = (TextView) findViewById(R.id.article_title_text);
         txtTitle.setText(mArticle.mTitle);
-        view = (ResponsiveScrollView) findViewById(R.id.scroll);
-        contentWebView = (WebView) findViewById(R.id.webContent);
+        mScrollView = (ResponsiveScrollView) findViewById(R.id.scroll);
+        mWebView = (WebView) findViewById(R.id.webContent);
+        mNoContentWrap = findViewById(R.id.no_content_wrap);
 
         WebViewClient mWebClient = new WebViewClient() {
 
@@ -118,13 +122,13 @@ public class ReadArticleActivity extends Activity {
 
                     @Override
                     public void run() {
-                        ReadArticleActivity.this.view.scrollTo(0, yPositionReadAt);
+                        ReadArticleActivity.this.mScrollView.scrollTo(0, yPositionReadAt);
                     }
                 }, 500);
             }
         };
 
-        contentWebView.setWebViewClient(mWebClient);
+        mWebView.setWebViewClient(mWebClient);
         isRtl = BidiFormatter.getInstance().isRtl(mArticle.getContent());
 
         TextView txtAuthor = (TextView) findViewById(R.id.article_url_text);
@@ -138,7 +142,7 @@ public class ReadArticleActivity extends Activity {
 
         txtAuthor.setText(articleUrlHostName);
 
-        view.setOnScrollViewListener(new OnViewScrollListener() {
+        mScrollView.setOnScrollViewListener(new OnViewScrollListener() {
 
             private int goingDown
                     ,
@@ -173,19 +177,19 @@ public class ReadArticleActivity extends Activity {
         super.onResume();
         getSettings();
         goImmersive();
-        loadDataToWebView();
-        contentWebView.setKeepScreenOn(keepScreenOn);
+        loadDataIntoWebView();
+        mWebView.setKeepScreenOn(keepScreenOn);
     }
 
     @Override
     protected void onPause() {
-        yPositionReadAt = view.getScrollY();
+        yPositionReadAt = mScrollView.getScrollY();
         super.onPause();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(ARG_ARTICLE_SCROLL, view.getScrollY());
+        outState.putInt(ARG_ARTICLE_SCROLL, mScrollView.getScrollY());
         super.onSaveInstanceState(outState);
     }
 
@@ -194,12 +198,74 @@ public class ReadArticleActivity extends Activity {
         if (savedInstanceState != null && savedInstanceState.containsKey(ARG_ARTICLE_SCROLL)) {
             yPositionReadAt = savedInstanceState.getInt(ARG_ARTICLE_SCROLL);
         }
-
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    private void loadDataToWebView() {
-        contentWebView.loadDataWithBaseURL(null,
+    /**
+     * Puts the article content in the WebView with a bit of styling around it.
+     * If the article has no content ('unable to retrieve full-text content')
+     * it shows a button to open the url in a browser instead.
+     */
+    private void loadDataIntoWebView() {
+        if (mArticle.getContent().equals(getString(R.string.unable_to_retrieve))) {
+            mWebView.setVisibility(View.GONE);
+            mNoContentWrap.setVisibility(View.VISIBLE);
+            mNoContentWrap.findViewById(R.id.bt_no_content).setOnClickListener(new View.OnClickListener() {
+
+                private boolean tryLaunch() {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mArticle.mUrl));
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        return false;
+                    }
+                    return true;
+                }
+
+                private void notifyUser() {
+                    // Notify user of invalid url
+                    new AlertDialog.Builder(ReadArticleActivity.this)
+                            .setCancelable(true)
+                            .setMessage(
+                                    getString(R.string.error_invalid_url, mArticle.mUrl))
+                            .setPositiveButton(android.R.string.cancel, null)
+                            .show();
+                }
+
+                @Override
+                public void onClick(View view) {
+                    if (!tryLaunch()) {
+                        // Some URLS are invalid because they somehow contain a title. Not sure if
+                        // this is a bug in the app or the server (tested on server version 1.6).
+                        // This is a workaround that splits the url into the title part and url part,
+                        // updates the the article and tries to launch the newly extracted url.
+                        int p1 = mArticle.mUrl.indexOf("http://");
+                        int p2 = mArticle.mUrl.indexOf("https://");
+                        if (p1 < 0 && p2 < 0) {
+                            notifyUser();
+                        } else {
+                            // Update title and url and try again
+                            int split = Math.max(p1,p2);
+                            String title = mArticle.mUrl.substring(0, split);
+                            mArticle.mUrl = mArticle.mUrl.substring(split);
+                            mArticle.mDomain = Utils.getDomainFromUrl(mArticle.mUrl);
+
+                            if (mArticle.mTitle.equals("Untitled")) {
+                                mArticle.mTitle = title;
+                            }
+                            mArticle.store(ReadArticleActivity.this);
+                            // Try new URL
+                            if (!tryLaunch()) {
+                                notifyUser();
+                            }
+                        }
+                    }
+                }
+            });
+            return;
+        }
+
+        mWebView.loadDataWithBaseURL(null,
                 Style.getHead(
                         fontStyle,
                         textAlign,
@@ -217,7 +283,7 @@ public class ReadArticleActivity extends Activity {
         if (a.type >= TypedValue.TYPE_FIRST_COLOR_INT
                 && a.type <= TypedValue.TYPE_LAST_COLOR_INT) {
             int color = a.data;
-            contentWebView.setBackgroundColor(color);
+            mWebView.setBackgroundColor(color);
         }
     }
 
@@ -343,9 +409,9 @@ public class ReadArticleActivity extends Activity {
 
     @Override
     public void finish() {
-        yPositionReadAt = view.getScrollY();
+        yPositionReadAt = mScrollView.getScrollY();
         setResult(currentResult);
-        mArticle.mScrollPos = view.getScrollY();
+        mArticle.mScrollPos = mScrollView.getScrollY();
         mArticle.store(this);
         super.finish();
     }

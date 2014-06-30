@@ -53,5 +53,6 @@ public final class Constants {
     public static final int SORT_NEWER = 0;
     public static final int SORT_OLDER = 1;
     public static final int SORT_ALPHA = 2;
+
     public static final String SSL_KEYSTORE_FILENAME = "keystore";
 }

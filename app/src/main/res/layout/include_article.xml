@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="?android:attr/actionBarSize"
+    android:paddingTop="@dimen/default_padding_vertical"
+    tools:ignore="WebViewLayout">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/default_padding_horizontal"
+        android:paddingRight="@dimen/default_padding_horizontal">
+
+        <com.pixplicity.fonttextutils.FontTextView
+            android:id="@+id/article_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp" />
+
+        <com.pixplicity.fonttextutils.FontTextView
+            android:id="@+id/article_url_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/viewLine"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:background="@color/background_dark" />
+
+    <WebView
+        android:id="@+id/webContent"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.64"
+        tools:ignore="WebViewLayout"
+        android:layout_margin="8dp"
+        android:background="@drawable/card" />
+
+    <LinearLayout
+        android:id="@+id/no_content_wrap"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+
+        <com.pixplicity.fonttextutils.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="16dp"
+            android:text="@string/unable_to_retrieve_disp" />
+
+        <com.pixplicity.fonttextutils.FontButton
+            android:id="@+id/bt_no_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/open_in_browser" />
+    </LinearLayout>
+</LinearLayout>

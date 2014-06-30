@@ -1,57 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.pixplicity.wallabag.ui.ResponsiveScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/scroll">
+
     <!-- This element at the top makes sure the status bar turns blue -->
     <!-- <View
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/primary" /> -->
-    <LinearLayout
-        android:id="@+id/linear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="?android:attr/actionBarSize"
-        android:paddingTop="@dimen/default_padding_vertical" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" 
-            android:paddingLeft="@dimen/default_padding_horizontal"
-            android:paddingRight="@dimen/default_padding_horizontal" >
-
-            <com.pixplicity.fonttextutils.FontTextView
-                android:id="@+id/article_title_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="25sp" />
-            
-            <com.pixplicity.fonttextutils.FontTextView
-                android:id="@+id/article_url_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/viewLine"
-            android:layout_width="fill_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/background_dark" />
-
-        <WebView
-            android:id="@+id/webContent"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.64"
-            tools:ignore="WebViewLayout" />
-    </LinearLayout>
+    <include layout="@layout/include_article" />
 
 </com.pixplicity.wallabag.ui.ResponsiveScrollView>
