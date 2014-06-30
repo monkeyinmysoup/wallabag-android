@@ -10,25 +10,17 @@ def buildTime() {
     return new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
 }
 
-apt {
-    arguments {
-        // androidManifestFile 'path_to_AndroidManifest_file'
-        resourcePackageName android.defaultConfig.applicationId
-        androidManifestFile variant.processResources.manifestFile
-    }
-}
-
 def isTravis = "true".equals(System.getenv("TRAVIS"))
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
     final PROVIDER_DEBUG = "com.pixplicity.wallabag.debug.provider"
     final PROVIDER_RELEASE = "com.pixplicity.wallabag.provider"
 
     // Fixes PopupMenu giving segfaults on 2.3.5
-    aaptOptions.useAaptPngCruncher = true
+    //aaptOptions.useAaptPngCruncher = true
 
     dexOptions {
         // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
@@ -42,13 +34,14 @@ android {
 
     defaultConfig {
         applicationId "com.pixplicity.wallabag"
-        minSdkVersion 14
-        targetSdkVersion 19
+        minSdkVersion 14    // ICS
+        targetSdkVersion 20
         versionCode Integer.parseInt(VERSION_CODE)
         versionName VERSION_NAME
     }
 
     signingConfigs {
+
         release {
             storeFile file("../keystore.keystore")
             storePassword ""
@@ -88,7 +81,6 @@ repositories {
 
 dependencies {
     apt 'org.androidannotations:androidannotations:3.0'
-    compile 'com.android.support:support-v4:+'
     compile files('libs/json-smart-1.2.jar')
     compile files('libs/jsonrpc2-base-1.35.jar')
     compile files('libs/jsonrpc2-client-1.14.4.jar')
@@ -96,7 +88,6 @@ dependencies {
     compile 'com.pixplicity:font.text.utils.library:1.3'
     compile 'nl.qbusict:cupboard:2.0.1'
     compile 'com.squareup.picasso:picasso:2.3.2'
-    compile 'com.github.castorflex.smoothprogressbar:library:0.5.1'
     //compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0-RC2'
 }
