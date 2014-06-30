@@ -6,6 +6,7 @@
     <string name="broadcast_favorites_loaded">com.pixplicity.wallabag.broadcast_favorites_refreshed</string>
     <string name="broadcast_archive_changed">com.pixplicity.wallabag.broadcast_archive</string>
     <string name="broadcast_favorites_changed">com.pixplicity.wallabag.broadcast_favorites</string>
+    <string name="broadcast_certificate_not_trusted">ssl_not_trusted</string>
 
     <item name="loader_articles" type="id" />
 

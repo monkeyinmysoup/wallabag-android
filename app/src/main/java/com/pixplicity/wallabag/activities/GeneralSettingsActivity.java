@@ -156,6 +156,7 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
                         deleteFiles();
                         if (willAlsoDeleteUserAccount) {
                             cleanUserInfo();
+                            cleanKeyStore();
                         }
                         database.close();
                         setResult(Constants.RESULT_LIST_SHOULD_CHANGE);
@@ -176,6 +177,17 @@ public class GeneralSettingsActivity extends AbstractSettingsActivity {
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void cleanKeyStore() {
+        File storeFile = new File(getFilesDir(), Constants.SSL_KEYSTORE_FILENAME);
+        if (storeFile.exists()) {
+            try {
+                storeFile.delete();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void cleanUserInfo() {

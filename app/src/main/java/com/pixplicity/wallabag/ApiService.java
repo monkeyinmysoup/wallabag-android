@@ -1,7 +1,10 @@
 package com.pixplicity.wallabag;
 
 import com.pixplicity.easyprefs.library.Prefs;
+import com.pixplicity.wallabag.api.SslTrustManager;
+import com.pixplicity.wallabag.api.TrustingHttpClient;
 import com.pixplicity.wallabag.models.Article;
+import com.squareup.okhttp.OkHttpClient;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -23,11 +26,21 @@ import android.os.Message;
 import android.text.Html;
 import android.util.Log;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.List;
@@ -35,6 +48,7 @@ import java.util.List;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.DocumentBuilder;
@@ -205,7 +219,7 @@ public class ApiService extends IntentService {
         String wallabagUrl = Prefs.getString(Constants.PREFS_KEY_WALLABAG_URL, null);
         String apiUsername = Prefs.getString(Constants.PREFS_KEY_USER_ID, null);
         String apiToken = Prefs.getString(Constants.PREFS_KEY_USER_TOKEN, null);
-
+        HttpsURLConnection conn_s = null;
         try {
             // Set the url
             url = new URL(
@@ -215,11 +229,21 @@ public class ApiService extends IntentService {
                             + "&token=" + apiToken);
 
             // Setup the connection
-            HttpsURLConnection conn_s = null;
+            //TrustingHttpClient client = new TrustingHttpClient(this);
+
+
+            // Setup the connection
             HttpURLConnection conn = null;
             if (wallabagUrl.startsWith("https")) {
-                trustEveryone();
-                conn_s = (HttpsURLConnection) url.openConnection();
+                //trustEveryone();
+                setupTrustManager();
+//                if (checkCertificate()) {
+                    conn_s = (HttpsURLConnection) url.openConnection();
+//                } else {
+//                    Intent intent = new Intent(getString(R.string.broadcast_certificate_not_trusted));
+//                    sendOrderedBroadcast(intent, null);
+//                    return;
+//                }
             } else {
                 conn = (HttpURLConnection) url.openConnection();
             }
@@ -311,6 +335,35 @@ public class ApiService extends IntentService {
             e.printStackTrace();
             if (feed == ArticleType.UNREAD) {
                 Utils.showToast(this, getString(R.string.fail_to_update));
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            if (feed == ArticleType.UNREAD) {
+                Utils.showToast(this, getString(R.string.fail_to_update));
+            }
+            // UnrecoverableKeyException | KeyStoreException | KeyManagementException
+        }
+    }
+
+    private void askToAcceptFingerprint(HttpsURLConnection conn_s) {
+        // TODO ask user to accept fingerprint. Retry if ok.
+
+
+        // Ask user if certificate should be trusted
+        if (conn_s != null) {
+            try {
+                Certificate[] certs = conn_s.getServerCertificates();
+                for (Certificate cert : certs) {
+                    try {
+                        MessageDigest sha1 = MessageDigest.getInstance("SHA1");
+                        sha1.reset();
+                        byte[] result = sha1.digest(cert.getEncoded());
+                        BigInteger fingerprint = new BigInteger(result);
+                        // TODO do something with fingerprint
+                    } catch (NoSuchAlgorithmException | CertificateEncodingException ignored) {}
+                }
+            } catch (SSLPeerUnverifiedException e1) {
+                e1.printStackTrace();
             }
         }
     }
@@ -507,9 +560,34 @@ public class ApiService extends IntentService {
                 .update(Article.URI, values, selection.toString(), (String[]) null);
     }
 
+
+
+    private void setupTrustManager() throws NoSuchAlgorithmException {
+        try {
+            HttpsURLConnection
+                    .setDefaultHostnameVerifier(new HostnameVerifier() {
+
+                        @Override
+                        public boolean verify(String hostname,
+                                              SSLSession session) {
+                            return true;
+                        }
+                    });
+            SSLContext context = SSLContext.getInstance("TLS");
+            context.init(null, new X509TrustManager[]{
+                    new SslTrustManager(this)
+            }, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(context
+                    .getSocketFactory());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // TODO remove this! Trusting all SSL certificates is asking for trouble.
     // Better solution would be either to ask the user if SSL certificate should be
     // trusted by showing its fingerprint
+    @Deprecated
     private void trustEveryone() {
         try {
             HttpsURLConnection
