@@ -1,5 +1,8 @@
 package com.pixplicity.wallabag.activities;
 
+import com.nhaarman.listviewanimations.swinginadapters.prepared.AlphaInAnimationAdapter;
+import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
+import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingLeftInAnimationAdapter;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.pixplicity.wallabag.ApiService;
 import com.pixplicity.wallabag.Constants;
@@ -8,7 +11,6 @@ import com.pixplicity.wallabag.Utils;
 import com.pixplicity.wallabag.adapters.DrawerListAdapter;
 import com.pixplicity.wallabag.adapters.ReadingListAdapter;
 import com.pixplicity.wallabag.db.ArticleLoader;
-import com.pixplicity.wallabag.models.Article;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -21,7 +23,6 @@ import android.content.IntentFilter;
 import android.content.Loader;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.database.CursorWrapper;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -38,8 +39,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 /**
  * Main Activity of the app.
@@ -63,6 +62,7 @@ public class ListArticlesActivity extends Activity implements
     private View mNoArticles;
     private TextView mNoArticlesText;
     private boolean mIsLoading = false;
+    private boolean isDrawerOpen = false;
 
     private IntentFilter mServiceIntentFilter;
 
@@ -90,10 +90,7 @@ public class ListArticlesActivity extends Activity implements
                 setProgress(progress);
                 setProgressBarIndeterminateVisibility(Boolean.FALSE);
             }
-//            getLoaderManager().restartLoader(
-//                    R.id.loader_articles,
-//                    null,
-//                    ListArticlesActivity.this);
+
             updateList();
         }
     };
@@ -120,17 +117,24 @@ public class ListArticlesActivity extends Activity implements
         mNoArticles = findViewById(R.id.no_articles_container);
         mNoArticlesText = (TextView) findViewById(R.id.no_articles_text);
 
-        //Listview
+        // Listview
         mListView = (ListView) findViewById(R.id.list_articles);
         mAdapter = new ReadingListAdapter(getBaseContext());
-        mListView.setAdapter(mAdapter);
+        // Animate the adapter with a fade-in and swipe-up
+        SwingBottomInAnimationAdapter animationAdapter1 = new SwingBottomInAnimationAdapter(mAdapter);
+        AlphaInAnimationAdapter animationAdapter2 = new AlphaInAnimationAdapter(animationAdapter1);
+        animationAdapter2.setAbsListView(mListView);
+        mListView.setAdapter(animationAdapter2);
         setupList();
 
-        //Drawer
+        // Drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerContainer = (ViewGroup) findViewById(R.id.left_drawer);
         ListView drawerList = (ListView) findViewById(R.id.lv_drawer);
         mDrawerAdapter = new DrawerListAdapter(this, listFilterOption, themeId);
+//        SwingLeftInAnimationAdapter drawerAnimationAdapter = new SwingLeftInAnimationAdapter(mDrawerAdapter);
+//        drawerAnimationAdapter.setAbsListView(drawerList);
+//        drawerList.setAdapter(drawerAnimationAdapter);
         drawerList.setAdapter(mDrawerAdapter);
         drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 
@@ -177,6 +181,20 @@ public class ListArticlesActivity extends Activity implements
             @Override
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setLogo(R.drawable.actionbar_wide);
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                // This makes the actionbar title change when the drawer
+                // is halfway instead of when it's closed/opened completely.
+                // Source: http://toastdroid.com/2014/04/25/smooth-actionbar-transitions-when-opening-a-navigation-drawer/
+                if (slideOffset > .55 && !isDrawerOpen) {
+                    onDrawerOpened(drawerView);
+                    isDrawerOpen = true;
+                } else if (slideOffset < .45 && isDrawerOpen) {
+                    onDrawerClosed(drawerView);
+                    isDrawerOpen = false;
+                }
             }
         };
 
