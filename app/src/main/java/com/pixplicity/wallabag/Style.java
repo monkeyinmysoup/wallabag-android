@@ -58,8 +58,9 @@ public abstract class Style {
 					 align +
 				"	font-size: " + fontSize + "pt;" +
 				"	color: " + textColor + ";" +
-				"	word-wrap: break-word;" + 
-				"	margin: 1eM 5%;" +
+				"	word-wrap: break-word;" +
+                "	line-height: 160%;" +
+                "	margin: 1eM 5%;" +
 				"} " +
 				"img {" +
 				"	max-width: 100%;" +
