@@ -40,7 +40,7 @@ public class Article {
     @Column(BaseColumns._ID)
     public Long mId;
 
-    @Column(FIELD_URL)
+    @Column(value=FIELD_URL)
     public String mUrl;
 
     @Column(FIELD_TITLE)

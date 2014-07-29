@@ -85,6 +85,12 @@ public class ApiService extends IntentService {
     private volatile Looper mServiceLooper;
     private volatile ServiceHandler mServiceHandler;
 
+    /**
+     * To avoid queries that are too long,
+     * we split some operations up in chunks of this many articles:
+     */
+    public static final int CHUNK_SIZE = 10;
+
     private final class ServiceHandler extends Handler {
 
         public ServiceHandler(Looper looper) {
@@ -484,24 +490,40 @@ public class ApiService extends IntentService {
         if (articlesInDB.size() == 0) {
             return;
         }
+        int i;
         // Updated values: is_deleted = 1
         ContentValues values = new ContentValues();
         values.put(Article.FIELD_IS_DELETED, 1);
         // Where: id IN (...)
         StringBuilder selection = new StringBuilder();
         selection.append(Article.FIELD_URL).append(" IN (");
-        for (int i = 0; i < articlesInDB.size(); i++) {
-            if (i > 0) {
+        for (i = 0; i < articlesInDB.size(); i++) {
+            if (i % CHUNK_SIZE > 0) {
                 selection.append(",");
             }
             selection.append("'")
                     .append(articlesInDB.get(i).mUrl)
                     .append("'");
+
+            // Execute query every 10 items, to avoid creating queries
+            // that are too long
+            if (i % CHUNK_SIZE == 0) {
+                selection.append(");");
+                // Execute query
+                cupboard().withContext(this)
+                        .update(Article.URI, values, selection.toString(), (String[]) null);
+                // Reset query
+                selection = new StringBuilder();
+                selection.append(Article.FIELD_URL).append(" IN (");
+            }
         }
-        selection.append(");");
-        // Execute query
-        cupboard().withContext(this)
-                .update(Article.URI, values, selection.toString(), (String[]) null);
+        // Finish last chunk
+        if (i % CHUNK_SIZE > 0) {
+            selection.append(");");
+            // Execute query
+            cupboard().withContext(this)
+                    .update(Article.URI, values, selection.toString(), (String[]) null);
+        }
     }
 
     private void removeArticlesFromArchive(List<Article> articlesInDB) {
@@ -509,51 +531,79 @@ public class ApiService extends IntentService {
             return;
         }
 
+        int i;
         // Updated values: is_archived = 1
         ContentValues values = new ContentValues();
         values.put(Article.FIELD_IS_ARCHIVED, 1);
         // Where: id IN (...)
         StringBuilder selection = new StringBuilder();
         selection.append(Article.FIELD_URL).append(" IN (");
-        for (int i = 0; i < articlesInDB.size(); i++) {
-            if (i > 0) {
+        for (i = 0; i < articlesInDB.size(); i++) {
+            if (i % CHUNK_SIZE > 0) {
                 selection.append(",");
             }
             selection.append("'")
                     .append(articlesInDB.get(i).mUrl)
                     .append("'");
+            // Execute query every 10 items, to avoid creating queries
+            // that are too long
+            if (i % CHUNK_SIZE == 0) {
+                selection.append(");");
+                // Execute query
+                cupboard().withContext(this)
+                        .update(Article.URI, values, selection.toString(), (String[]) null);
+                // Reset query
+                selection = new StringBuilder();
+                selection.append(Article.FIELD_URL).append(" IN (");
+            }
         }
-        selection.append(");");
-        // Execute query
-        cupboard().withContext(this)
-                .update(Article.URI, values, selection.toString(), (String[]) null);
+        // Finish last chunk
+        if (i % CHUNK_SIZE > 0) {
+            selection.append(");");
+            // Execute query
+            cupboard().withContext(this)
+                    .update(Article.URI, values, selection.toString(), (String[]) null);
+        }
     }
 
     private void removeArticlesFromFavs(List<Article> articlesInDB) {
         if (articlesInDB.size() == 0) {
             return;
         }
+        int i;
         // Updated values: is_favorite = 1
         ContentValues values = new ContentValues();
         values.put(Article.FIELD_IS_FAV, 1);
         // Where: id IN (...)
         StringBuilder selection = new StringBuilder();
         selection.append(Article.FIELD_URL).append(" IN (");
-        for (int i = 0; i < articlesInDB.size(); i++) {
-            if (i > 0) {
+        for (i = 0; i < articlesInDB.size(); i++) {
+            if (i % CHUNK_SIZE > 0) {
                 selection.append(",");
             }
             selection.append("'")
                     .append(articlesInDB.get(i).mUrl)
                     .append("'");
+            // Execute query every 10 items, to avoid creating queries
+            // that are too long
+            if (i % CHUNK_SIZE == 0) {
+                selection.append(");");
+                // Execute query
+                cupboard().withContext(this)
+                        .update(Article.URI, values, selection.toString(), (String[]) null);
+                // Reset query
+                selection = new StringBuilder();
+                selection.append(Article.FIELD_URL).append(" IN (");
+            }
         }
-        selection.append(");");
-        // Execute query
-        cupboard().withContext(this)
-                .update(Article.URI, values, selection.toString(), (String[]) null);
+        // Finish last chunk
+        if (i % CHUNK_SIZE > 0) {
+            selection.append(");");
+            // Execute query
+            cupboard().withContext(this)
+                    .update(Article.URI, values, selection.toString(), (String[]) null);
+        }
     }
-
-
 
     private void setupTrustManager() throws NoSuchAlgorithmException {
         try {
