@@ -18,6 +18,7 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -491,6 +492,7 @@ public class ApiService extends IntentService {
             return;
         }
         int i;
+        boolean first = true;
         // Updated values: is_deleted = 1
         ContentValues values = new ContentValues();
         values.put(Article.FIELD_IS_DELETED, 1);
@@ -498,12 +500,11 @@ public class ApiService extends IntentService {
         StringBuilder selection = new StringBuilder();
         selection.append(Article.FIELD_URL).append(" IN (");
         for (i = 0; i < articlesInDB.size(); i++) {
-            if (i % CHUNK_SIZE > 0) {
+            if (!first) {
                 selection.append(",");
             }
-            selection.append("'")
-                    .append(articlesInDB.get(i).mUrl)
-                    .append("'");
+            first = false;
+            selection.append(DatabaseUtils.sqlEscapeString(articlesInDB.get(i).mUrl));
 
             // Execute query every 10 items, to avoid creating queries
             // that are too long
@@ -515,6 +516,7 @@ public class ApiService extends IntentService {
                 // Reset query
                 selection = new StringBuilder();
                 selection.append(Article.FIELD_URL).append(" IN (");
+                first = true;
             }
         }
         // Finish last chunk
@@ -532,6 +534,7 @@ public class ApiService extends IntentService {
         }
 
         int i;
+        boolean first = true;
         // Updated values: is_archived = 1
         ContentValues values = new ContentValues();
         values.put(Article.FIELD_IS_ARCHIVED, 1);
@@ -539,12 +542,11 @@ public class ApiService extends IntentService {
         StringBuilder selection = new StringBuilder();
         selection.append(Article.FIELD_URL).append(" IN (");
         for (i = 0; i < articlesInDB.size(); i++) {
-            if (i % CHUNK_SIZE > 0) {
+            if (!first) {
                 selection.append(",");
             }
-            selection.append("'")
-                    .append(articlesInDB.get(i).mUrl)
-                    .append("'");
+            first = false;
+            selection.append(DatabaseUtils.sqlEscapeString(articlesInDB.get(i).mUrl));
             // Execute query every 10 items, to avoid creating queries
             // that are too long
             if (i % CHUNK_SIZE == 0) {
@@ -555,6 +557,7 @@ public class ApiService extends IntentService {
                 // Reset query
                 selection = new StringBuilder();
                 selection.append(Article.FIELD_URL).append(" IN (");
+                first = true;
             }
         }
         // Finish last chunk
@@ -571,6 +574,7 @@ public class ApiService extends IntentService {
             return;
         }
         int i;
+        boolean first = true;
         // Updated values: is_favorite = 1
         ContentValues values = new ContentValues();
         values.put(Article.FIELD_IS_FAV, 1);
@@ -578,12 +582,11 @@ public class ApiService extends IntentService {
         StringBuilder selection = new StringBuilder();
         selection.append(Article.FIELD_URL).append(" IN (");
         for (i = 0; i < articlesInDB.size(); i++) {
-            if (i % CHUNK_SIZE > 0) {
+            if (!first) {
                 selection.append(",");
             }
-            selection.append("'")
-                    .append(articlesInDB.get(i).mUrl)
-                    .append("'");
+            first = false;
+            selection.append(DatabaseUtils.sqlEscapeString(articlesInDB.get(i).mUrl));
             // Execute query every 10 items, to avoid creating queries
             // that are too long
             if (i % CHUNK_SIZE == 0) {
@@ -594,6 +597,7 @@ public class ApiService extends IntentService {
                 // Reset query
                 selection = new StringBuilder();
                 selection.append(Article.FIELD_URL).append(" IN (");
+                first = true;
             }
         }
         // Finish last chunk
