@@ -1,5 +1,5 @@
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 def gitSha() {
@@ -15,31 +15,23 @@ def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
 android {
     compileSdkVersion 20
-    buildToolsVersion "20.0.0"
+    buildToolsVersion '20.0.0'
     final PROVIDER_DEBUG = "com.pixplicity.wallabag.debug.provider"
     final PROVIDER_RELEASE = "com.pixplicity.wallabag.provider"
-
-    // Fixes PopupMenu giving segfaults on 2.3.5
-    //aaptOptions.useAaptPngCruncher = true
-
     dexOptions {
         // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
         preDexLibraries = preDexEnabled && !isTravis
     }
-
     lintOptions {
         //checkReleaseBuilds false
         abortOnError false
     }
-
     defaultConfig {
-        applicationId "com.pixplicity.wallabag"
+        applicationId 'com.pixplicity.wallabag.debug'
         minSdkVersion 14    // ICS
         targetSdkVersion 20
-        versionCode Integer.parseInt(VERSION_CODE)
         versionName VERSION_NAME
     }
-
     signingConfigs {
 
         release {
@@ -49,12 +41,10 @@ android {
             keyPassword ""
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-
     buildTypes {
         release {
             debuggable false
@@ -70,6 +60,8 @@ android {
             versionNameSuffix "-dev"
             buildConfigField "String", "PROVIDER_AUTHORITY", "\"${PROVIDER_DEBUG}\""
         }
+    }
+    productFlavors {
     }
 }
 
