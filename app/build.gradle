@@ -27,7 +27,7 @@ android {
         abortOnError false
     }
     defaultConfig {
-        applicationId 'com.pixplicity.wallabag.debug'
+        applicationId 'com.pixplicity.wallabag'
         minSdkVersion 14    // ICS
         targetSdkVersion 20
         versionName VERSION_NAME
