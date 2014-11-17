@@ -367,6 +367,7 @@ public class ApiService extends IntentService {
                         byte[] result = sha1.digest(cert.getEncoded());
                         BigInteger fingerprint = new BigInteger(result);
                         // TODO do something with fingerprint
+
                     } catch (NoSuchAlgorithmException | CertificateEncodingException ignored) {}
                 }
             } catch (SSLPeerUnverifiedException e1) {
@@ -608,69 +609,4 @@ public class ApiService extends IntentService {
                     .update(Article.URI, values, selection.toString(), (String[]) null);
         }
     }
-
-    private void setupTrustManager() throws NoSuchAlgorithmException {
-        try {
-            HttpsURLConnection
-                    .setDefaultHostnameVerifier(new HostnameVerifier() {
-
-                        @Override
-                        public boolean verify(String hostname,
-                                              SSLSession session) {
-                            return true;
-                        }
-                    });
-            SSLContext context = SSLContext.getInstance("TLS");
-            context.init(null, new X509TrustManager[]{
-                    new SslTrustManager(this)
-            }, new SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(context
-                    .getSocketFactory());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // TODO remove this! Trusting all SSL certificates is asking for trouble.
-    // Better solution would be either to ask the user if SSL certificate should be
-    // trusted by showing its fingerprint
-    @Deprecated
-    private void trustEveryone() {
-        try {
-            HttpsURLConnection
-                    .setDefaultHostnameVerifier(new HostnameVerifier() {
-
-                        @Override
-                        public boolean verify(String hostname,
-                                SSLSession session) {
-                            return true;
-                        }
-                    });
-            SSLContext context = SSLContext.getInstance("TLS");
-            context.init(null, new X509TrustManager[]{
-                    new X509TrustManager() {
-
-                        @Override
-                        public void checkClientTrusted(X509Certificate[] chain,
-                                String authType) throws CertificateException {
-                        }
-
-                        @Override
-                        public void checkServerTrusted(X509Certificate[] chain,
-                                String authType) throws CertificateException {
-                        }
-
-                        @Override
-                        public X509Certificate[] getAcceptedIssuers() {
-                            return new X509Certificate[0];
-                        }
-                    }
-            }, new SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(context
-                    .getSocketFactory());
-        } catch (Exception e) { // should never happen
-            e.printStackTrace();
-        }
-    }
-
 }
