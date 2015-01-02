@@ -242,15 +242,7 @@ public class ApiService extends IntentService {
             // Setup the connection
             HttpURLConnection conn = null;
             if (wallabagUrl.startsWith("https")) {
-                //trustEveryone();
-                setupTrustManager();
-//                if (checkCertificate()) {
-                    conn_s = (HttpsURLConnection) url.openConnection();
-//                } else {
-//                    Intent intent = new Intent(getString(R.string.broadcast_certificate_not_trusted));
-//                    sendOrderedBroadcast(intent, null);
-//                    return;
-//                }
+                conn_s = (HttpsURLConnection) url.openConnection();
             } else {
                 conn = (HttpURLConnection) url.openConnection();
             }
@@ -343,38 +335,10 @@ public class ApiService extends IntentService {
             if (feed == ArticleType.UNREAD) {
                 Utils.showToast(this, getString(R.string.fail_to_update));
             }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            if (feed == ArticleType.UNREAD) {
-                Utils.showToast(this, getString(R.string.fail_to_update));
-            }
-            // UnrecoverableKeyException | KeyStoreException | KeyManagementException
         }
     }
 
-    private void askToAcceptFingerprint(HttpsURLConnection conn_s) {
-        // TODO ask user to accept fingerprint. Retry if ok.
 
-
-        // Ask user if certificate should be trusted
-        if (conn_s != null) {
-            try {
-                Certificate[] certs = conn_s.getServerCertificates();
-                for (Certificate cert : certs) {
-                    try {
-                        MessageDigest sha1 = MessageDigest.getInstance("SHA1");
-                        sha1.reset();
-                        byte[] result = sha1.digest(cert.getEncoded());
-                        BigInteger fingerprint = new BigInteger(result);
-                        // TODO do something with fingerprint
-
-                    } catch (NoSuchAlgorithmException | CertificateEncodingException ignored) {}
-                }
-            } catch (SSLPeerUnverifiedException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
 
     /**
      * Parses a single RSS node and stores it as an Article in the database
