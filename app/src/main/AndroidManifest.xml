@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.pixplicity.wallabag">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,7 +23,8 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:logo="@drawable/actionbar_wide"
-        android:theme="@style/Theme.Wallabag">
+        android:theme="@style/Theme.Wallabag"
+        tools:replace="android:icon">
         <activity
             android:name="com.pixplicity.wallabag.activities.WelcomeActivity"
             android:label="@string/app_name" />
